@@ -1,0 +1,34 @@
+{
+  "name": "storagecraft",
+  "version": "0.1.0",
+  "description": "The open knowledge base for storage systems and AI infrastructure.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "gen:bench": "python3 scripts/gen_benchmark_page.py",
+    "gen:index": "python3 scripts/gen_content_index.py",
+    "validate": "python3 scripts/validate_frontmatter.py"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.21.0",
+    "astro": "^4.5.0",
+    "sharp": "^0.32.5"
+  },
+  "keywords": [
+    "storage", "distributed-systems", "filesystems", "nvme",
+    "raid", "lsm-tree", "ai-infrastructure", "llm", "benchmarks", "open-source"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Manmeet Nain",
+    "email": "manmeet.nain@gmail.com",
+    "url": "https://github.com/manmeetnain"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manmeetnain/storagecraft"
+  },
+  "homepage": "https://manmeetnain.github.io/storagecraft"
+}
