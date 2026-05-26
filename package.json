@@ -12,13 +12,21 @@
     "validate": "python3 scripts/validate_frontmatter.py"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.21.0",
-    "astro": "^4.5.0",
+    "@astrojs/starlight": "^0.39.2",
+    "astro": "^6.3.7",
     "sharp": "^0.32.5"
   },
   "keywords": [
-    "storage", "distributed-systems", "filesystems", "nvme",
-    "raid", "lsm-tree", "ai-infrastructure", "llm", "benchmarks", "open-source"
+    "storage",
+    "distributed-systems",
+    "filesystems",
+    "nvme",
+    "raid",
+    "lsm-tree",
+    "ai-infrastructure",
+    "llm",
+    "benchmarks",
+    "open-source"
   ],
   "license": "MIT",
   "author": {
