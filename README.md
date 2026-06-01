@@ -1,8 +1,6 @@
 # 🗄️ StorageCraft
 
-**The open knowledge base for storage systems and AI infrastructure.**
-
-Deep dives into how storage actually works — from NVMe queue dispatch to KV-cache in LLM inference. Trusted content, reproducible benchmarks, and interactive simulators. All free, all open.
+**The open knowledge base where enterprise storage meets AI infrastructure.**
 
 [![GitHub Stars](https://img.shields.io/github/stars/manmeetnain/storagecraft?style=flat-square)](https://github.com/manmeetnain/storagecraft/stargazers)
 [![Docs Site](https://img.shields.io/badge/docs-live-brightgreen?style=flat-square)](https://manmeetnain.github.io/storagecraft)
@@ -15,22 +13,28 @@ Deep dives into how storage actually works — from NVMe queue dispatch to KV-ca
 
 | Section | Description | Status |
 |---|---|---|
-| [Core Concepts](src/content/docs/concepts/) | WAL, write amplification, COW, erasure coding | 🟢 Live |
-| [Storage Internals](src/content/docs/internals/) | ext4, ZFS, NVMe, LSM trees, RAID | 🟡 Building |
-| [AI Infrastructure](src/content/docs/ai-infra/) | KV-cache, vLLM, Flash Attention, GPU memory | 🟡 Building |
-| [Comparisons](src/content/docs/comparisons/) | S3 vs Azure Blob, Ceph vs MinIO, ext4 vs ZFS | 🔴 Soon |
-| [Benchmarks](src/content/docs/benchmarks/) | Reproducible Python-scripted benchmarks | 🔴 Soon |
-| [Simulators](docs/src/content/docs/simulators/) | Interactive RAID, LSM, consistent hashing | 🟡 Building |
+| [🧠 Core Concepts](https://manmeetnain.github.io/storagecraft/concepts/write-amplification/) | WAL, Write Amplification, COW, Erasure Coding | 🟢 Live |
+| [🤖 AI Infrastructure](https://manmeetnain.github.io/storagecraft/ai-infra/kv-cache/) | KV-Cache, vLLM, Flash Attention, GPU Memory | 🟢 Live |
+| [🔮 Generative AI](https://manmeetnain.github.io/storagecraft) | LLM storage, RAG, Vector DBs, Agents | 🟡 Building |
+| [⚙️ Storage Internals](https://manmeetnain.github.io/storagecraft) | NVMe, LSM Trees, RAID, ext4, ZFS | 🟡 Building |
+| [🏢 Enterprise Storage](https://manmeetnain.github.io/storagecraft) | IBM FlashSystem, EMC PowerMax, SAN fabrics | 🟡 Building |
+| [🔬 Simulators](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html) | Interactive RAID, LSM Tree, SAN fabric | 🟡 Building |
+| [📊 Benchmarks](https://manmeetnain.github.io/storagecraft) | Reproducible Python benchmark suite | 🔴 Coming |
+
+---
+
+## 🌐 Live Site
+
+**[→ manmeetnain.github.io/storagecraft](https://manmeetnain.github.io/storagecraft)**
+
+This is where you read the content — beautifully rendered with search, sidebar navigation, and code highlighting.
 
 ---
 
 ## 🔬 Live Simulators
 
-| Simulator | Description | Link |
-|---|---|---|
-| RAID-5 Visualizer | See parity, disk failures, rebuild in real-time | [▶ Launch](https://manmeetnain.github.io/storagecraft/simulators/raid/) |
-| LSM Tree | Insert keys, watch compaction happen | Coming Week 4 |
-| Consistent Hashing | Add/remove nodes, watch key redistribution | Coming Week 5 |
+**[▶ RAID-5 Visualizer](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)**
+Write data, fail a disk, watch parity rebuild in real-time via XOR.
 
 ---
 
@@ -52,29 +56,26 @@ npm run dev
 # Validate all doc frontmatter
 python3 scripts/validate_frontmatter.py
 
-# Generate a benchmark page from a result JSON
+# Generate benchmark page from result JSON
 python3 scripts/gen_benchmark_page.py --sample
-
-# Run content index generator
-python3 scripts/gen_content_index.py
 ```
 
 ---
 
 ## 🤝 Contributing
 
-Found an error? Want to add a deep dive? PRs are very welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
 ## 👤 Author
 
-Built and maintained by **Manmeet Nain**
+**Manmeet Nain** — Enterprise Storage Engineer × GenAI & AI Infrastructure
 
 - GitHub: [@manmeetnain](https://github.com/manmeetnain)
-- Email: manmeet.nain@gmail.com
-- Support this work: [GitHub Sponsors](https://github.com/sponsors/manmeetnain)
+- Docs: [manmeetnain.github.io/storagecraft](https://manmeetnain.github.io/storagecraft)
+- Sponsor: [github.com/sponsors/manmeetnain](https://github.com/sponsors/manmeetnain)
 
 ---
 
-*MIT License · Built in public · Every benchmark reproducible*
+*Enterprise Storage × Generative AI × Open Source · India 🇮🇳 · MIT License*
