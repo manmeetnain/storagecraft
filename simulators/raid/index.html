@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAID-5 Visualizer — StorageCraft by Manmeet Nain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060b14;--bg2:#0a1020;--bg3:#0f1830;
+  --panel:#111827;--border:#1e2d45;--border2:#2a3f5f;
+  --text:#e2e8f0;--muted:#4a6080;--muted2:#6b85a8;
+  --accent:#38bdf8;--accent2:#0ea5e9;
+  --green:#22c55e;--green2:#16a34a;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;
+  --data:#3b82f6;--parity:#8b5cf6;--empty:#1a2535;--failed:#7f1d1d;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Syne',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--display);min-height:100vh;overflow-x:hidden;}
+
+/* HEADER */
+.hdr{
+  background:linear-gradient(90deg,#060b14,#0a1020);
+  border-bottom:1px solid var(--border);
+  padding:14px 32px;display:flex;align-items:center;justify-content:space-between;
+}
+.hdr-brand{display:flex;align-items:center;gap:12px;}
+.hdr-icon{width:34px;height:34px;background:linear-gradient(135deg,#1e40af,#38bdf8);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.hdr-title{font-size:18px;font-weight:800;letter-spacing:-0.02em;}
+.hdr-title span{color:var(--accent);}
+.hdr-sub{font-size:11px;color:var(--muted2);font-family:var(--mono);margin-top:1px;}
+.hdr-links{display:flex;gap:16px;align-items:center;}
+.hdr-link{font-size:12px;color:var(--muted2);text-decoration:none;font-family:var(--mono);padding:5px 12px;border:1px solid var(--border);border-radius:5px;transition:all 0.2s;}
+.hdr-link:hover{color:var(--accent);border-color:var(--accent2);}
+.hdr-link.star{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.25);color:var(--green);}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:calc(100vh - 65px);}
+
+/* MAIN AREA */
+.main{padding:28px 32px;overflow-y:auto;}
+.main-title{font-size:26px;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px;}
+.main-desc{font-size:14px;color:var(--muted2);line-height:1.6;margin-bottom:28px;max-width:640px;}
+
+/* CONTROLS */
+.controls{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:10px;padding:20px 24px;margin-bottom:24px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+}
+.ctrl-group{display:flex;flex-direction:column;gap:6px;}
+.ctrl-label{font-size:10px;font-family:var(--mono);color:var(--muted2);letter-spacing:0.1em;text-transform:uppercase;}
+.ctrl-row{display:flex;gap:8px;align-items:center;}
+.btn{
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  padding:7px 16px;border-radius:6px;border:1px solid;cursor:pointer;
+  transition:all 0.15s;letter-spacing:0.02em;
+}
+.btn-primary{background:var(--accent2);border-color:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent);box-shadow:0 0 16px rgba(56,189,248,0.3);}
+.btn-danger{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:var(--red);}
+.btn-danger:hover{background:rgba(239,68,68,0.2);}
+.btn-success{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3);color:var(--green);}
+.btn-success:hover{background:rgba(34,197,94,0.2);}
+.btn-neutral{background:var(--bg3);border-color:var(--border2);color:var(--muted2);}
+.btn-neutral:hover{color:var(--text);border-color:var(--border2);}
+.btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+select{
+  font-family:var(--mono);font-size:12px;
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  padding:7px 10px;border-radius:6px;cursor:pointer;
+}
+
+/* DISK ARRAY */
+.array-section{margin-bottom:24px;}
+.section-label{font-size:11px;font-family:var(--mono);color:var(--muted2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.disk-array{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.disk{
+  flex:1;min-width:100px;max-width:160px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;cursor:pointer;
+  transition:all 0.2s;position:relative;
+}
+.disk:hover{border-color:var(--border2);}
+.disk.failed{border-color:var(--red);background:rgba(127,29,29,0.15);}
+.disk.rebuilding{border-color:var(--amber);animation:rebuild-pulse 1s infinite alternate;}
+.disk.healthy{border-color:var(--border);}
+@keyframes rebuild-pulse{from{box-shadow:0 0 0px var(--amber);}to{box-shadow:0 0 12px rgba(245,158,11,0.4);}}
+
+.disk-header{
+  padding:8px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+.disk-name{font-size:12px;font-weight:700;font-family:var(--mono);}
+.disk-status{font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:10px;}
+.status-ok{background:rgba(34,197,94,0.1);color:var(--green);}
+.status-fail{background:rgba(239,68,68,0.15);color:var(--red);}
+.status-rebuild{background:rgba(245,158,11,0.12);color:var(--amber);}
+
+.disk-blocks{padding:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+.block{
+  aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-family:var(--mono);font-weight:600;
+  transition:all 0.3s;cursor:default;position:relative;
+  border:1px solid transparent;
+}
+.block.data{background:rgba(59,130,246,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3);}
+.block.parity{background:rgba(139,92,246,0.2);color:#c4b5fd;border-color:rgba(139,92,246,0.3);}
+.block.empty{background:var(--empty);color:var(--muted);}
+.block.failed-block{background:rgba(239,68,68,0.08);color:rgba(239,68,68,0.3);border-color:rgba(239,68,68,0.1);}
+.block.rebuilding-block{background:rgba(245,158,11,0.15);color:var(--amber);border-color:rgba(245,158,11,0.3);animation:rebuild-pulse 0.8s infinite alternate;}
+.block.highlight{border-color:var(--accent)!important;box-shadow:0 0 8px rgba(56,189,248,0.4);}
+.block.writing{animation:write-flash 0.4s ease;}
+@keyframes write-flash{0%{background:rgba(56,189,248,0.5);}100%{}}
+
+.disk-footer{
+  padding:6px 12px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;
+  font-size:10px;font-family:var(--mono);color:var(--muted2);
+}
+
+/* STRIPE VISUALIZATION */
+.stripe-vis{
+  background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  padding:20px 24px;margin-bottom:24px;
+}
+.stripe-row{
+  display:flex;gap:8px;margin-bottom:8px;align-items:center;
+}
+.stripe-label{font-size:10px;font-family:var(--mono);color:var(--muted2);width:60px;text-align:right;flex-shrink:0;}
+.stripe-cell{
+  flex:1;height:32px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-family:var(--mono);font-weight:600;
+  transition:all 0.3s;border:1px solid transparent;
+}
+.stripe-cell.data{background:rgba(59,130,246,0.18);color:#93c5fd;border-color:rgba(59,130,246,0.25);}
+.stripe-cell.parity{background:rgba(139,92,246,0.18);color:#c4b5fd;border-color:rgba(139,92,246,0.25);}
+.stripe-cell.failed-cell{background:rgba(239,68,68,0.08);color:rgba(239,68,68,0.25);border-color:rgba(239,68,68,0.1);}
+.stripe-cell.recover{background:rgba(34,197,94,0.15);color:var(--green);border-color:rgba(34,197,94,0.25);}
+
+/* LOG */
+.log-panel{
+  background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  padding:16px 20px;max-height:200px;overflow-y:auto;
+}
+.log-entry{
+  font-size:12px;font-family:var(--mono);line-height:1.8;
+  display:flex;gap:10px;align-items:baseline;
+}
+.log-time{color:var(--muted);flex-shrink:0;font-size:10px;}
+.log-msg{color:var(--muted2);}
+.log-msg.ok{color:var(--green);}
+.log-msg.err{color:var(--red);}
+.log-msg.warn{color:var(--amber);}
+.log-msg.info{color:var(--accent);}
+
+/* SIDEBAR */
+.sidebar{
+  background:var(--bg2);border-left:1px solid var(--border);
+  padding:24px 20px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:20px;
+}
+.sidebar-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;
+}
+.card-title{font-size:11px;font-family:var(--mono);color:var(--muted2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat{background:var(--bg3);border-radius:7px;padding:10px 12px;}
+.stat-val{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1;}
+.stat-lbl{font-size:10px;color:var(--muted2);margin-top:3px;}
+.stat-val.green{color:var(--green);}
+.stat-val.blue{color:var(--accent);}
+.stat-val.amber{color:var(--amber);}
+.stat-val.red{color:var(--red);}
+
+.legend-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--muted2);}
+.legend-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+.leg-data{background:rgba(59,130,246,0.3);border:1px solid rgba(59,130,246,0.5);}
+.leg-parity{background:rgba(139,92,246,0.3);border:1px solid rgba(139,92,246,0.5);}
+.leg-fail{background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);}
+.leg-rebuild{background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);}
+
+.explain-text{font-size:12px;color:var(--muted2);line-height:1.7;font-family:var(--mono);}
+.explain-text strong{color:var(--text);}
+.explain-text .formula{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:5px;
+  padding:8px 10px;margin:8px 0;color:var(--accent);display:block;
+}
+
+.progress-bar-wrap{margin-top:8px;}
+.pb-label{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono);margin-bottom:4px;}
+.pb-label .name{color:var(--muted2);}
+.pb-label .val{color:var(--text);}
+.pb{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.pb-fill{height:100%;border-radius:3px;transition:width 0.5s ease;}
+.pb-blue{background:linear-gradient(to right,var(--accent2),var(--accent));}
+.pb-green{background:linear-gradient(to right,var(--green2),var(--green));}
+.pb-amber{background:linear-gradient(to right,#b45309,var(--amber));}
+
+/* FOOTER */
+.footer{
+  grid-column:1/-1;background:var(--bg2);border-top:1px solid var(--border);
+  padding:12px 32px;display:flex;align-items:center;justify-content:space-between;
+  font-size:11px;font-family:var(--mono);color:var(--muted);
+}
+.footer a{color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-icon">🗄</div>
+    <div>
+      <div class="hdr-title">Storage<span>Craft</span> — RAID-5 Visualizer</div>
+      <div class="hdr-sub">by manmeetnain · github.com/manmeetnain/storagecraft</div>
+    </div>
+  </div>
+  <div class="hdr-links">
+    <a class="hdr-link" href="https://manmeetnain.github.io/storagecraft">← Back to Docs</a>
+    <a class="hdr-link star" href="https://github.com/manmeetnain/storagecraft">⭐ Star on GitHub</a>
+  </div>
+</div>
+
+<div class="layout">
+<div class="main">
+
+  <div class="main-title">RAID-5 Interactive Visualizer</div>
+  <div class="main-desc">
+    See how RAID-5 distributes data and parity across disks in real-time. Write data, simulate disk failures, and watch the rebuild process — all explained step by step.
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="ctrl-group">
+      <div class="ctrl-label">Write Data</div>
+      <div class="ctrl-row">
+        <select id="writeSize">
+          <option value="1">1 stripe (4 blocks)</option>
+          <option value="2" selected>2 stripes (8 blocks)</option>
+          <option value="3">3 stripes (12 blocks)</option>
+          <option value="4">4 stripes (16 blocks)</option>
+        </select>
+        <button class="btn btn-primary" onclick="writeData()">▶ Write Data</button>
+      </div>
+    </div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">Disk Failure</div>
+      <div class="ctrl-row">
+        <select id="failDisk">
+          <option value="0">Disk 0</option>
+          <option value="1">Disk 1</option>
+          <option value="2">Disk 2</option>
+          <option value="3">Disk 3</option>
+          <option value="4">Disk 4</option>
+        </select>
+        <button class="btn btn-danger" onclick="failDisk()">💥 Fail Disk</button>
+        <button class="btn btn-success" onclick="rebuildDisk()" id="rebuildBtn" disabled>🔧 Rebuild</button>
+      </div>
+    </div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">Actions</div>
+      <div class="ctrl-row">
+        <button class="btn btn-neutral" onclick="resetAll()">↺ Reset</button>
+        <button class="btn btn-neutral" onclick="autoDemo()">▷ Auto Demo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISK ARRAY -->
+  <div class="array-section">
+    <div class="section-label">Disk Array (5 Disks — RAID-5)</div>
+    <div class="disk-array" id="diskArray"></div>
+  </div>
+
+  <!-- STRIPE VISUALIZATION -->
+  <div class="stripe-vis">
+    <div class="section-label">Stripe Layout — How RAID-5 distributes parity</div>
+    <div id="stripeVis"></div>
+  </div>
+
+  <!-- LOG -->
+  <div class="section-label" style="margin-bottom:8px;">Operation Log</div>
+  <div class="log-panel" id="logPanel"></div>
+
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <div class="sidebar-card">
+    <div class="card-title">Array Statistics</div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-val blue" id="statTotal">0</div><div class="stat-lbl">Blocks Written</div></div>
+      <div class="stat"><div class="stat-val green" id="statStripes">0</div><div class="stat-lbl">Stripes Used</div></div>
+      <div class="stat"><div class="stat-val amber" id="statFailed">0</div><div class="stat-lbl">Disks Failed</div></div>
+      <div class="stat"><div class="stat-val green" id="statHealth">100%</div><div class="stat-lbl">Array Health</div></div>
+    </div>
+    <div style="margin-top:12px;">
+      <div class="progress-bar-wrap">
+        <div class="pb-label"><span class="name">Capacity used</span><span class="val" id="capPct">0%</span></div>
+        <div class="pb"><div class="pb-fill pb-blue" id="capBar" style="width:0%"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="pb-label"><span class="name">Parity overhead</span><span class="val">20% (1/5 disks)</span></div>
+        <div class="pb"><div class="pb-fill pb-amber" style="width:20%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="card-title">Legend</div>
+    <div class="legend-row"><div class="legend-swatch leg-data"></div>Data block</div>
+    <div class="legend-row"><div class="legend-swatch leg-parity"></div>Parity block (XOR)</div>
+    <div class="legend-row"><div class="legend-swatch leg-fail"></div>Failed / lost block</div>
+    <div class="legend-row"><div class="legend-swatch leg-rebuild"></div>Rebuilt via parity</div>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="card-title">How RAID-5 Works</div>
+    <div class="explain-text">
+      <strong>RAID-5</strong> stripes data across N disks with distributed parity. For 5 disks:
+      <span class="formula">Usable = (N-1) × disk_size<br>= 4 × disk_size = 80%</span>
+      Each stripe row has exactly <strong>1 parity block</strong>, rotating which disk holds it:
+      <span class="formula">P(stripe) = D0 XOR D1 XOR D2 XOR D3</span>
+      If any <strong>one disk fails</strong>, every lost block is recovered by XORing the remaining blocks in that stripe. This is why RAID-5 tolerates <strong>exactly 1 disk failure</strong> — a second failure loses data permanently.
+    </div>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="card-title">RAID Comparison</div>
+    <div class="explain-text">
+      <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:4px 10px;align-items:center;">
+        <span style="color:var(--muted);font-size:10px;">RAID</span>
+        <span style="color:var(--muted);font-size:10px;">Usable</span>
+        <span style="color:var(--muted);font-size:10px;">Fault Tol.</span>
+        <strong style="color:var(--text)">RAID-0</strong><span>100%</span><span style="color:var(--red)">0 disks</span>
+        <strong style="color:var(--text)">RAID-1</strong><span>50%</span><span style="color:var(--green)">N-1 disks</span>
+        <strong style="color:var(--accent)">RAID-5 ★</strong><span style="color:var(--accent)">80%</span><span style="color:var(--amber)">1 disk</span>
+        <strong style="color:var(--text)">RAID-6</strong><span>60%</span><span style="color:var(--green)">2 disks</span>
+        <strong style="color:var(--text)">RAID-10</strong><span>50%</span><span style="color:var(--green)">1/mirror</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="card-title">Learn More</div>
+    <div class="explain-text">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="https://manmeetnain.github.io/storagecraft/concepts/write-amplification" style="color:var(--accent);text-decoration:none;font-size:12px;">→ Write Amplification in RAID</a>
+        <a href="https://manmeetnain.github.io/storagecraft/internals/raid-write-penalty" style="color:var(--accent);text-decoration:none;font-size:12px;">→ RAID Write Penalty Explained</a>
+        <a href="https://manmeetnain.github.io/storagecraft/concepts/erasure-coding" style="color:var(--accent);text-decoration:none;font-size:12px;">→ Erasure Coding vs RAID</a>
+        <a href="https://github.com/manmeetnain/storagecraft" style="color:var(--green);text-decoration:none;font-size:12px;">⭐ Star this project on GitHub</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="footer">
+  <span>StorageCraft · RAID-5 Visualizer · Open Source MIT</span>
+  <span>Built by <a href="https://github.com/manmeetnain">@manmeetnain</a> · <a href="https://github.com/manmeetnain/storagecraft">View source</a></span>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────
+const NUM_DISKS = 5;
+const BLOCKS_PER_DISK = 16;
+const STRIPES = BLOCKS_PER_DISK; // one block per disk per stripe row
+
+let disks = [];        // disks[d][b] = {type:'data'|'parity'|'empty'|'failed', stripe, label}
+let diskFailed = [];   // boolean per disk
+let diskRebuilding = [];
+let totalWritten = 0;
+let stripesUsed = 0;
+let failedCount = 0;
+let currentStripe = 0; // next stripe row to write into
+let demoRunning = false;
+
+function initState() {
+  disks = Array.from({length: NUM_DISKS}, () =>
+    Array.from({length: BLOCKS_PER_DISK}, () => ({type:'empty', stripe:-1, label:''}))
+  );
+  diskFailed = Array(NUM_DISKS).fill(false);
+  diskRebuilding = Array(NUM_DISKS).fill(false);
+  totalWritten = 0;
+  stripesUsed = 0;
+  failedCount = 0;
+  currentStripe = 0;
+  demoRunning = false;
+}
+
+// ─── PARITY DISK FOR STRIPE ──────────────────────────────
+// RAID-5 rotates parity: stripe 0 → disk 4, stripe 1 → disk 3, etc.
+function parityDisk(stripe) {
+  return (NUM_DISKS - 1 - (stripe % NUM_DISKS) + NUM_DISKS) % NUM_DISKS;
+}
+
+// ─── RENDER ──────────────────────────────────────────────
+function render() {
+  renderDisks();
+  renderStripes();
+  renderStats();
+}
+
+function renderDisks() {
+  const arr = document.getElementById('diskArray');
+  arr.innerHTML = '';
+  for (let d = 0; d < NUM_DISKS; d++) {
+    const div = document.createElement('div');
+    div.className = 'disk ' + (diskFailed[d] ? 'failed' : diskRebuilding[d] ? 'rebuilding' : 'healthy');
+    div.onclick = () => {};
+
+    const statusClass = diskFailed[d] ? 'status-fail' : diskRebuilding[d] ? 'status-rebuild' : 'status-ok';
+    const statusText  = diskFailed[d] ? 'FAILED' : diskRebuilding[d] ? 'REBUILDING' : 'OK';
+
+    const used = disks[d].filter(b => b.type !== 'empty' && b.type !== 'failed-block').length;
+    const pct = Math.round(used / BLOCKS_PER_DISK * 100);
+
+    div.innerHTML = `
+      <div class="disk-header">
+        <span class="disk-name">Disk ${d}</span>
+        <span class="disk-status ${statusClass}">${statusText}</span>
+      </div>
+      <div class="disk-blocks" id="disk-blocks-${d}">
+        ${disks[d].map((b,i) => blockHTML(b, d, i)).join('')}
+      </div>
+      <div class="disk-footer">
+        <span>${used}/${BLOCKS_PER_DISK} blocks</span>
+        <span>${pct}%</span>
+      </div>`;
+    arr.appendChild(div);
+  }
+}
+
+function blockHTML(b, d, i) {
+  const cls = diskFailed[d] ? 'failed-block' :
+              diskRebuilding[d] && b.type === 'failed-block' ? 'rebuilding-block' :
+              b.type;
+  const lbl = diskFailed[d] ? '✗' :
+              diskRebuilding[d] && b.type !== 'empty' ? '↺' :
+              b.label;
+  return `<div class="block ${cls}" title="Disk ${d}, Block ${i}${b.stripe >= 0 ? ', Stripe '+b.stripe : ''}">${lbl}</div>`;
+}
+
+function renderStripes() {
+  const vis = document.getElementById('stripeVis');
+  vis.innerHTML = '';
+  const rows = Math.min(currentStripe, 8);
+  if (rows === 0) {
+    vis.innerHTML = '<div style="font-size:12px;color:var(--muted);font-family:var(--mono);padding:8px 0;">Write data to see stripe layout...</div>';
+    return;
+  }
+  // Header
+  let header = '<div class="stripe-row"><div class="stripe-label"></div>';
+  for (let d = 0; d < NUM_DISKS; d++) header += `<div class="stripe-cell" style="background:var(--bg3);color:var(--muted2);font-size:10px;">Disk ${d}</div>`;
+  header += '</div>';
+  vis.innerHTML = header;
+
+  for (let s = 0; s < rows; s++) {
+    const p = parityDisk(s);
+    let row = `<div class="stripe-row"><div class="stripe-label">S${s}</div>`;
+    for (let d = 0; d < NUM_DISKS; d++) {
+      const isP = d === p;
+      const isFailed = diskFailed[d];
+      const block = disks[d][s];
+      let cls = isP ? 'parity' : 'data';
+      if (isFailed) cls = 'failed-cell';
+      else if (diskRebuilding[d]) cls = 'recover';
+      const lbl = isFailed ? '✗' : diskRebuilding[d] ? '✓' : isP ? 'P' : `D${d < p ? d : d-1}`;
+      row += `<div class="stripe-cell ${cls}" title="${isP ? 'Parity' : 'Data'} block">${lbl}</div>`;
+    }
+    row += '</div>';
+    vis.innerHTML += row;
+  }
+  if (currentStripe > 8) {
+    vis.innerHTML += `<div style="font-size:11px;color:var(--muted);font-family:var(--mono);padding:6px 0;">...and ${currentStripe - 8} more stripes</div>`;
+  }
+}
+
+function renderStats() {
+  document.getElementById('statTotal').textContent = totalWritten;
+  document.getElementById('statStripes').textContent = stripesUsed;
+  document.getElementById('statFailed').textContent = failedCount;
+  const health = failedCount === 0 ? '100%' : failedCount === 1 ? 'DEGRADED' : 'FAILED';
+  const hEl = document.getElementById('statHealth');
+  hEl.textContent = health;
+  hEl.className = 'stat-val ' + (failedCount === 0 ? 'green' : failedCount === 1 ? 'amber' : 'red');
+
+  const maxUsable = BLOCKS_PER_DISK * (NUM_DISKS - 1);
+  const pct = Math.round(totalWritten / maxUsable * 100);
+  document.getElementById('capPct').textContent = pct + '%';
+  document.getElementById('capBar').style.width = pct + '%';
+
+  document.getElementById('rebuildBtn').disabled = failedCount === 0 || failedCount > 1;
+}
+
+// ─── LOG ─────────────────────────────────────────────────
+function log(msg, type = '') {
+  const panel = document.getElementById('logPanel');
+  const now = new Date();
+  const ts = now.toTimeString().slice(0,8);
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = `<span class="log-time">${ts}</span><span class="log-msg ${type}">${msg}</span>`;
+  panel.appendChild(entry);
+  panel.scrollTop = panel.scrollHeight;
+}
+
+// ─── WRITE DATA ──────────────────────────────────────────
+async function writeData() {
+  if (failedCount > 1) { log('Array is in FAILED state — cannot write', 'err'); return; }
+  const stripes = parseInt(document.getElementById('writeSize').value);
+  const avail = BLOCKS_PER_DISK - currentStripe;
+  const toWrite = Math.min(stripes, avail);
+  if (toWrite === 0) { log('Array full (16 stripes used)', 'warn'); return; }
+
+  log(`Writing ${toWrite} stripe(s) to array...`, 'info');
+
+  for (let s = 0; s < toWrite; s++) {
+    const stripe = currentStripe;
+    const p = parityDisk(stripe);
+    let dataIdx = 0;
+
+    for (let d = 0; d < NUM_DISKS; d++) {
+      if (diskFailed[d]) {
+        disks[d][stripe] = {type:'failed-block', stripe, label:'✗'};
+      } else if (d === p) {
+        disks[d][stripe] = {type:'parity', stripe, label:'P'};
+      } else {
+        const lbl = `D${dataIdx}`;
+        disks[d][stripe] = {type:'data', stripe, label:lbl};
+        dataIdx++;
+        totalWritten++;
+      }
+    }
+
+    currentStripe++;
+    stripesUsed++;
+    renderDisks();
+    renderStripes();
+    renderStats();
+    log(`  Stripe ${stripe}: data on disks ${[...Array(NUM_DISKS).keys()].filter(d=>d!==p).join(',')}, parity on disk ${p}`, 'ok');
+    await sleep(180);
+  }
+  log(`Write complete. ${totalWritten} data blocks on array.`, 'ok');
+}
+
+// ─── FAIL DISK ───────────────────────────────────────────
+function failDisk() {
+  const d = parseInt(document.getElementById('failDisk').value);
+  if (diskFailed[d]) { log(`Disk ${d} is already failed`, 'warn'); return; }
+  if (failedCount >= 1) { log('Cannot fail second disk — array would be unrecoverable!', 'err'); return; }
+
+  diskFailed[d] = true;
+  failedCount++;
+
+  for (let b = 0; b < BLOCKS_PER_DISK; b++) {
+    if (disks[d][b].type !== 'empty') {
+      disks[d][b] = {type:'failed-block', stripe: disks[d][b].stripe, label:'✗'};
+    }
+  }
+
+  log(`💥 DISK ${d} FAILED — array is now DEGRADED`, 'err');
+  log(`Recovery possible using parity blocks on remaining disks`, 'warn');
+  log(`Run rebuild to restore data from parity XOR`, 'warn');
+
+  render();
+}
+
+// ─── REBUILD ─────────────────────────────────────────────
+async function rebuildDisk() {
+  const failedDisk = diskFailed.indexOf(true);
+  if (failedDisk < 0) { log('No failed disk to rebuild', 'warn'); return; }
+
+  log(`🔧 Starting rebuild of Disk ${failedDisk}...`, 'info');
+  log(`XORing surviving disks to reconstruct lost data`, 'info');
+  diskRebuilding[failedDisk] = true;
+  render();
+
+  await sleep(400);
+
+  for (let b = 0; b < BLOCKS_PER_DISK; b++) {
+    const block = disks[failedDisk][b];
+    if (block.type === 'failed-block' && block.stripe >= 0) {
+      const stripe = block.stripe;
+      const p = parityDisk(stripe);
+      const wasData = failedDisk !== p;
+      disks[failedDisk][b] = {
+        type: wasData ? 'data' : 'parity',
+        stripe,
+        label: wasData ? `D${failedDisk < p ? failedDisk : failedDisk - 1}` : 'P'
+      };
+      renderDisks();
+      await sleep(60);
+    }
+  }
+
+  diskFailed[failedDisk] = false;
+  diskRebuilding[failedDisk] = false;
+  failedCount--;
+
+  log(`✅ Disk ${failedDisk} rebuilt successfully via parity XOR`, 'ok');
+  log(`Array is now healthy — replace failed disk with a new one`, 'ok');
+  render();
+}
+
+// ─── RESET ───────────────────────────────────────────────
+function resetAll() {
+  initState();
+  document.getElementById('logPanel').innerHTML = '';
+  log('Array reset — all disks online, no data written', 'info');
+  render();
+}
+
+// ─── AUTO DEMO ───────────────────────────────────────────
+async function autoDemo() {
+  if (demoRunning) return;
+  demoRunning = true;
+  resetAll();
+  await sleep(300);
+  log('=== AUTO DEMO: Showing RAID-5 write, failure, and rebuild ===', 'info');
+  await sleep(400);
+
+  // Write 4 stripes
+  document.getElementById('writeSize').value = '4';
+  await writeData();
+  await sleep(800);
+
+  // Fail disk 2
+  log('--- Simulating disk 2 failure ---', 'warn');
+  document.getElementById('failDisk').value = '2';
+  failDisk();
+  await sleep(1200);
+
+  // Rebuild
+  await rebuildDisk();
+  await sleep(400);
+  log('=== Demo complete — RAID-5 successfully recovered from 1-disk failure ===', 'ok');
+  demoRunning = false;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ─── INIT ────────────────────────────────────────────────
+initState();
+log('RAID-5 array initialized — 5 disks, 16 blocks each', 'ok');
+log('Usable capacity: 80% (4 of 5 disks). Parity: distributed, rotating.', 'info');
+log('Click "Write Data" to begin, or "Auto Demo" to see everything.', 'info');
+render();
+</script>
+</body>
+</html>
