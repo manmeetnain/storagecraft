@@ -15,11 +15,11 @@ Deep dives into how storage actually works — from NVMe queue dispatch to KV-ca
 
 | Section | Description | Status |
 |---|---|---|
-| [Core Concepts](docs/src/content/docs/concepts/) | WAL, write amplification, COW, erasure coding | 🟢 Live |
-| [Storage Internals](docs/src/content/docs/internals/) | ext4, ZFS, NVMe, LSM trees, RAID | 🟡 Building |
-| [AI Infrastructure](docs/src/content/docs/ai-infra/) | KV-cache, vLLM, Flash Attention, GPU memory | 🟡 Building |
-| [Comparisons](docs/src/content/docs/comparisons/) | S3 vs Azure Blob, Ceph vs MinIO, ext4 vs ZFS | 🔴 Soon |
-| [Benchmarks](docs/src/content/docs/benchmarks/) | Reproducible Python-scripted benchmarks | 🔴 Soon |
+| [Core Concepts](src/content/docs/concepts/) | WAL, write amplification, COW, erasure coding | 🟢 Live |
+| [Storage Internals](src/content/docs/internals/) | ext4, ZFS, NVMe, LSM trees, RAID | 🟡 Building |
+| [AI Infrastructure](src/content/docs/ai-infra/) | KV-cache, vLLM, Flash Attention, GPU memory | 🟡 Building |
+| [Comparisons](src/content/docs/comparisons/) | S3 vs Azure Blob, Ceph vs MinIO, ext4 vs ZFS | 🔴 Soon |
+| [Benchmarks](src/content/docs/benchmarks/) | Reproducible Python-scripted benchmarks | 🔴 Soon |
 | [Simulators](docs/src/content/docs/simulators/) | Interactive RAID, LSM, consistent hashing | 🟡 Building |
 
 ---
