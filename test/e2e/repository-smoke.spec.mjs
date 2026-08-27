@@ -104,3 +104,14 @@ test('guided goals, workflows, CLI lab, and updates produce useful outcomes', as
   await expect(page.getByRole('heading', { name: 'What changed: maintained source watch' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'CHECK CURRENT UPDATES' }).first()).toHaveAttribute('href', /^https:/);
 });
+
+test('animated outcome journey advances through product stages', async ({ page }) => {
+  await page.goto('ai-resource-hub/index.html');
+  await expect(page.locator('#outcomeOrbit')).toHaveAttribute('data-stage', 'chatgpt');
+  await page.evaluate(() => window.advanceOutcomeJourney());
+  await expect(page.locator('#outcomeOrbit')).toHaveAttribute('data-stage', 'codex');
+  await expect(page.locator('[data-journey="codex"]')).toHaveClass(/active/);
+  await expect(page.locator('#journeyTitle')).toHaveText('BUILD');
+  const animationName = await page.locator('.outcome-runner').evaluate(el => getComputedStyle(el).animationName);
+  expect(animationName).toBe('outcome-journey');
+});
