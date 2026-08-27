@@ -61,6 +61,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [Erasure Coding Lab](https://manmeetnain.github.io/storagecraft/simulators/erasure-coding/index.html) | How does k+m coding trade capacity for recoverability? | Interactive failure lab + CLI |
 | [Write Amplification Explorer](https://manmeetnain.github.io/storagecraft/simulators/write-amplification/index.html) | How does one logical write multiply through the full stack? | Interactive pipeline + CLI |
 | [LSM-Tree Compaction Lab](https://manmeetnain.github.io/storagecraft/simulators/lsm-compaction/index.html) | How do leveled and tiered policies trade writes, reads, and space? | Interactive policy lab + CLI |
+| [GPU Memory Planner](https://manmeetnain.github.io/storagecraft/simulators/gpu-memory/index.html) | Will an LLM serving configuration fit per GPU? | Interactive inference planner + CLI |
 
 ## Roadmap
 

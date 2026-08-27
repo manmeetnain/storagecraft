@@ -45,3 +45,5 @@ Allocators reserve blocks, requests have varying lifetimes, and serving framewor
 5. Apply operational headroom and validate with sustained traffic.
 
 Use the [StorageCraft CLI](/storagecraft/internals/cli/) for a transparent KV-cache baseline.
+
+Use the [GPU Memory Planner](/storagecraft/simulators/gpu-memory/) to combine weights, KV cache, runtime workspace, tensor parallelism, headroom, and modeled concurrency.

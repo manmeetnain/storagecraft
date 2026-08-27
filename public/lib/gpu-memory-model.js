@@ -1,0 +1,13 @@
+export const GPU_PRESETS={
+  llama8:{name:'8B · GQA',paramsB:8,weightBits:16,layers:32,kvHeads:8,headDim:128},
+  llama70:{name:'70B · GQA',paramsB:70,weightBits:4,layers:80,kvHeads:8,headDim:128},
+  dense7:{name:'7B · MHA',paramsB:7,weightBits:16,layers:32,kvHeads:32,headDim:128},
+  large405:{name:'405B · GQA',paramsB:405,weightBits:4,layers:126,kvHeads:8,headDim:128}
+};
+const pos=(v,n,int=false)=>{const x=Number(v);if(!Number.isFinite(x)||x<=0||(int&&!Number.isInteger(x)))throw new Error(`${n} must be a positive${int?' integer':''}`);return x};
+export function calculateGpuMemory({paramsB=70,weightBits=4,weightOverheadPercent=5,layers=80,kvHeads=8,headDim=128,tokens=8192,concurrency=8,kvBytes=2,gpus=1,gpuMemoryGB=80,activationGB=2,workspaceGB=3,reservePercent=10,shardKv=true}={}){
+  const p=pos(paramsB,'paramsB'),bits=pos(weightBits,'weightBits'),layersN=pos(layers,'layers',true),heads=pos(kvHeads,'kvHeads',true),dim=pos(headDim,'headDim',true),tok=pos(tokens,'tokens',true),batch=pos(concurrency,'concurrency',true),bytes=pos(kvBytes,'kvBytes'),gpuN=pos(gpus,'gpus',true),capacity=pos(gpuMemoryGB,'gpuMemoryGB'),act=pos(activationGB,'activationGB'),work=pos(workspaceGB,'workspaceGB');
+  const reserve=Number(reservePercent);if(!Number.isFinite(reserve)||reserve<0||reserve>=100)throw new Error('reservePercent must be between 0 and 100');const overhead=Number(weightOverheadPercent);if(!Number.isFinite(overhead)||overhead<0)throw new Error('weightOverheadPercent must be non-negative');
+  const gib=1024**3;const totalWeightsGiB=p*1e9*(bits/8)*(1+overhead/100)/gib;const perRequestKvGiB=2*layersN*heads*dim*tok*bytes/gib;const totalKvGiB=perRequestKvGiB*batch;const perGpuWeights=totalWeightsGiB/gpuN;const perGpuKv=totalKvGiB/(shardKv?gpuN:1);const usablePerGpu=capacity*(1-reserve/100);const fixedPerGpu=act+work;const requiredPerGpu=perGpuWeights+perGpuKv+fixedPerGpu;const headroomGiB=usablePerGpu-requiredPerGpu;const kvBudgetPerGpu=Math.max(0,usablePerGpu-perGpuWeights-fixedPerGpu);const maxConcurrency=Math.max(0,Math.floor(kvBudgetPerGpu*(shardKv?gpuN:1)/perRequestKvGiB));
+  return{paramsB:p,weightBits:bits,layers:layersN,kvHeads:heads,headDim:dim,tokens:tok,concurrency:batch,kvBytes:bytes,gpus:gpuN,gpuMemoryGB:capacity,reservePercent:reserve,shardKv,totalWeightsGiB,perGpuWeights,perRequestKvGiB,totalKvGiB,perGpuKv,fixedPerGpu,usablePerGpu,requiredPerGpu,headroomGiB,maxConcurrency,fits:headroomGiB>=0,utilization:requiredPerGpu/capacity,warning:'Planning estimate: runtime kernels, CUDA graphs, allocator fragmentation, quantization metadata, parallelism strategy, and framework reservations must be measured on the target stack.'};
+}

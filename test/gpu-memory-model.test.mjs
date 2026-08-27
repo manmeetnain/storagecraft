@@ -1,0 +1,5 @@
+import test from'node:test';import assert from'node:assert/strict';import{calculateGpuMemory}from'../public/lib/gpu-memory-model.js';
+test('calculates the 7B MHA K-plus-V cache baseline',()=>{const r=calculateGpuMemory({paramsB:7,weightBits:16,weightOverheadPercent:0,layers:32,kvHeads:32,headDim:128,tokens:4096,concurrency:1,kvBytes:2,gpus:1,gpuMemoryGB:80,activationGB:1,workspaceGB:1,reservePercent:0});assert.equal(r.perRequestKvGiB,2);assert.ok(Math.abs(r.totalWeightsGiB-14e9/1024**3)<1e-10)});
+test('tensor parallelism shards weights and optionally KV',()=>{const one=calculateGpuMemory({gpus:1}),four=calculateGpuMemory({gpus:4});assert.ok(Math.abs(four.perGpuWeights-one.perGpuWeights/4)<1e-12);assert.ok(Math.abs(four.perGpuKv-one.perGpuKv/4)<1e-12)});
+test('detects fit and maximum concurrency',()=>{const r=calculateGpuMemory({paramsB:70,weightBits:4,gpus:1,gpuMemoryGB:40,concurrency:64});assert.equal(r.fits,false);assert.ok(r.maxConcurrency<64)});
+test('rejects invalid reserves',()=>{assert.throws(()=>calculateGpuMemory({reservePercent:100}),/between 0 and 100/)});

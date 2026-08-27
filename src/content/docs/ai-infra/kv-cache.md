@@ -74,11 +74,11 @@ def kv_cache_bytes(num_layers, num_heads, head_dim, seq_len, dtype_bytes=2):
 
 # Llama-2-7B, 4096 token context, bfloat16
 size = kv_cache_bytes(32, 32, 128, 4096, 2)
-print(f"KV-cache per request: {size / 1e9:.2f} GB")
-# Output: KV-cache per request: 1.07 GB
+print(f"KV-cache per request: {size / (1024 ** 3):.2f} GiB")
+# Output: KV-cache per request: 2.00 GiB
 ```
 
-With 40 GB GPU RAM and 1 GB per request, you can serve **~37 concurrent users** — that's your throughput ceiling.
+This cache alone consumes 2 GiB per fully occupied request. Real concurrency must also leave room for weights, activations, runtime workspaces, allocator fragmentation, and operational reserve.
 
 ## PagedAttention (vLLM)
 
