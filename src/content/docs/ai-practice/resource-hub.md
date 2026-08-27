@@ -1,11 +1,11 @@
 ---
-title: AI Capability Atlas
+title: Manmeet AI Command Center
 description: A practical, sourced path through ChatGPT capabilities, prompt design, agentic workflows, and open learning resources.
 ---
 
-The AI Capability Atlas puts ChatGPT, Codex, skills, plugins, connectors, shortcuts, prompts, and automated workflows under one searchable umbrella. It explains what each layer does, when to use it, and how to invoke it with practical examples.
+The Manmeet AI Command Center puts ChatGPT, Codex, Claude, Claude Code, Gemini, Copilot, skills, connectors, shortcuts, prompts, and automated workflows under one searchable, focused interface.
 
-<a class="sl-link-button primary" href="/storagecraft/ai-resource-hub/index.html">Launch the AI Capability Atlas →</a>
+<a class="sl-link-button primary" href="/storagecraft/ai-resource-hub/index.html">Launch the Manmeet AI Command Center →</a>
 
 ## What is inside
 

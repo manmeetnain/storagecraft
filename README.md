@@ -68,7 +68,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [NVMe Queue Lab](https://manmeetnain.github.io/storagecraft/simulators/nvme-queues/index.html) | When do queue count and depth expose performance versus add latency? | Interactive queue lab + CLI |
 | [SAN Failure-Domain Lab](https://manmeetnain.github.io/storagecraft/simulators/san-failure/index.html) | Will storage remain reachable—and recover before the workload times out? | Interactive resilience lab + CLI |
 | [Storage Network Academy](https://manmeetnain.github.io/storagecraft/simulators/network-academy/index.html) | How can a new hire safely practice FC switching and iSCSI operations? | Stateful terminal academy + guided labs |
-| [AI Capability Atlas](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) | Which ChatGPT, Codex, skill, connector, shortcut, or prompt pattern fits the job? | Searchable visual field guide with official sources |
+| [Manmeet AI Command Center](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) | Which AI platform, capability, skill, connector, shortcut, or prompt pattern fits the job? | Multi-platform deep-dive guide and interactive prompt console |
 
 ## Roadmap
 
