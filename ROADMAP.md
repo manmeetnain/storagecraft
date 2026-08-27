@@ -17,6 +17,7 @@ A capsule can move to `shipped` only when it has:
 
 | Priority | Capsule | State | Primary audience |
 |---:|---|---|---|
+| 120 | Storage Network Academy | Active | New hires, students, and SAN operations teams |
 | 100 | Universal RAID Planner | Shipped | Storage and infrastructure engineers |
 | 95 | Erasure Coding Lab | Shipped | Distributed-storage and cloud engineers |
 | 92 | Write Amplification Explorer | Shipped | Database, SSD, filesystem, and AI-data engineers |
