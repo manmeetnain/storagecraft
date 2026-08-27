@@ -102,6 +102,35 @@
         border-radius: 999px;
         white-space: nowrap;
       }
+      .journey { margin-bottom:14px; padding:16px; }
+      .journey-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+      .journey-head strong { font-size:14px; }
+      .journey-head span { color:var(--cyan); font:10px var(--mono); }
+      .journey-steps { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
+      .journey-step { text-align:left; background:#07101c; color:var(--muted); border:1px solid var(--line); border-radius:10px; padding:10px; cursor:pointer; }
+      .journey-step b { display:block; color:var(--text); font-size:11px; margin:3px 0; }
+      .journey-step small { font:9px/1.35 var(--mono); }
+      .journey-step .step-number { color:var(--cyan); font:800 9px var(--mono); }
+      .journey-step.active { border-color:var(--cyan); background:rgba(34,211,238,.08); }
+      .stage-guide { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px; margin-top:12px; padding:14px; border-radius:10px; background:linear-gradient(100deg,rgba(34,211,238,.08),rgba(167,139,250,.05)); }
+      .stage-guide h2 { font-size:18px; margin:0 0 5px; }
+      .stage-guide p { color:var(--muted); font:10px/1.55 var(--mono); margin:0; max-width:760px; }
+      .stage-guide button { background:var(--cyan); color:#021018; border:0; border-radius:8px; padding:10px 14px; font:800 10px var(--mono); cursor:pointer; }
+      .stage-guide .full-workspace { background:transparent; color:var(--muted); border:1px solid var(--line); margin-left:6px; }
+      body[data-stage="basics"] .topology,
+      body[data-stage="basics"] .certification,
+      body[data-stage="basics"] .terminal-tabs,
+      body[data-stage="basics"] .governance,
+      body[data-stage="basics"] .config-safety,
+      body[data-stage="basics"] .advanced-scenarios { display:none; }
+      body[data-stage="basics"] .lesson:not(:first-child) { display:none; }
+      body[data-stage="configure"] .topology,
+      body[data-stage="configure"] .certification,
+      body[data-stage="configure"] .advanced-scenarios { display:none; }
+      body[data-stage="fabric"] .certification,
+      body[data-stage="fabric"] .advanced-scenarios,
+      body[data-stage="fabric"] .config-safety { display:none; }
+      body[data-stage="incidents"] .certification { display:none; }
       .workspace {
         display: grid;
         grid-template-columns: 290px minmax(0, 1fr) 300px;
@@ -450,10 +479,13 @@
         .terminal-head span {
           display: none;
         }
+        .journey-steps { grid-template-columns:1fr 1fr; }
+        .stage-guide { grid-template-columns:1fr; }
+        .cert-tasks { grid-template-columns:1fr; }
       }
     </style>
   </head>
-  <body>
+  <body data-stage="basics">
     <header>
       <a class="brand" href="/storagecraft/"
         >Storage<span>Craft</span> Academy</a
@@ -472,6 +504,11 @@
         </div>
         <div class="status">● SIMULATION ONLY · NO REAL DEVICES</div>
       </div>
+      <section class="panel journey" aria-label="Academy learning journey">
+        <div class="journey-head"><strong>Choose your learning stage</strong><span id="stage-progress">STAGE 1 OF 5 · BEGINNER</span></div>
+        <div class="journey-steps" id="journey-steps"></div>
+        <div class="stage-guide"><div><h2 id="stage-title">Start with one switch</h2><p id="stage-description">Learn how to inspect a healthy switch before making any changes. Choose an environment, follow Lab 01, and run the highlighted command.</p></div><div><button id="stage-action">START LAB 01</button><button class="full-workspace" id="full-workspace">FULL WORKSPACE</button></div></div>
+      </section>
       <section class="panel topology" aria-label="Live dual-fabric topology">
         <div class="topology-head"><strong>LIVE DUAL-FABRIC TOPOLOGY · v2.0</strong><div class="topology-actions"><button id="fabric-a">TOGGLE A</button> <button id="fabric-b">TOGGLE B</button> <button id="fabric-reset">RESTORE</button></div><span class="topology-summary" id="topology-summary"></span></div>
         <div class="topology-grid" id="topology-grid"></div>
@@ -524,8 +561,8 @@
         <aside class="panel curriculum">
           <div class="panel-title">Guided new-hire path</div>
           <div class="lessons" id="lessons"></div>
-          <div class="panel-title">Troubleshooting incidents</div>
-          <div class="scenarios" id="scenarios"></div>
+          <div class="advanced-scenarios"><div class="panel-title">Troubleshooting incidents</div>
+          <div class="scenarios" id="scenarios"></div></div>
           <div class="guide">
             <h3 id="lesson-title">Select a lesson</h3>
             <p id="lesson-goal">
@@ -555,6 +592,33 @@
       const $ = (id) => document.getElementById(id);
       document.title = productTitle(STORAGECRAFT_BRAND.academyName);
       document.getElementById("creator-attribution").innerHTML = `${creatorAttribution()} · <a href="${STORAGECRAFT_BRAND.repositoryUrl}">GitHub ↗</a>`;
+      const learningStages = [
+        { id:'basics', level:'BEGINNER', title:'Start with one switch', short:'Inspect health', description:'Learn how to inspect a healthy switch before making changes. Choose Brocade, Cisco, or iSCSI; follow Lab 01; run the highlighted command.', action:'START LAB 01' },
+        { id:'configure', level:'FOUNDATION', title:'Configure safely', short:'Build and undo', description:'Practice zoning or iSCSI configuration, use multiple terminals, then protect work with an atomic script, checkpoint, diff, and rollback.', action:'OPEN CONFIG TOOLS' },
+        { id:'fabric', level:'INTERMEDIATE', title:'Understand dual fabrics', short:'Trace both paths', description:'See how a host reaches storage through independent Fabric A and Fabric B paths. Fail one fabric and confirm service remains reachable.', action:'EXPLORE TOPOLOGY' },
+        { id:'incidents', level:'ADVANCED', title:'Troubleshoot incidents', short:'Diagnose and recover', description:'Investigate CRC errors, inactive zoning, asymmetric paths, authentication failures, and complete fabric loss across device terminals.', action:'VIEW INCIDENTS' },
+        { id:'certify', level:'ASSESSMENT', title:'Prove job readiness', short:'Earn evidence', description:'Complete five practical domains with RBAC and audit evidence, then download a branded JSON or CSV assessment report.', action:'START ASSESSMENT' },
+      ];
+      let learningStage = 'basics';
+      function renderJourney() {
+        const index = learningStages.findIndex((stage) => stage.id === learningStage);
+        const stage = learningStages[index];
+        document.body.dataset.stage = stage.id;
+        $("journey-steps").innerHTML = learningStages.map((item, position) => `<button class="journey-step ${item.id===stage.id?'active':''}" data-stage-id="${item.id}" aria-current="${item.id===stage.id?'step':'false'}"><span class="step-number">${String(position+1).padStart(2,'0')}</span><b>${item.title}</b><small>${item.short}</small></button>`).join('');
+        document.querySelectorAll('[data-stage-id]').forEach((button) => button.onclick = () => { learningStage=button.dataset.stageId; renderJourney(); });
+        $("stage-progress").textContent = `STAGE ${index+1} OF ${learningStages.length} · ${stage.level}`;
+        $("stage-title").textContent = stage.title;
+        $("stage-description").textContent = stage.description;
+        $("stage-action").textContent = stage.action;
+      }
+      $("stage-action").onclick = () => {
+        if(learningStage==='basics'){ lesson=0; step=0; renderLessons(); $("command").focus(); }
+        if(learningStage==='configure'){ document.querySelector('.config-safety').open=true; document.querySelector('.terminal-wrap').scrollIntoView({behavior:'smooth',block:'start'}); }
+        if(learningStage==='fabric') document.querySelector('.topology').scrollIntoView({behavior:'smooth',block:'start'});
+        if(learningStage==='incidents') document.querySelector('.advanced-scenarios').scrollIntoView({behavior:'smooth',block:'start'});
+        if(learningStage==='certify'){ $("candidate-name").focus(); document.querySelector('.certification').scrollIntoView({behavior:'smooth',block:'start'}); }
+      };
+      $("full-workspace").onclick = () => { learningStage='certify'; renderJourney(); document.querySelector('.workspace').scrollIntoView({behavior:'smooth',block:'start'}); };
       const operationsWorkspace = createOperationsWorkspace();
       const configurationSafety = createConfigurationSafety(operationsWorkspace);
       const governance = createGovernedWorkspace(operationsWorkspace, { actor: 'learner01', role: 'administrator' });
@@ -1031,6 +1095,7 @@
         if (confirm("Reset this simulated environment to its baseline?"))
           run("reset");
       };
+      renderJourney();
       renderProfiles();
       renderTerminalTabs();
       renderTopology();
