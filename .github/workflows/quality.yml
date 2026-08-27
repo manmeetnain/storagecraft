@@ -1,0 +1,31 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: npm ci
+      - run: npm run check
+      - run: NO_COLOR=1 npm run craft -- doctor
+      - run: NO_COLOR=1 npm run craft -- raid --level 6 --disks 8 --size 4
+      - run: NO_COLOR=1 npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2

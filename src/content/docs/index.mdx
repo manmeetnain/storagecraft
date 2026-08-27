@@ -1,28 +1,45 @@
 ---
 title: StorageCraft
-description: The open knowledge base for storage systems and AI infrastructure.
+description: Interactive systems lab for storage engineering and AI infrastructure.
 template: splash
 hero:
-  tagline: Deep-dive storage and AI infrastructure knowledge. Trusted content. Open forever.
+  tagline: Understand the data path beneath modern AI—from disk arrays and write paths to GPU memory and KV caches—through visual labs, precise models, and reproducible experiments.
+  image:
+    file: ../../../public/brand/storagecraft-social.png
   actions:
-    - text: Start Learning
-      link: /storagecraft/concepts/write-amplification/
-      icon: right-arrow
+    - text: Launch RAID Lab
+      link: /storagecraft/simulators/raid/index.html
+      icon: rocket
       variant: primary
-    - text: View on GitHub
+    - text: Use the CLI
+      link: /storagecraft/internals/cli/
+    - text: Star on GitHub
       link: https://github.com/manmeetnain/storagecraft
       icon: external
 ---
 
-## What is StorageCraft?
+import { Card, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
 
-StorageCraft is a free, open-source knowledge base for storage systems and AI infrastructure — from how NVMe works under the hood, to how KV-cache powers LLM inference.
+## Systems become intuitive when you can operate them
 
-## Sections
+<CardGrid>
+  <Card title="Interactive labs" icon="rocket">Change parameters, trigger failures, and observe system behavior instead of memorizing diagrams.</Card>
+  <Card title="Engineering models" icon="approve-check">Calculate capacity, overhead, memory pressure, and trade-offs with explicit assumptions.</Card>
+  <Card title="Production context" icon="puzzle">Connect fundamentals to enterprise storage, distributed data systems, and LLM inference.</Card>
+</CardGrid>
 
-- **Core Concepts** — WAL, write amplification, copy-on-write, erasure coding
-- **AI Infrastructure** — KV-cache, vLLM, Flash Attention, GPU memory
-- **Simulators** — Interactive RAID, LSM tree, consistent hashing demos
-- **Benchmarks** — Reproducible, Python-scripted benchmark data
+## Start with a learning path
 
-*Built by [@manmeetnain](https://github.com/manmeetnain) · MIT License*
+<LinkCard title="Storage mechanics" description="Write amplification, WAL, Copy-on-Write, RAID, and erasure coding." href="/storagecraft/concepts/write-amplification/" />
+<LinkCard title="AI inference memory" description="KV-cache sizing, GPU memory pressure, and serving trade-offs." href="/storagecraft/ai-infra/kv-cache/" />
+<LinkCard title="StorageCraft CLI" description="Run colored capacity and KV-cache models directly from your terminal." href="/storagecraft/internals/cli/" />
+
+## The five-minute experiment
+
+<Steps>
+1. Open the **RAID-5 Visualizer** and write two stripes.
+2. Fail one disk and inspect how XOR reconstructs missing blocks.
+3. Rebuild the array, then compare the behavior with erasure coding.
+</Steps>
+
+> StorageCraft is educational engineering software. Validate workload, durability, recovery objectives, and vendor behavior before making production decisions.

@@ -1,0 +1,27 @@
+name: Topic or simulator proposal
+description: Propose a high-value learning capsule.
+title: "proposal: "
+labels: [content, proposal]
+body:
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      placeholder: PagedAttention block allocation
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Learning objective
+      description: What should a reader be able to explain or calculate afterward?
+    validations:
+      required: true
+  - type: textarea
+    id: interaction
+    attributes:
+      label: Proposed interaction or experiment
+  - type: textarea
+    id: sources
+    attributes:
+      label: Primary references

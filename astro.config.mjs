@@ -14,6 +14,11 @@ export default defineConfig({
       lastUpdated: true,
       pagination: true,
       customCss: ['./src/assets/custom.css'],
+      logo: { src: './src/assets/storagecraft-mark.svg' },
+      head: [
+        { tag: 'meta', attrs: { property: 'og:image', content: 'https://manmeetnain.github.io/storagecraft/brand/storagecraft-social.png' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#07111f' } },
+      ],
       sidebar: [
         {
           label: '🧠 Core Concepts',

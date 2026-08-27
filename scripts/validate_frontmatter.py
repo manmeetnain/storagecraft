@@ -5,10 +5,8 @@ Usage: python3 scripts/validate_frontmatter.py
 """
 import sys
 from pathlib import Path
-from datetime import datetime
-
-CONTENT_DIR = Path("docs/src/content/docs")
-REQUIRED = ["title", "description", "lastUpdated"]
+CONTENT_DIR = Path("src/content/docs")
+REQUIRED = ["title", "description"]
 errors, warnings = [], []
 
 def parse_fm(text):
@@ -22,12 +20,16 @@ def parse_fm(text):
             fields[k.strip()] = v.strip()
     return fields
 
-files = list(CONTENT_DIR.rglob("*.md")) + list(CONTENT_DIR.rglob("*.mdx"))
+if not CONTENT_DIR.is_dir():
+    print(f"✗ content directory not found: {CONTENT_DIR}")
+    sys.exit(1)
+
+files = sorted(list(CONTENT_DIR.rglob("*.md")) + list(CONTENT_DIR.rglob("*.mdx")))
 print(f"Validating {len(files)} file(s)...")
 
 for f in files:
     rel = f.relative_to(CONTENT_DIR)
-    fm = parse_fm(f.read_text())
+    fm = parse_fm(f.read_text(encoding="utf-8"))
     for field in REQUIRED:
         if field not in fm or not fm[field]:
             errors.append(f"{rel}: missing '{field}'")

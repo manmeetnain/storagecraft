@@ -9,7 +9,12 @@
     "preview": "astro preview",
     "gen:bench": "python3 scripts/gen_benchmark_page.py",
     "gen:index": "python3 scripts/gen_content_index.py",
-    "validate": "python3 scripts/validate_frontmatter.py"
+    "validate": "python3 scripts/validate_frontmatter.py",
+    "craft": "node scripts/storagecraft.mjs",
+    "check": "npm run validate && npm run build"
+  },
+  "bin": {
+    "storagecraft": "./scripts/storagecraft.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.39.2",

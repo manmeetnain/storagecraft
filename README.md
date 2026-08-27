@@ -1,81 +1,94 @@
-# 🗄️ StorageCraft
+<div align="center">
+  <img src="public/brand/storagecraft-social.png" alt="Storage systems connected to an AI compute fabric" width="100%">
 
-**The open knowledge base where enterprise storage meets AI infrastructure.**
+  # StorageCraft
 
-[![GitHub Stars](https://img.shields.io/github/stars/manmeetnain/storagecraft?style=flat-square)](https://github.com/manmeetnain/storagecraft/stargazers)
-[![Docs Site](https://img.shields.io/badge/docs-live-brightgreen?style=flat-square)](https://manmeetnain.github.io/storagecraft)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg?style=flat-square)](CONTRIBUTING.md)
+  **Operate the data path beneath modern AI.**
 
----
+  Interactive labs, transparent engineering models, and visual deep dives spanning storage internals, distributed data, and LLM infrastructure.
 
-## 📖 What's inside
+  [![Live Lab](https://img.shields.io/badge/LAUNCH-INTERACTIVE_LAB-22d3ee?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)
+  [![Documentation](https://img.shields.io/badge/EXPLORE-DOCUMENTATION-8b5cf6?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/)
+  [![Sponsor](https://img.shields.io/badge/SPONSOR-THE_LAB-34d399?style=for-the-badge)](https://github.com/sponsors/manmeetnain)
 
-| Section | Description | Status |
+  [![Quality](https://github.com/manmeetnain/storagecraft/actions/workflows/quality.yml/badge.svg)](https://github.com/manmeetnain/storagecraft/actions/workflows/quality.yml)
+  [![Deploy](https://github.com/manmeetnain/storagecraft/actions/workflows/deploy.yml/badge.svg)](https://github.com/manmeetnain/storagecraft/actions/workflows/deploy.yml)
+  [![GitHub stars](https://img.shields.io/github/stars/manmeetnain/storagecraft?style=flat-square&color=22d3ee)](https://github.com/manmeetnain/storagecraft/stargazers)
+  [![License: MIT](https://img.shields.io/badge/license-MIT-8b5cf6.svg?style=flat-square)](LICENSE)
+</div>
+
+## Why StorageCraft exists
+
+The storage layer is usually invisible—until latency spikes, a disk fails, compaction stalls, or an LLM server runs out of memory. StorageCraft exposes those mechanisms through experiments you can operate and models you can inspect.
+
+| Explore | Operate | Measure |
 |---|---|---|
-| [🧠 Core Concepts](https://manmeetnain.github.io/storagecraft/concepts/write-amplification/) | WAL, Write Amplification, COW, Erasure Coding | 🟢 Live |
-| [🤖 AI Infrastructure](https://manmeetnain.github.io/storagecraft/ai-infra/kv-cache/) | KV-Cache, vLLM, Flash Attention, GPU Memory | 🟢 Live |
-| [🔮 Generative AI](https://manmeetnain.github.io/storagecraft) | LLM storage, RAG, Vector DBs, Agents | 🟡 Building |
-| [⚙️ Storage Internals](https://manmeetnain.github.io/storagecraft) | NVMe, LSM Trees, RAID, ext4, ZFS | 🟡 Building |
-| [🏢 Enterprise Storage](https://manmeetnain.github.io/storagecraft) | IBM FlashSystem, EMC PowerMax, SAN fabrics | 🟡 Building |
-| [🔬 Simulators](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html) | Interactive RAID, LSM Tree, SAN fabric | 🟡 Building |
-| [📊 Benchmarks](https://manmeetnain.github.io/storagecraft) | Reproducible Python benchmark suite | 🔴 Coming |
+| Canonical systems explanations | Browser-based failure labs | Capacity and memory calculators |
+| Storage × AI learning paths | Colored terminal workflows | Explicit formulas and assumptions |
+| Production trade-off checklists | Shareable, zero-install demos | Reproducible benchmarks—next |
 
----
+## Try it in 60 seconds
 
-## 🌐 Live Site
+### Browser lab
 
-**[→ manmeetnain.github.io/storagecraft](https://manmeetnain.github.io/storagecraft)**
+Open the **[RAID-5 Visualizer](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)**, write two stripes, fail a disk, and watch XOR reconstruct the missing blocks.
 
-This is where you read the content — beautifully rendered with search, sidebar navigation, and code highlighting.
-
----
-
-## 🔬 Live Simulators
-
-**[▶ RAID-5 Visualizer](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)**
-Write data, fail a disk, watch parity rebuild in real-time via XOR.
-
----
-
-## 🚀 Quick start
+### Colored CLI
 
 ```bash
-git clone https://github.com/manmeetnain/storagecraft
+git clone https://github.com/manmeetnain/storagecraft.git
 cd storagecraft
 npm install
-npm run dev
-# → http://localhost:4321/storagecraft
+npm run craft -- raid --level 6 --disks 8 --size 4
+npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2
 ```
 
----
+The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](https://no-color.org/) convention.
 
-## 🐍 Python tooling
+## Current learning capsules
+
+| Path | Core question | Artifact |
+|---|---|---|
+| [Write Amplification](https://manmeetnain.github.io/storagecraft/concepts/write-amplification/) | Why does one logical write become many physical writes? | Deep dive |
+| [Write-Ahead Log](https://manmeetnain.github.io/storagecraft/concepts/write-ahead-log/) | How is a mutation made crash-safe? | Deep dive |
+| [Copy-on-Write](https://manmeetnain.github.io/storagecraft/concepts/copy-on-write/) | How do immutable updates enable snapshots? | Deep dive |
+| [Erasure Coding](https://manmeetnain.github.io/storagecraft/concepts/erasure-coding/) | How is durability traded against capacity and repair cost? | Deep dive |
+| [KV Cache](https://manmeetnain.github.io/storagecraft/ai-infra/kv-cache/) | Why does inference memory grow with live tokens? | AI-infra deep dive |
+| [GPU Memory Anatomy](https://manmeetnain.github.io/storagecraft/ai-infra/gpu-memory/) | What competes for accelerator memory? | Sizing workflow |
+| [RAID-5](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html) | How does distributed parity recover missing data? | Interactive lab |
+
+## Roadmap
+
+- [x] RAID failure and rebuild lab
+- [x] RAID and KV-cache CLI models
+- [x] Storage internals and AI-infrastructure foundation
+- [ ] Erasure Coding Lab
+- [ ] Write Amplification Explorer
+- [ ] GPU Memory Planner
+- [ ] RAG Storage Sizer
+- [ ] Reproducible benchmark capsule format
+
+Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml).
+
+## Quality contract
+
+Every flagship capsule should include a learning objective, explicit assumptions, a visual or executable model, failure behavior, production limitations, automated validation, and a contribution entry point.
 
 ```bash
-# Validate all doc frontmatter
-python3 scripts/validate_frontmatter.py
-
-# Generate benchmark page from result JSON
-python3 scripts/gen_benchmark_page.py --sample
+npm run check
+npm run craft -- doctor
 ```
 
----
+## Contribute
 
-## 🤝 Contributing
+Storage engineers, ML-systems engineers, database practitioners, educators, technical writers, and accessible-design contributors are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), open a focused proposal, or improve an explanation with a primary source.
 
-PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+## Maintainer
 
----
+Built by **[Manmeet Nain](https://github.com/manmeetnain)**—Enterprise Storage Engineer working across IBM, EMC, Brocade, Cisco, SAN/NAS, and AI infrastructure in India.
 
-## 👤 Author
-
-**Manmeet Nain** — Enterprise Storage Engineer × GenAI & AI Infrastructure
-
-- GitHub: [@manmeetnain](https://github.com/manmeetnain)
-- Docs: [manmeetnain.github.io/storagecraft](https://manmeetnain.github.io/storagecraft)
-- Sponsor: [github.com/sponsors/manmeetnain](https://github.com/sponsors/manmeetnain)
+If StorageCraft helps your work, [star the repository](https://github.com/manmeetnain/storagecraft), share a lab, or [sponsor its development](https://github.com/sponsors/manmeetnain).
 
 ---
 
-*Enterprise Storage × Generative AI × Open Source · India 🇮🇳 · MIT License*
+<div align="center"><sub>Educational engineering software · Validate assumptions before production use · MIT</sub></div>
