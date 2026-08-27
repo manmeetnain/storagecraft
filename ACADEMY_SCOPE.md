@@ -23,15 +23,15 @@ Each vendor profile must provide:
 
 Command names modeled after vendor CLIs are implemented from public documentation. Output is original educational output, not copied firmware output. Unsupported commands return help rather than pretending to succeed.
 
-## Delivery queue
+## Delivered components
 
-| Priority | Capsule | Initial command domains |
-|---:|---|---|
-| 120 | Academy Core | Parser, state, terminal, history, help, undo, reset, persistence |
-| 118 | Brocade FC Lab | Switch setup, ports, aliases, zones, configs, failures |
-| 116 | Cisco MDS Lab | Config modes, VSANs, interfaces, device aliases, zonesets |
-| 114 | iSCSI Lab | VLAN/IP, target/portal/LUN, CHAP, sessions, multipath |
-| 112 | Guided Curriculum | New-hire steps, hints, validation, scoring, assessments |
+| Component | State | Command domains |
+|---|---|---|
+| Academy Core | Shipped | Parser, state, terminal, history, help, undo, reset, persistence |
+| Brocade FC Lab | Shipped | Switch setup, ports, aliases, zones, configs, diagnostics, failures |
+| Cisco MDS Lab | Shipped | Modes, VSANs, interfaces, FLOGI/FCNS, device aliases, zonesets, logs |
+| iSCSI Lab | Shipped | VLAN/IP, target/portal/LUN, CHAP, discovery, sessions, multipath |
+| Guided Curriculum | Shipped | Twelve guided labs, hints, six incidents, scoring, reports, export |
 
 ## Scenario contract
 

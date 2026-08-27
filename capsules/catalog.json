@@ -10,7 +10,7 @@
     {"id":"rag-storage","title":"RAG Storage Sizer","status":"shipped","priority":86,"model":"public/lib/rag-storage-model.js","tests":"test/rag-storage-model.test.mjs","ui":"public/simulators/rag-storage/index.html","docs":"src/content/docs/simulators/rag-storage.md","cli":"rag-size"},
     {"id":"ai-data-path","title":"AI Data Path Lab","status":"shipped","priority":82,"model":"public/lib/ai-data-path-model.js","tests":"test/ai-data-path-model.test.mjs","ui":"public/simulators/ai-data-path/index.html","docs":"src/content/docs/simulators/ai-data-path.md","cli":"ai-path"},
     {"id":"nvme-queues","title":"NVMe Queue Lab","status":"shipped","priority":78,"model":"public/lib/nvme-queue-model.js","tests":"test/nvme-queue-model.test.mjs","ui":"public/simulators/nvme-queues/index.html","docs":"src/content/docs/simulators/nvme-queues.md","cli":"nvme-queues"},
-    {"id":"storage-network-academy","title":"Storage Network Academy","status":"active","priority":120},
+    {"id":"storage-network-academy","title":"Storage Network Academy","status":"shipped","priority":120,"model":"public/lib/network-academy-engine.js","tests":"test/network-academy-engine.test.mjs","ui":"public/simulators/network-academy/index.html","docs":"src/content/docs/simulators/network-academy.md","cli":"academy"},
     {"id":"san-failure","title":"SAN Failure-Domain Lab","status":"shipped","priority":76,"model":"public/lib/san-failure-model.js","tests":"test/san-failure-model.test.mjs","ui":"public/simulators/san-failure/index.html","docs":"src/content/docs/simulators/san-failure.md","cli":"san-failure"}
   ]
 }

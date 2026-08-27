@@ -447,8 +447,9 @@
             <div class="lights"><i></i><i></i><i></i></div>
             <span id="profile-title"></span>
             <div class="tools">
-              <button class="tool" id="help">HELP</button
-              ><button class="tool" id="undo">UNDO</button
+                <button class="tool" id="help">HELP</button
+                ><button class="tool" id="report">REPORT</button
+                ><button class="tool" id="undo">UNDO</button
               ><button class="tool" id="reset">RESET</button>
             </div>
           </div>
@@ -565,6 +566,18 @@
               "show interface brief",
             ],
           },
+          {
+            title: "Verify logins and save",
+            goal:
+              "Inspect FLOGI and FCNS registrations, review events, and save the running configuration.",
+            commands: [
+              "show flogi database",
+              "show fcns database",
+              "show logging",
+              "copy running-config startup-config",
+              "show startup-config",
+            ],
+          },
         ],
         iscsi: [
           {
@@ -598,6 +611,20 @@
               "multipath show",
             ],
           },
+          {
+            title: "Secure and protect sessions",
+            goal:
+              "Create a CHAP-protected target, authenticate, and select a multipath policy.",
+            commands: [
+              "target create iqn.2026-08.lab:secure",
+              "portal add iqn.2026-08.lab:secure 192.0.2.30:3260",
+              "chap set iqn.2026-08.lab:secure learner strongsecret",
+              "discover",
+              "login iqn.2026-08.lab:secure learner strongsecret",
+              "multipath policy failover",
+              "multipath show",
+            ],
+          },
         ],
       };
       let profile = localStorage.getItem("academy-profile") || "brocade",
@@ -612,6 +639,13 @@
         if (!sessions[profile]) {
           const saved = localStorage.getItem(`academy-state-${profile}`);
           sessions[profile] = createAcademySession(profile);
+          const assessments = localStorage.getItem(
+            `academy-assessments-${profile}`,
+          );
+          if (assessments)
+            try {
+              sessions[profile].assessments = JSON.parse(assessments);
+            } catch {}
           if (saved)
             try {
               sessions[profile].state = JSON.parse(saved);
@@ -623,6 +657,10 @@
         localStorage.setItem(
           `academy-state-${profile}`,
           JSON.stringify(getSession().state),
+        );
+        localStorage.setItem(
+          `academy-assessments-${profile}`,
+          JSON.stringify(getSession().assessments),
         );
         localStorage.setItem("academy-profile", profile);
       }
@@ -731,7 +769,7 @@
         $("prompt").textContent = r.prompt;
         history.push(command);
         historyIndex = history.length;
-        if (r.changed) save();
+        if (r.changed || r.assessment) save();
         if (incidentMode && r.assessment) {
           $("progress").style.width = r.assessment.passed ? "100%" : "25%";
           $("hint").textContent = r.assessment.passed
@@ -771,6 +809,7 @@
         }
       };
       $("help").onclick = () => run("help");
+      $("report").onclick = () => run("academy report");
       $("undo").onclick = () => run("undo");
       $("reset").onclick = () => {
         if (confirm("Reset this simulated environment to its baseline?"))

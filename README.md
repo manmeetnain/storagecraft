@@ -78,6 +78,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 - [x] GPU Memory Planner
 - [x] RAG Storage Sizer
 - [x] AI Data Path Lab
+- [x] Storage Network Academy: Brocade-style FC, Cisco MDS-style FC, and iSCSI
 - [ ] Reproducible benchmark capsule format
 
 Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml).
