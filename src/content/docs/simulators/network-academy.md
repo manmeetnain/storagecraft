@@ -8,6 +8,10 @@ sidebar:
 
 Storage Network Academy is a browser-local training environment for new hires, students, and storage operations teams. It simulates stateful command workflows without connecting to real infrastructure.
 
+Academy v2 adds a live Fabric A/B topology, independent Brocade-style and Cisco MDS-style switch terminals, an iSCSI gateway terminal, cross-fabric incidents, atomic multi-device configuration scripts, path-level diffs, named checkpoints and rollback, Observer/Operator/Administrator roles, chained audit evidence, version-labelled compatibility profiles, and a five-domain practical certification with JSON and CSV reports.
+
+Every device mutation remains local to the browser. Vendor names describe educational command styles; the simulator does not claim exact firmware emulation and must not replace the documentation for the installed production release.
+
 <a class="sl-link-button primary" href="/storagecraft/simulators/network-academy/index.html">Launch Storage Network Academy →</a>
 
 ## Environments

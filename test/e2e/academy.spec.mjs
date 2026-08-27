@@ -1,0 +1,68 @@
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+const academy = 'simulators/network-academy/index.html';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto(academy);
+  await expect(page.getByRole('heading', { name: 'Storage Network Academy' })).toBeVisible();
+});
+
+test('renders branded topology, five terminals, and three incidents', async ({ page }) => {
+  await expect(page.getByText('Built by Manmeet Nain (@manmeetnain)')).toBeVisible();
+  await expect(page.locator('.topology-node')).toHaveCount(6);
+  await expect(page.locator('.terminal-tab')).toHaveCount(5);
+  await expect(page.locator('.operations-incident')).toHaveCount(3);
+  await expect(page.locator('#topology-summary')).toHaveText('HEALTHY · A UP · B UP');
+});
+
+test('fails and restores a redundant fabric', async ({ page }) => {
+  await page.getByRole('button', { name: 'TOGGLE A' }).click();
+  await expect(page.locator('#topology-summary')).toHaveText('DEGRADED · A DOWN · B UP');
+  await page.getByRole('button', { name: 'RESTORE', exact: true }).click();
+  await expect(page.locator('#topology-summary')).toHaveText('HEALTHY · A UP · B UP');
+});
+
+test('retains independent terminal state across vendors', async ({ page }) => {
+  await page.getByRole('button', { name: 'FC-A1 · A' }).click();
+  await page.getByLabel('Simulator command').fill('switchname E2E-A1');
+  await page.getByRole('button', { name: 'RUN', exact: true }).click();
+  await page.getByRole('button', { name: 'MDS-A2 · A' }).click();
+  await expect(page.locator('#prompt')).toHaveText('MDS-A2#');
+  await page.getByRole('button', { name: 'FC-A1 · A' }).click();
+  await expect(page.locator('#prompt')).toHaveText('E2E-A1:admin>');
+});
+
+test('runs atomic configuration, reports diff, and rolls back', async ({ page }) => {
+  await page.getByText('CONFIGURATION SAFETY · ATOMIC SCRIPTS / DIFF / CHECKPOINT / ROLLBACK').click();
+  await page.getByRole('button', { name: 'CHECKPOINT' }).click();
+  await expect(page.locator('#config-result')).toContainText('captured across 5 devices');
+  await page.getByRole('button', { name: 'RUN ATOMIC' }).click();
+  await expect(page.locator('#config-result')).toContainText('PASS · 2 commands · 2 state changes');
+  await page.getByRole('button', { name: 'ROLLBACK' }).click();
+  await expect(page.locator('#config-result')).toHaveText('Rolled back to known-good.');
+});
+
+test('enforces observer RBAC and exposes a verified audit chain', async ({ page }) => {
+  await page.getByLabel('Academy role').selectOption('observer');
+  await page.getByLabel('Simulator command').fill('switchname DENIED');
+  await page.getByRole('button', { name: 'RUN', exact: true }).click();
+  await expect(page.getByText(/RBAC DENIED/)).toBeVisible();
+  await page.getByRole('button', { name: 'AUDIT LOG' }).click();
+  await expect(page.getByText(/AUDIT LOG · CHAIN VERIFIED/)).toBeVisible();
+});
+
+test('provides structured downloadable certification reports', async ({ page }) => {
+  await expect(page.locator('.cert-task')).toHaveCount(5);
+  await expect(page.locator('#cert-json')).toHaveAttribute('download', /\.json$/);
+  await expect(page.locator('#cert-json')).toHaveAttribute('href', /^data:application\/json/);
+  await expect(page.locator('#cert-csv')).toHaveAttribute('download', /\.csv$/);
+  await expect(page.locator('#cert-csv')).toHaveAttribute('href', /^data:text\/csv/);
+});
+
+test('has no serious accessibility violations or horizontal viewport overflow', async ({ page }) => {
+  const results = await new AxeBuilder({ page }).analyze();
+  const material = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact));
+  expect(material).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+});

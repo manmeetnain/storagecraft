@@ -13,7 +13,8 @@
     "validate:capsules": "node scripts/validate_capsules.mjs",
     "validate:brand": "node scripts/validate_brand.mjs",
     "craft": "node scripts/storagecraft.mjs",
-    "test": "node --test",
+    "test": "node --test test/*.test.mjs",
+    "test:academy:e2e": "playwright test",
     "check": "npm run validate && npm run validate:brand && npm run validate:capsules && npm test && npm run build"
   },
   "bin": {
@@ -46,5 +47,9 @@
     "type": "git",
     "url": "https://github.com/manmeetnain/storagecraft"
   },
-  "homepage": "https://manmeetnain.github.io/storagecraft"
+  "homepage": "https://manmeetnain.github.io/storagecraft",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1"
+  }
 }

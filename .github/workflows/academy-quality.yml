@@ -6,10 +6,22 @@ on:
       - 'public/lib/network-academy-engine.js'
       - 'public/lib/storagecraft-brand.js'
       - 'public/lib/academy-topology.js'
+      - 'public/lib/academy-operations.js'
+      - 'public/lib/academy-config-safety.js'
+      - 'public/lib/academy-governance.js'
+      - 'public/lib/academy-certification.js'
       - 'public/simulators/network-academy/**'
       - 'test/network-academy-engine.test.mjs'
       - 'test/storagecraft-brand.test.mjs'
       - 'test/academy-topology.test.mjs'
+      - 'test/academy-operations.test.mjs'
+      - 'test/academy-config-safety.test.mjs'
+      - 'test/academy-governance.test.mjs'
+      - 'test/academy-certification.test.mjs'
+      - 'test/e2e/**'
+      - 'playwright.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'scripts/validate_brand.mjs'
       - 'ACADEMY_V2.md'
       - '.github/workflows/academy-quality.yml'
@@ -18,10 +30,22 @@ on:
       - 'public/lib/network-academy-engine.js'
       - 'public/lib/storagecraft-brand.js'
       - 'public/lib/academy-topology.js'
+      - 'public/lib/academy-operations.js'
+      - 'public/lib/academy-config-safety.js'
+      - 'public/lib/academy-governance.js'
+      - 'public/lib/academy-certification.js'
       - 'public/simulators/network-academy/**'
       - 'test/network-academy-engine.test.mjs'
       - 'test/storagecraft-brand.test.mjs'
       - 'test/academy-topology.test.mjs'
+      - 'test/academy-operations.test.mjs'
+      - 'test/academy-config-safety.test.mjs'
+      - 'test/academy-governance.test.mjs'
+      - 'test/academy-certification.test.mjs'
+      - 'test/e2e/**'
+      - 'playwright.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'scripts/validate_brand.mjs'
       - 'ACADEMY_V2.md'
       - '.github/workflows/academy-quality.yml'
@@ -46,6 +70,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate:brand
-      - run: node --test test/network-academy-engine.test.mjs test/storagecraft-brand.test.mjs test/academy-topology.test.mjs
+      - run: node --test test/network-academy-engine.test.mjs test/storagecraft-brand.test.mjs test/academy-topology.test.mjs test/academy-operations.test.mjs test/academy-config-safety.test.mjs test/academy-governance.test.mjs test/academy-certification.test.mjs
       - run: npm run validate:capsules
       - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:academy:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: academy-playwright-report
+          path: playwright-report/
+          retention-days: 7

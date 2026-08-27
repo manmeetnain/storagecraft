@@ -29,6 +29,28 @@ Only one stage is `active` in [`capsules/catalog.json`](capsules/catalog.json). 
 
 The v2 baseline models two isolated end-to-end FC paths. Fabric A and Fabric B each contain a Brocade-style switch and a Cisco MDS-style switch between `HOST-01` and `ARRAY-01`. The browser can fail and restore either fabric; the deterministic health evaluator reports `HEALTHY`, `DEGRADED`, or `OUTAGE`. Inspect the same baseline from the colored CLI with `npm run craft -- academy --topology`.
 
+The operations workspace retains independent state for `FC-A1`, `MDS-A2`, `FC-B1`, `MDS-B2`, and `ISCSI-GW1`. Learners can switch terminals without losing configuration and practice total-fabric loss, cross-switch CRC escalation, and asymmetric-path recovery. List the workspace and incidents with `npm run craft -- academy --operations`.
+
+Configuration safety uses explicit targets such as `[brocade-a1] switchname PROD-A1`. Scripts are atomic by default: any rejected command restores the complete pre-run workspace. Successful runs return path-level desired-state diffs, named checkpoints span every terminal and topology link, and rollback restores that serialized state. Run the CLI demonstration with `npm run craft -- academy --config-safety`.
+
+Governance exposes Observer, Operator, and Administrator roles. Every attempted terminal command creates a chained audit event containing actor, role, device, versioned compatibility profile, allow/deny decision, result, and previous-event hash. The browser identifies Brocade FOS-style 9.2, Cisco MDS NX-OS-style 9.4, or standards-based iSCSI 2026 as educational compatibility surfaces rather than claims of exact vendor firmware emulation.
+
+Practical certification covers fabric health (20%), dual-fabric incident recovery (25%), configuration safety (20%), governance (15%), and iSCSI operations (20%). Passing requires all five evidence-bearing tasks, an 80/100 weighted score, and at least 60/100 in every domain. The assessment center exports branded, machine-readable JSON and trainer-friendly CSV reports; incomplete reports remain downloadable for coaching and progress review.
+
 ## Definition of complete
 
 The program is complete only when all seven v2 stages are shipped, `npm run check` passes, the dedicated Academy workflow passes, GitHub Pages serves the verified build, and the user journeys are browser-tested. Popularity is not promised; quality, discoverability, trustworthy attribution, and consistent release evidence are engineered.
+
+## Verification commands
+
+```bash
+npm run check
+npm run test:academy:e2e
+npm run craft -- academy --topology
+npm run craft -- academy --operations
+npm run craft -- academy --config-safety
+npm run craft -- academy --governance
+npm run craft -- academy --certification --candidate "Storage Learner"
+```
+
+The E2E release gate executes seven journeys in desktop Chromium and a mobile viewport: identity/topology rendering, fabric failure and restoration, state retention across vendor terminals, atomic configuration and rollback, RBAC denial and audit verification, JSON/CSV certification downloads, and automated serious/critical accessibility plus horizontal-overflow checks.

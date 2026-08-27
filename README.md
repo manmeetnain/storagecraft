@@ -79,7 +79,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 - [x] RAG Storage Sizer
 - [x] AI Data Path Lab
 - [x] Storage Network Academy: Brocade-style FC, Cisco MDS-style FC, and iSCSI
-- [ ] Storage Network Academy v2: dual fabrics, multi-switch operations, incidents, governance, and certification ([execution contract](ACADEMY_V2.md))
+- [x] Storage Network Academy v2: dual fabrics, multi-switch operations, incidents, configuration safety, governance, certification, and desktop/mobile E2E ([execution contract](ACADEMY_V2.md))
 - [ ] Reproducible benchmark capsule format
 
 Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml).
