@@ -32,4 +32,5 @@ jobs:
       - run: NO_COLOR=1 npm run craft -- raid --compare --disks 12 --size 8 --groups 2
       - run: NO_COLOR=1 npm run craft -- erasure --data 10 --parity 4 --dataset 100 --failures 2
       - run: NO_COLOR=1 npm run craft -- write-path --preset lsm --logical 1
+      - run: NO_COLOR=1 npm run craft -- lsm --policy leveled --dataset 500 --memtable 512 --ratio 10
       - run: NO_COLOR=1 npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2

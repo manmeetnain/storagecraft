@@ -60,6 +60,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [Universal RAID Planner](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html) | How do standard, nested, and RAID-Z layouts compare? | Interactive planner + CLI |
 | [Erasure Coding Lab](https://manmeetnain.github.io/storagecraft/simulators/erasure-coding/index.html) | How does k+m coding trade capacity for recoverability? | Interactive failure lab + CLI |
 | [Write Amplification Explorer](https://manmeetnain.github.io/storagecraft/simulators/write-amplification/index.html) | How does one logical write multiply through the full stack? | Interactive pipeline + CLI |
+| [LSM-Tree Compaction Lab](https://manmeetnain.github.io/storagecraft/simulators/lsm-compaction/index.html) | How do leveled and tiered policies trade writes, reads, and space? | Interactive policy lab + CLI |
 
 ## Roadmap
 

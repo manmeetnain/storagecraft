@@ -1,0 +1,4 @@
+import test from'node:test';import assert from'node:assert/strict';import{calculateLsm}from'../public/lib/lsm-model.js';
+test('matches the RocksDB-style 500GB leveled example',()=>{const r=calculateLsm({datasetGB:500,memtableMB:512,sizeRatio:10,l0Files:4,storageMBps:500});assert.equal(r.levels,4);assert.equal(r.writeAmplification,33);assert.ok(Math.abs(r.maxIngestMBps-500/33)<1e-10)});
+test('tiered trades writes for reads and space',()=>{const l=calculateLsm({policy:'leveled'}),t=calculateLsm({policy:'tiered'});assert.ok(t.writeAmplification<l.writeAmplification);assert.ok(t.readRuns>l.readRuns);assert.ok(t.spaceAmplification>l.spaceAmplification)});
+test('rejects invalid policy and ratio',()=>{assert.throws(()=>calculateLsm({policy:'fifo'}),/policy/);assert.throws(()=>calculateLsm({sizeRatio:1}),/at least 2/) });

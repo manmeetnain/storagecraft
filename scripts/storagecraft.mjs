@@ -2,6 +2,7 @@
 import { calculateRaid, compareRaids } from '../public/lib/raid-model.js';
 import { calculateErasure, compareReplication } from '../public/lib/erasure-model.js';
 import { calculateWritePath, WRITE_PRESETS } from '../public/lib/write-amplification-model.js';
+import { calculateLsm } from '../public/lib/lsm-model.js';
 
 const c = { reset:'\x1b[0m', bold:'\x1b[1m', dim:'\x1b[2m', cyan:'\x1b[36m', blue:'\x1b[34m', violet:'\x1b[35m', green:'\x1b[32m', yellow:'\x1b[33m', red:'\x1b[31m' };
 const paint = (color, text) => process.stdout.isTTY && !process.env.NO_COLOR ? `${c[color]}${text}${c.reset}` : text;
@@ -21,6 +22,7 @@ function help() {
   console.log(`  ${paint('green','raid')}     Model and compare RAID capacity, overhead, and tolerance`);
   console.log(`  ${paint('cyan','erasure')}  Model k+m coding, failure state, repair baseline, and replication savings`);
   console.log(`  ${paint('yellow','write-path')} Trace cumulative write amplification through the storage stack`);
+  console.log(`  ${paint('green','lsm')}      Compare leveled and tiered LSM compaction trade-offs`);
   console.log(`  ${paint('violet','kv')}       Estimate transformer KV-cache memory`);
   console.log(`  ${paint('blue','topics')}   Explore the learning roadmap`);
   console.log(`  ${paint('yellow','doctor')}   Check the local StorageCraft workspace`);
@@ -31,6 +33,7 @@ function help() {
   console.log(paint('dim','  npm run craft -- raid --compare --disks 12 --size 8 --groups 2'));
   console.log(paint('dim','  npm run craft -- erasure --data 10 --parity 4 --dataset 100 --failures 2'));
   console.log(paint('dim','  npm run craft -- write-path --preset lsm --logical 1'));
+  console.log(paint('dim','  npm run craft -- lsm --policy leveled --dataset 500 --memtable 512 --ratio 10'));
   console.log(paint('dim','  npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2'));
 }
 function raid() {
@@ -82,6 +85,7 @@ function writePath() {
   console.log(`  Largest added work        ${paint('yellow',`${result.largest.name}: +${fmt(result.largest.added)} units`)}`);
   console.log(`\n  ${paint('yellow','⚠')} ${paint('dim',result.warning)}`);
 }
+function lsm(){const result=calculateLsm({policy:String(arg('policy','leveled')),datasetGB:number('dataset',500),memtableMB:number('memtable',512),sizeRatio:number('ratio',10),l0Files:number('l0-files',4),storageMBps:number('bandwidth',500)});header();console.log(`\n${paint('bold','LSM Compaction Lab')}  ${paint('dim',result.policy)}`);console.log(`  ${paint('dim',result.tradeoff)}\n`);console.log(`  Non-empty levels         ${paint('cyan',result.levels)}`);console.log(`  Estimated write amp     ${paint('red',`${fmt(result.writeAmplification)}×`)}`);console.log(`  Point-lookup runs       ${paint('yellow',fmt(result.readRuns))}`);console.log(`  Space amplification    ${paint('violet',`${fmt(result.spaceAmplification)}×`)}`);console.log(`  Ingest ceiling         ${paint('green',`${fmt(result.maxIngestMBps)} MB/s`)}`);console.log(`\n  ${paint('yellow','⚠')} ${paint('dim',result.warning)}`)}
 function kv() {
   const layers=number('layers',32), heads=number('heads',32), dim=number('dim',128), tokens=number('tokens',8192), bytes=number('bytes',2), batch=number('batch',1);
   const total=2*layers*heads*dim*tokens*bytes*batch, gib=total/1024**3; header();
@@ -103,5 +107,5 @@ async function doctor() {
   console.log(); checks.forEach(([name,ok])=>console.log(`  ${ok?paint('green','✓'):paint('red','✗')} ${name}`)); if(checks.some(([,ok])=>!ok)) process.exitCode=1;
 }
 const command=process.argv[2]||'help';
-try { if(command==='raid') raid(); else if(command==='erasure') erasure(); else if(command==='write-path') writePath(); else if(command==='kv') kv(); else if(command==='topics') topics(); else if(command==='doctor') await doctor(); else help(); }
+try { if(command==='raid') raid(); else if(command==='erasure') erasure(); else if(command==='write-path') writePath(); else if(command==='lsm') lsm(); else if(command==='kv') kv(); else if(command==='topics') topics(); else if(command==='doctor') await doctor(); else help(); }
 catch(error) { console.error(`\n${paint('red','error:')} ${error.message}\n`); process.exitCode=1; }
