@@ -303,6 +303,34 @@
         color: var(--muted);
         line-height: 1.4;
       }
+      .scenarios {
+        padding: 10px;
+        border-top: 1px solid var(--line);
+      }
+      .scenario {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: 1px solid var(--line);
+        background: rgba(251, 113, 133, 0.04);
+        color: var(--text);
+        border-radius: 9px;
+        padding: 10px;
+        margin-bottom: 7px;
+        cursor: pointer;
+      }
+      .scenario:hover,
+      .scenario.active {
+        border-color: var(--red);
+      }
+      .scenario strong {
+        display: block;
+        font-size: 11px;
+      }
+      .scenario small {
+        color: var(--muted);
+        font: 9px/1.4 var(--mono);
+      }
       .guide {
         padding: 15px;
         border-top: 1px solid var(--line);
@@ -445,6 +473,8 @@
         <aside class="panel curriculum">
           <div class="panel-title">Guided new-hire path</div>
           <div class="lessons" id="lessons"></div>
+          <div class="panel-title">Troubleshooting incidents</div>
+          <div class="scenarios" id="scenarios"></div>
           <div class="guide">
             <h3 id="lesson-title">Select a lesson</h3>
             <p id="lesson-goal">
@@ -460,6 +490,7 @@
     <script type="module">
       import {
         ACADEMY_PROFILES,
+        ACADEMY_SCENARIOS,
         createAcademySession,
         executeAcademyCommand,
         academyPrompt,
@@ -574,7 +605,9 @@
         lesson = 0,
         step = 0,
         history = [],
-        historyIndex = 0;
+        historyIndex = 0,
+        incidentMode = false,
+        activeScenario = null;
       function getSession() {
         if (!sessions[profile]) {
           const saved = localStorage.getItem(`academy-state-${profile}`);
@@ -615,9 +648,12 @@
         profile = id;
         lesson = 0;
         step = 0;
+        incidentMode = false;
+        activeScenario = null;
         $("terminal").innerHTML = "";
         renderProfiles();
         renderLessons();
+        renderScenarios();
         boot();
       }
       function renderLessons() {
@@ -631,6 +667,8 @@
         document.querySelectorAll(".lesson").forEach(
           (b) =>
             (b.onclick = () => {
+              incidentMode = false;
+              activeScenario = null;
               lesson = Number(b.dataset.lesson);
               step = 0;
               renderLessons();
@@ -645,6 +683,33 @@
           step < l.commands.length
             ? "Run the shown command. Type help whenever you need the command map."
             : "Completed. Reset or choose another lab to practice again.";
+      }
+      function renderScenarios() {
+        $("scenarios").innerHTML = ACADEMY_SCENARIOS[profile]
+          .map(
+            (item) =>
+              `<button type="button" class="scenario ${item.id === activeScenario ? "active" : ""}" data-scenario="${item.id}"><strong>${item.title}</strong><small>${item.brief}</small></button>`,
+          )
+          .join("");
+        document.querySelectorAll(".scenario").forEach(
+          (button) =>
+            (button.onclick = () => {
+              incidentMode = true;
+              activeScenario = button.dataset.scenario;
+              const item = ACADEMY_SCENARIOS[profile].find(
+                (candidate) => candidate.id === activeScenario,
+              );
+              renderScenarios();
+              run(`scenario load ${activeScenario}`);
+              $("lesson-title").textContent = item.title;
+              $("lesson-goal").textContent = item.brief;
+              $("expected").textContent =
+                "Investigate freely, remediate, then run: scenario check";
+              $("progress").style.width = "0%";
+              $("hint").textContent =
+                "Use show and diagnostic commands. A hint appears only after an unsuccessful check.";
+            }),
+        );
       }
       function boot() {
         const s = getSession();
@@ -667,8 +732,18 @@
         history.push(command);
         historyIndex = history.length;
         if (r.changed) save();
+        if (incidentMode && r.assessment) {
+          $("progress").style.width = r.assessment.passed ? "100%" : "25%";
+          $("hint").textContent = r.assessment.passed
+            ? `Incident resolved · score ${r.assessment.score}/100 in ${r.assessment.commands} commands.`
+            : r.assessment.hint;
+        }
         const expected = curricula[profile][lesson].commands[step];
-        if (r.ok && command.trim().toLowerCase() === expected?.toLowerCase()) {
+        if (
+          !incidentMode &&
+          r.ok &&
+          command.trim().toLowerCase() === expected?.toLowerCase()
+        ) {
           step++;
           renderLessons();
         }
@@ -703,6 +778,7 @@
       };
       renderProfiles();
       renderLessons();
+      renderScenarios();
       boot();
     </script>
   </body>
