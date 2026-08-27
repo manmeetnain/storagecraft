@@ -50,6 +50,7 @@ test('command center hero navigation and prompt compiler work', async ({ page })
   await page.getByLabel('Outcome', { exact: true }).fill('Design a verified storage learning lab');
   await page.getByRole('button', { name: 'COMPILE PROMPT' }).click();
   await expect(page.locator('#compiledPrompt')).toContainText('Design a verified storage learning lab');
+  await expect(page.locator('#promptScore')).toHaveText('QUALITY 100/100');
 });
 
 test('command center header and bookmarked deep links reveal their destinations', async ({ page }) => {
@@ -84,4 +85,22 @@ test('ChatGPT and Codex widgets open useful playbooks', async ({ page, context }
   const cliCard = page.locator('.guide-card').filter({ hasText: 'Terminal-native agent' });
   await cliCard.click();
   await expect(cliCard.getByText('Starter instruction')).toBeVisible();
+});
+
+test('guided goals, workflows, CLI lab, and updates produce useful outcomes', async ({ page }) => {
+  await page.goto('ai-resource-hub/index.html');
+  await page.getByRole('button', { name: 'Research & learn' }).click();
+  await expect(page.locator('#recommendation')).toContainText('ChatGPT Deep Research');
+  await page.getByRole('button', { name: 'WORKFLOWS' }).click();
+  await expect(page.getByRole('heading', { name: 'Outcome recipes: from idea to verified result' })).toBeVisible();
+  await page.getByRole('button', { name: 'OPEN IN PROMPT STUDIO' }).first().click();
+  await expect(page.getByRole('heading', { name: 'Prompt Studio v2: compile an execution brief' })).toBeVisible();
+  await expect(page.getByLabel('Outcome', { exact: true })).toHaveValue(/Research brief/);
+  await page.getByRole('button', { name: 'CLI LAB' }).click();
+  await page.getByLabel('AI CLI command').fill('help');
+  await page.getByRole('button', { name: 'RUN', exact: true }).click();
+  await expect(page.locator('#cliOutput')).toContainText('explore <platform>');
+  await page.getByRole('button', { name: 'UPDATES' }).click();
+  await expect(page.getByRole('heading', { name: 'What changed: maintained source watch' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'CHECK CURRENT UPDATES' }).first()).toHaveAttribute('href', /^https:/);
 });

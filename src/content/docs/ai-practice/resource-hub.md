@@ -10,11 +10,15 @@ The Manmeet AI Command Center puts ChatGPT, Codex, Claude, Claude Code, Gemini, 
 ## What is inside
 
 - A decision map for choosing ChatGPT, Codex, a skill, or a connector
+- An outcome wizard that recommends a platform, execution path, and starting action
 - Current Codex surfaces, repository instruction layers, permissions, and delivery patterns
 - A grouped skill shelf with examples such as `$visualize:visualize`, document creation, browser QA, Figma, spreadsheets, and plugin management
 - A shortcut decoder for `$`, `@`, `/`, keyboard commands, and `codex://` deep links
 - A plain-language map of skills, plugins, connectors, and MCP servers
-- Original copyable prompt contracts and links to official OpenAI references
+- Eight end-to-end workflow recipes and interactive capability playbooks
+- Prompt Studio v2 with platform, experience, output, evidence, and quality controls
+- A safe simulated `manmeet-ai` CLI learning lab
+- A maintained official-source watch for major AI platform changes
 
 Availability varies by plan, workspace, product surface, authentication, region, and administrator policy. Use the linked official documentation as the source of truth for current behavior.
 
