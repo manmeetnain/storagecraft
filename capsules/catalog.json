@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "qualityContract": ["model", "tests", "ui", "docs", "cli", "ci"],
+  "capsules": [
+    {"id":"raid-planner","title":"Universal RAID Planner","status":"shipped","priority":100,"model":"public/lib/raid-model.js","tests":"test/raid-model.test.mjs","ui":"public/simulators/raid-planner/index.html","docs":"src/content/docs/simulators/raid-planner.md","cli":"raid"},
+    {"id":"erasure-coding","title":"Erasure Coding Lab","status":"shipped","priority":95,"model":"public/lib/erasure-model.js","tests":"test/erasure-model.test.mjs","ui":"public/simulators/erasure-coding/index.html","docs":"src/content/docs/simulators/erasure-coding.md","cli":"erasure"},
+    {"id":"write-amplification","title":"Write Amplification Explorer","status":"shipped","priority":92,"model":"public/lib/write-amplification-model.js","tests":"test/write-amplification-model.test.mjs","ui":"public/simulators/write-amplification/index.html","docs":"src/content/docs/simulators/write-amplification.md","cli":"write-path"},
+    {"id":"lsm-compaction","title":"LSM-Tree Compaction Lab","status":"active","priority":90},
+    {"id":"gpu-memory","title":"GPU Memory Planner","status":"queued","priority":88},
+    {"id":"rag-storage","title":"RAG Storage Sizer","status":"queued","priority":86},
+    {"id":"ai-data-path","title":"AI Data Path Lab","status":"queued","priority":82},
+    {"id":"nvme-queues","title":"NVMe Queue Lab","status":"queued","priority":78},
+    {"id":"san-failure","title":"SAN Failure-Domain Lab","status":"queued","priority":76}
+  ]
+}

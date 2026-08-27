@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { calculateRaid, compareRaids } from '../public/lib/raid-model.js';
 import { calculateErasure, compareReplication } from '../public/lib/erasure-model.js';
+import { calculateWritePath, WRITE_PRESETS } from '../public/lib/write-amplification-model.js';
 
 const c = { reset:'\x1b[0m', bold:'\x1b[1m', dim:'\x1b[2m', cyan:'\x1b[36m', blue:'\x1b[34m', violet:'\x1b[35m', green:'\x1b[32m', yellow:'\x1b[33m', red:'\x1b[31m' };
 const paint = (color, text) => process.stdout.isTTY && !process.env.NO_COLOR ? `${c[color]}${text}${c.reset}` : text;
@@ -19,6 +20,7 @@ function help() {
   console.log(`\n${paint('bold','Commands')}`);
   console.log(`  ${paint('green','raid')}     Model and compare RAID capacity, overhead, and tolerance`);
   console.log(`  ${paint('cyan','erasure')}  Model k+m coding, failure state, repair baseline, and replication savings`);
+  console.log(`  ${paint('yellow','write-path')} Trace cumulative write amplification through the storage stack`);
   console.log(`  ${paint('violet','kv')}       Estimate transformer KV-cache memory`);
   console.log(`  ${paint('blue','topics')}   Explore the learning roadmap`);
   console.log(`  ${paint('yellow','doctor')}   Check the local StorageCraft workspace`);
@@ -28,6 +30,7 @@ function help() {
   console.log(paint('dim','  npm run craft -- raid --level 60 --disks 16 --size 8 --groups 2'));
   console.log(paint('dim','  npm run craft -- raid --compare --disks 12 --size 8 --groups 2'));
   console.log(paint('dim','  npm run craft -- erasure --data 10 --parity 4 --dataset 100 --failures 2'));
+  console.log(paint('dim','  npm run craft -- write-path --preset lsm --logical 1'));
   console.log(paint('dim','  npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2'));
 }
 function raid() {
@@ -68,6 +71,17 @@ function erasure() {
   console.log(`  Baseline repair read     ${paint('yellow',`${fmt(result.baselineRepairRead)} TB`)}`);
   console.log(paint('dim','\n  Baseline model only: placement, code family, locality, and repair implementation change real cost.'));
 }
+function writePath() {
+  const presetName=String(arg('preset','database'));const preset=WRITE_PRESETS[presetName];if(!preset)throw new Error('--preset must be database, lsm, cow, or ai');
+  const factors={...preset.factors};for(const key of Object.keys(factors))if(process.argv.includes(`--${key}`))factors[key]=number(key,factors[key]);
+  const result=calculateWritePath({logical:number('logical',1),...factors});header();
+  console.log(`\n${paint('bold','Write Amplification Explorer')}  ${paint('dim',preset.name)}`);
+  console.log(`  ${paint('dim','Relative write-work units; every factor is explicit and configurable.')}\n`);
+  const max=result.physical;result.stages.forEach((stage,index)=>console.log(`  ${paint(index===0?'blue':index===result.stages.length-1?'red':'cyan',stage.name.padEnd(28))}${bar(stage.output,max,index===result.stages.length-1?'red':'cyan')}  ${fmt(stage.output)}×`));
+  console.log(`\n  End-to-end amplification  ${paint('red',paint('bold',`${fmt(result.amplification)}×`))}`);
+  console.log(`  Largest added work        ${paint('yellow',`${result.largest.name}: +${fmt(result.largest.added)} units`)}`);
+  console.log(`\n  ${paint('yellow','⚠')} ${paint('dim',result.warning)}`);
+}
 function kv() {
   const layers=number('layers',32), heads=number('heads',32), dim=number('dim',128), tokens=number('tokens',8192), bytes=number('bytes',2), batch=number('batch',1);
   const total=2*layers*heads*dim*tokens*bytes*batch, gib=total/1024**3; header();
@@ -85,9 +99,9 @@ function topics() {
 }
 async function doctor() {
   header(); const {existsSync}=await import('node:fs');
-  const checks=[['package.json',existsSync('package.json')],['Astro config',existsSync('astro.config.mjs')],['content',existsSync('src/content/docs')],['RAID simulator',existsSync('public/simulators/raid/index.html')],['RAID model',existsSync('public/lib/raid-model.js')],['Erasure model',existsSync('public/lib/erasure-model.js')]];
+  const checks=[['package.json',existsSync('package.json')],['Astro config',existsSync('astro.config.mjs')],['content',existsSync('src/content/docs')],['Capsule catalog',existsSync('capsules/catalog.json')],['RAID simulator',existsSync('public/simulators/raid/index.html')],['RAID model',existsSync('public/lib/raid-model.js')],['Erasure model',existsSync('public/lib/erasure-model.js')],['Write-path model',existsSync('public/lib/write-amplification-model.js')]];
   console.log(); checks.forEach(([name,ok])=>console.log(`  ${ok?paint('green','✓'):paint('red','✗')} ${name}`)); if(checks.some(([,ok])=>!ok)) process.exitCode=1;
 }
 const command=process.argv[2]||'help';
-try { if(command==='raid') raid(); else if(command==='erasure') erasure(); else if(command==='kv') kv(); else if(command==='topics') topics(); else if(command==='doctor') await doctor(); else help(); }
+try { if(command==='raid') raid(); else if(command==='erasure') erasure(); else if(command==='write-path') writePath(); else if(command==='kv') kv(); else if(command==='topics') topics(); else if(command==='doctor') await doctor(); else help(); }
 catch(error) { console.error(`\n${paint('red','error:')} ${error.message}\n`); process.exitCode=1; }

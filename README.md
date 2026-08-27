@@ -59,6 +59,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [RAID-5](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html) | How does distributed parity recover missing data? | Interactive lab |
 | [Universal RAID Planner](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html) | How do standard, nested, and RAID-Z layouts compare? | Interactive planner + CLI |
 | [Erasure Coding Lab](https://manmeetnain.github.io/storagecraft/simulators/erasure-coding/index.html) | How does k+m coding trade capacity for recoverability? | Interactive failure lab + CLI |
+| [Write Amplification Explorer](https://manmeetnain.github.io/storagecraft/simulators/write-amplification/index.html) | How does one logical write multiply through the full stack? | Interactive pipeline + CLI |
 
 ## Roadmap
 
@@ -66,7 +67,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 - [x] Universal RAID planner and RAID/KV-cache CLI models
 - [x] Storage internals and AI-infrastructure foundation
 - [x] Erasure Coding Lab v1
-- [ ] Write Amplification Explorer
+- [x] Write Amplification Explorer v1
 - [ ] GPU Memory Planner
 - [ ] RAG Storage Sizer
 - [ ] Reproducible benchmark capsule format

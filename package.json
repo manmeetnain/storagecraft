@@ -10,9 +10,10 @@
     "gen:bench": "python3 scripts/gen_benchmark_page.py",
     "gen:index": "python3 scripts/gen_content_index.py",
     "validate": "python3 scripts/validate_frontmatter.py",
+    "validate:capsules": "node scripts/validate_capsules.mjs",
     "craft": "node scripts/storagecraft.mjs",
     "test": "node --test",
-    "check": "npm run validate && npm test && npm run build"
+    "check": "npm run validate && npm run validate:capsules && npm test && npm run build"
   },
   "bin": {
     "storagecraft": "./scripts/storagecraft.mjs"

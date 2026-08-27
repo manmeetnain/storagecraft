@@ -11,6 +11,8 @@ lastUpdated: 2026-05-26
 
 Write amplification (WA) is one of the most important concepts in storage systems. A single logical write from your application causes **multiple physical writes** inside the device or system.
 
+Operate the complete stack with the [Write Amplification Explorer](/storagecraft/simulators/write-amplification/).
+
 ## The formula
 
 ```
