@@ -500,9 +500,35 @@
       const curricula = {
         brocade: [
           {
-            title: "Inspect the fabric",
-            goal: "Establish the switch, fabric, and port baseline.",
-            commands: ["switchshow", "fabricshow", "portshow 0"],
+            title: "Complete fabric health check",
+            goal:
+              "Run the full new-hire baseline across software, chassis, environment, fabric, ports, optics, zoning, and events.",
+            commands: [
+              "version",
+              "firmwareshow",
+              "uptime",
+              "licenseshow",
+              "chassisshow",
+              "fanshow",
+              "psshow",
+              "tempshow",
+              "sensorshow",
+              "switchstatusshow",
+              "switchstatuspolicyshow",
+              "switchshow",
+              "fabricshow",
+              "islshow",
+              "trunkshow",
+              "topologyshow",
+              "portcfgshow",
+              "portshow 0",
+              "sfpshow 0",
+              "porterrshow",
+              "nsshow",
+              "cfgshow",
+              "errshow",
+              "mapsdb --show",
+            ],
           },
           {
             title: "Build single-initiator zoning",
@@ -529,6 +555,28 @@
           },
         ],
         cisco: [
+          {
+            title: "Complete MDS health check",
+            goal:
+              "Baseline time, software, hardware, environment, resources, FC interfaces, registrations, zoning, and logs.",
+            commands: [
+              "show clock",
+              "show version",
+              "show module",
+              "show environment",
+              "show system resources",
+              "show ntp peers",
+              "show vsan",
+              "show interface brief",
+              "show interface fc1/1",
+              "show interface counters errors",
+              "show flogi database",
+              "show fcns database",
+              "show device-alias database",
+              "show zoneset active",
+              "show logging last 20",
+            ],
+          },
           {
             title: "Create a VSAN",
             goal: "Enter configuration mode and create VSAN 20.",
@@ -580,6 +628,20 @@
           },
         ],
         iscsi: [
+          {
+            title: "Complete iSCSI health check",
+            goal:
+              "Baseline interfaces, routes, portals, targets, sessions, and multipath state.",
+            commands: [
+              "show health",
+              "show network",
+              "show routes",
+              "show portals",
+              "show targets",
+              "sessions",
+              "multipath show",
+            ],
+          },
           {
             title: "Build the IP path",
             goal: "Create an isolated storage VLAN and interface.",

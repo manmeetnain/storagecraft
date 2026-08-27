@@ -27,8 +27,12 @@ This matrix is the authoritative compatibility surface for Storage Network Acade
 
 | Area | Supported syntax |
 |---|---|
-| Inventory | `switchshow`, `fabricshow`, `portshow <port>`, `nsshow` |
-| Diagnostics | `porterrshow`, `portstatsclear <port>` |
+| Software and identity | `version`, `firmwareshow`, `uptime`, `licenseshow`, `switchshow` |
+| Chassis/environment | `chassisshow`, `fanshow`, `psshow`, `tempshow`, `sensorshow` |
+| Health policy | `switchstatusshow`, `switchstatuspolicyshow`, `mapsdb --show` |
+| Fabric topology | `fabricshow`, `islshow`, `trunkshow`, `topologyshow`, `nsshow`, `nodefind <alias\|wwn>` |
+| Port/optics diagnostics | `portcfgshow`, `portshow <port>`, `sfpshow <port>`, `porterrshow`, `portstatsclear <port>` |
+| Event history | `errshow`, `errdump` |
 | Identity | `switchname <name>`, `configure domain-id <1-239>` |
 | Management | `ipaddrset <ip> <mask> <gateway>` |
 | Ports | `portenable <port>`, `portdisable <port>`, `portcfgspeed <port> <auto\|4\|8\|16\|32\|64>` |
@@ -42,7 +46,9 @@ Brocade-style create/add/remove commands use `object, member; member` syntax. Al
 
 | Mode/area | Supported syntax |
 |---|---|
-| EXEC inspection | `show version`, `show vsan`, `show interface brief`, `show interface fc1/1`, `show flogi database`, `show fcns database`, `show logging` |
+| System health | `show clock`, `show version`, `show module`, `show environment`, `show system resources`, `show ntp peers` |
+| Fabric health | `show vsan`, `show interface brief`, `show interface fc1/1`, `show interface counters errors`, `show flogi database`, `show fcns database` |
+| Event history | `show logging`, `show logging last 20` |
 | Configuration inspection | `show running-config`, `show startup-config`, `show device-alias database`, `show zone`, `show zoneset`, `show zoneset active` |
 | Mode navigation | `configure terminal`, `conf t`, `exit`, `end` |
 | Global config | `hostname <name>`, `vsan <id> [name <name>]`, `no vsan <id>` |
@@ -58,7 +64,7 @@ Configuration commands are mode-sensitive. VSAN and zoning objects cannot be rem
 
 | Area | Supported syntax |
 |---|---|
-| Inspection | `show network`, `show targets`, `sessions`, `multipath show` |
+| Inspection | `show health`, `show network`, `show routes`, `show portals`, `show targets`, `sessions`, `multipath show` |
 | VLANs and interfaces | `vlan create\|delete <id> [name]`, `interface set <name> <cidr> [vlan <id>]`, `interface delete <name>`, `interface up\|down <name>` |
 | Targets and portals | `target create\|delete <iqn>`, `portal add\|delete <iqn> <address:port>` |
 | LUNs | `lun map <iqn> <lun> <backing-store>`, `lun unmap <iqn> <lun>` |
