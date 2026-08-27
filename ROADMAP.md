@@ -17,6 +17,13 @@ A capsule can move to `shipped` only when it has:
 
 | Priority | Capsule | State | Primary audience |
 |---:|---|---|---|
+| 140 | Academy v2 foundation and identity | Shipped | Contributors and Academy learners |
+| 138 | Academy dual-fabric topology | Shipped | SAN engineers and new hires |
+| 136 | Academy multi-session incident operations | Active | Operations and incident teams |
+| 134 | Academy configuration safety | Queued | Switch administrators |
+| 132 | Academy governance and version profiles | Queued | Enterprise platform teams |
+| 130 | Academy practical certification | Queued | Learners, trainers, and hiring teams |
+| 128 | Academy end-to-end release assurance | Queued | Maintainers and contributors |
 | 120 | Storage Network Academy | Shipped | New hires, students, and SAN operations teams |
 | 100 | Universal RAID Planner | Shipped | Storage and infrastructure engineers |
 | 95 | Erasure Coding Lab | Shipped | Distributed-storage and cloud engineers |

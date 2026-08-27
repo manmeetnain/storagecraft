@@ -1,0 +1,51 @@
+name: Academy Quality
+
+on:
+  push:
+    paths:
+      - 'public/lib/network-academy-engine.js'
+      - 'public/lib/storagecraft-brand.js'
+      - 'public/lib/academy-topology.js'
+      - 'public/simulators/network-academy/**'
+      - 'test/network-academy-engine.test.mjs'
+      - 'test/storagecraft-brand.test.mjs'
+      - 'test/academy-topology.test.mjs'
+      - 'scripts/validate_brand.mjs'
+      - 'ACADEMY_V2.md'
+      - '.github/workflows/academy-quality.yml'
+  pull_request:
+    paths:
+      - 'public/lib/network-academy-engine.js'
+      - 'public/lib/storagecraft-brand.js'
+      - 'public/lib/academy-topology.js'
+      - 'public/simulators/network-academy/**'
+      - 'test/network-academy-engine.test.mjs'
+      - 'test/storagecraft-brand.test.mjs'
+      - 'test/academy-topology.test.mjs'
+      - 'scripts/validate_brand.mjs'
+      - 'ACADEMY_V2.md'
+      - '.github/workflows/academy-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: academy-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  academy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run validate:brand
+      - run: node --test test/network-academy-engine.test.mjs test/storagecraft-brand.test.mjs test/academy-topology.test.mjs
+      - run: npm run validate:capsules
+      - run: npm run build

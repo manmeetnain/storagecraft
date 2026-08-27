@@ -57,6 +57,8 @@
       .brand span {
         color: var(--cyan);
       }
+      .creator-attribution { color: var(--muted); font: 11px var(--mono); }
+      .creator-attribution a { color: var(--cyan); text-decoration: none; }
       header a:last-child {
         font: 11px var(--mono);
         color: var(--muted);
@@ -370,6 +372,18 @@
         color: var(--amber);
         font: 10px/1.5 var(--mono);
       }
+      .topology { margin-bottom: 14px; padding: 14px; }
+      .topology-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+      .topology-head strong { font: 750 11px var(--mono); letter-spacing:.08em; }
+      .topology-actions button { background:#0c1a2c; color:var(--muted); border:1px solid var(--line); border-radius:7px; padding:6px 9px; cursor:pointer; }
+      .topology-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+      .topology-node { border:1px solid var(--line); border-radius:9px; padding:9px; text-align:center; font:10px var(--mono); }
+      .topology-node small { display:block; color:var(--muted); margin-top:3px; }
+      .topology-node[data-fabric="A"] { border-top:3px solid var(--cyan); }
+      .topology-node[data-fabric="B"] { border-top:3px solid var(--violet); }
+      .topology-summary { color:var(--green); font:10px var(--mono); }
+      .topology-summary[data-state="DEGRADED"] { color:var(--amber); }
+      .topology-summary[data-state="OUTAGE"] { color:var(--red); }
       @media (max-width: 1100px) {
         .workspace {
           grid-template-columns: 235px 1fr;
@@ -417,7 +431,7 @@
     <header>
       <a class="brand" href="/storagecraft/"
         >Storage<span>Craft</span> Academy</a
-      ><a href="https://github.com/manmeetnain/storagecraft">GitHub ↗</a>
+      ><span class="creator-attribution" id="creator-attribution"></span>
     </header>
     <main>
       <div class="top">
@@ -432,6 +446,10 @@
         </div>
         <div class="status">● SIMULATION ONLY · NO REAL DEVICES</div>
       </div>
+      <section class="panel topology" aria-label="Live dual-fabric topology">
+        <div class="topology-head"><strong>LIVE DUAL-FABRIC TOPOLOGY · v2.0</strong><div class="topology-actions"><button id="fabric-a">TOGGLE A</button> <button id="fabric-b">TOGGLE B</button> <button id="fabric-reset">RESTORE</button></div><span class="topology-summary" id="topology-summary"></span></div>
+        <div class="topology-grid" id="topology-grid"></div>
+      </section>
       <div class="workspace">
         <aside class="panel">
           <div class="panel-title">Choose environment</div>
@@ -496,7 +514,22 @@
         executeAcademyCommand,
         academyPrompt,
       } from "/storagecraft/lib/network-academy-engine.js";
+      import { STORAGECRAFT_BRAND, creatorAttribution, productTitle } from "/storagecraft/lib/storagecraft-brand.js";
+      import { createDualFabricTopology, setFabricState, topologyHealth } from "/storagecraft/lib/academy-topology.js";
       const $ = (id) => document.getElementById(id);
+      document.title = productTitle(STORAGECRAFT_BRAND.academyName);
+      document.getElementById("creator-attribution").innerHTML = `${creatorAttribution()} · <a href="${STORAGECRAFT_BRAND.repositoryUrl}">GitHub ↗</a>`;
+      let topology = createDualFabricTopology();
+      function renderTopology() {
+        const health = topologyHealth(topology);
+        $("topology-summary").textContent = `${health.state} · A ${health.paths.A ? 'UP' : 'DOWN'} · B ${health.paths.B ? 'UP' : 'DOWN'}`;
+        $("topology-summary").dataset.state = health.state;
+        $("topology-grid").innerHTML = topology.nodes.map((node) => `<div class="topology-node" data-fabric="${node.fabric || ''}">${node.label}<small>${node.type}${node.fabric ? ` · Fabric ${node.fabric}` : ''}</small></div>`).join('');
+      }
+      function toggleFabric(fabric) { const up = topologyHealth(topology).paths[fabric]; topology = setFabricState(topology, fabric, up ? 'down' : 'up'); renderTopology(); }
+      $("fabric-a").onclick = () => toggleFabric('A');
+      $("fabric-b").onclick = () => toggleFabric('B');
+      $("fabric-reset").onclick = () => { topology = createDualFabricTopology(); renderTopology(); };
       const curricula = {
         brocade: [
           {
@@ -878,6 +911,7 @@
           run("reset");
       };
       renderProfiles();
+      renderTopology();
       renderLessons();
       renderScenarios();
       boot();

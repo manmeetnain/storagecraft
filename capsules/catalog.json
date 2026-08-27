@@ -2,6 +2,13 @@
   "version": 1,
   "qualityContract": ["model", "tests", "ui", "docs", "cli", "ci"],
   "capsules": [
+    {"id":"academy-v2-foundation","title":"Academy v2 Foundation and Identity","status":"shipped","priority":140,"model":"public/lib/storagecraft-brand.js","tests":"test/storagecraft-brand.test.mjs","ui":"public/simulators/network-academy/index.html","docs":"ACADEMY_V2.md","cli":"topics"},
+    {"id":"academy-v2-topology","title":"Academy Dual-Fabric Topology","status":"shipped","priority":138,"model":"public/lib/academy-topology.js","tests":"test/academy-topology.test.mjs","ui":"public/simulators/network-academy/index.html","docs":"ACADEMY_V2.md","cli":"academy --topology"},
+    {"id":"academy-v2-operations","title":"Academy Multi-Session Incident Operations","status":"active","priority":136},
+    {"id":"academy-v2-config-safety","title":"Academy Configuration Safety","status":"queued","priority":134},
+    {"id":"academy-v2-governance","title":"Academy Governance and Version Profiles","status":"queued","priority":132},
+    {"id":"academy-v2-certification","title":"Academy Practical Certification","status":"queued","priority":130},
+    {"id":"academy-v2-e2e","title":"Academy End-to-End Release Assurance","status":"queued","priority":128},
     {"id":"raid-planner","title":"Universal RAID Planner","status":"shipped","priority":100,"model":"public/lib/raid-model.js","tests":"test/raid-model.test.mjs","ui":"public/simulators/raid-planner/index.html","docs":"src/content/docs/simulators/raid-planner.md","cli":"raid"},
     {"id":"erasure-coding","title":"Erasure Coding Lab","status":"shipped","priority":95,"model":"public/lib/erasure-model.js","tests":"test/erasure-model.test.mjs","ui":"public/simulators/erasure-coding/index.html","docs":"src/content/docs/simulators/erasure-coding.md","cli":"erasure"},
     {"id":"write-amplification","title":"Write Amplification Explorer","status":"shipped","priority":92,"model":"public/lib/write-amplification-model.js","tests":"test/write-amplification-model.test.mjs","ui":"public/simulators/write-amplification/index.html","docs":"src/content/docs/simulators/write-amplification.md","cli":"write-path"},
