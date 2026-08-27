@@ -1,11 +1,22 @@
 ---
-title: AI Resource & Prompt Hub
+title: AI Capability Atlas
 description: A practical, sourced path through ChatGPT capabilities, prompt design, agentic workflows, and open learning resources.
 ---
 
-The AI Resource & Prompt Hub helps learners choose the right ChatGPT capability, write outcome-first prompts, and design agentic workflows with boundaries, evidence, and verification.
+The AI Capability Atlas puts ChatGPT, Codex, skills, plugins, connectors, shortcuts, prompts, and automated workflows under one searchable umbrella. It explains what each layer does, when to use it, and how to invoke it with practical examples.
 
-<a class="sl-link-button primary" href="/storagecraft/ai-resource-hub/index.html">Launch the interactive hub →</a>
+<a class="sl-link-button primary" href="/storagecraft/ai-resource-hub/index.html">Launch the AI Capability Atlas →</a>
+
+## What is inside
+
+- A decision map for choosing ChatGPT, Codex, a skill, or a connector
+- Current Codex surfaces, repository instruction layers, permissions, and delivery patterns
+- A grouped skill shelf with examples such as `$visualize:visualize`, document creation, browser QA, Figma, spreadsheets, and plugin management
+- A shortcut decoder for `$`, `@`, `/`, keyboard commands, and `codex://` deep links
+- A plain-language map of skills, plugins, connectors, and MCP servers
+- Original copyable prompt contracts and links to official OpenAI references
+
+Availability varies by plan, workspace, product surface, authentication, region, and administrator policy. Use the linked official documentation as the source of truth for current behavior.
 
 ## What makes this collection different
 

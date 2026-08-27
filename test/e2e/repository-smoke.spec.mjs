@@ -11,7 +11,7 @@ const surfaces = [
   ['RAID-5 Interactive Visualizer', 'simulators/raid/index.html'],
   ['SAN Failure-Domain Lab', 'simulators/san-failure/index.html'],
   ['Write Amplification Explorer', 'simulators/write-amplification/index.html'],
-  ['AI Resource & Prompt Hub', 'ai-resource-hub/index.html'],
+  ['AI Capability Atlas', 'ai-resource-hub/index.html'],
 ];
 
 for (const [title, path] of surfaces) {
@@ -27,13 +27,16 @@ for (const [title, path] of surfaces) {
   });
 }
 
-test('AI hub search, filters, and prompt copy controls work', async ({ page, context }) => {
+test('AI atlas search, filters, shortcuts, and prompt copy controls work', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('ai-resource-hub/index.html');
-  await page.getByLabel('Search AI resource hub').fill('research');
+  await page.getByLabel('Search AI capability atlas').fill('research');
   await expect(page.getByRole('heading', { name: 'Deep research', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'PROMPTS' }).click();
-  await expect(page.getByRole('heading', { name: 'Source-grounded research' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Research brief' })).toBeVisible();
   await page.locator('.copy:visible').click();
   await expect(page.locator('.copy:visible')).toHaveText('COPIED');
+  await page.getByLabel('Search AI capability atlas').fill('codex://skills');
+  await page.getByRole('button', { name: 'SHORTCUTS' }).click();
+  await expect(page.getByRole('heading', { name: 'Open skills', exact: true })).toBeVisible();
 });
