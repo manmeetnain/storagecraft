@@ -20,6 +20,7 @@ for (const [title, path] of surfaces) {
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(path);
     await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
+    await expect(page.getByText('Manmeet Nain', { exact: false }).first()).toBeVisible();
     expect(errors).toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
     const audit = await new AxeBuilder({ page }).analyze();
