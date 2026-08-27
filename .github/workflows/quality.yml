@@ -34,4 +34,5 @@ jobs:
       - run: NO_COLOR=1 npm run craft -- write-path --preset lsm --logical 1
       - run: NO_COLOR=1 npm run craft -- lsm --policy leveled --dataset 500 --memtable 512 --ratio 10
       - run: NO_COLOR=1 npm run craft -- gpu-plan --preset llama70 --gpus 1 --gpu-memory 80 --tokens 8192
+      - run: NO_COLOR=1 npm run craft -- rag-size --documents 1000000 --tokens 1200 --chunk 512 --overlap 64
       - run: NO_COLOR=1 npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2

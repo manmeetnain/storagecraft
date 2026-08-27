@@ -7,8 +7,8 @@
     {"id":"write-amplification","title":"Write Amplification Explorer","status":"shipped","priority":92,"model":"public/lib/write-amplification-model.js","tests":"test/write-amplification-model.test.mjs","ui":"public/simulators/write-amplification/index.html","docs":"src/content/docs/simulators/write-amplification.md","cli":"write-path"},
     {"id":"lsm-compaction","title":"LSM-Tree Compaction Lab","status":"shipped","priority":90,"model":"public/lib/lsm-model.js","tests":"test/lsm-model.test.mjs","ui":"public/simulators/lsm-compaction/index.html","docs":"src/content/docs/simulators/lsm-compaction.md","cli":"lsm"},
     {"id":"gpu-memory","title":"GPU Memory Planner","status":"shipped","priority":88,"model":"public/lib/gpu-memory-model.js","tests":"test/gpu-memory-model.test.mjs","ui":"public/simulators/gpu-memory/index.html","docs":"src/content/docs/simulators/gpu-memory.md","cli":"gpu-plan"},
-    {"id":"rag-storage","title":"RAG Storage Sizer","status":"active","priority":86},
-    {"id":"ai-data-path","title":"AI Data Path Lab","status":"queued","priority":82},
+    {"id":"rag-storage","title":"RAG Storage Sizer","status":"shipped","priority":86,"model":"public/lib/rag-storage-model.js","tests":"test/rag-storage-model.test.mjs","ui":"public/simulators/rag-storage/index.html","docs":"src/content/docs/simulators/rag-storage.md","cli":"rag-size"},
+    {"id":"ai-data-path","title":"AI Data Path Lab","status":"active","priority":82},
     {"id":"nvme-queues","title":"NVMe Queue Lab","status":"queued","priority":78},
     {"id":"san-failure","title":"SAN Failure-Domain Lab","status":"queued","priority":76}
   ]

@@ -62,6 +62,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [Write Amplification Explorer](https://manmeetnain.github.io/storagecraft/simulators/write-amplification/index.html) | How does one logical write multiply through the full stack? | Interactive pipeline + CLI |
 | [LSM-Tree Compaction Lab](https://manmeetnain.github.io/storagecraft/simulators/lsm-compaction/index.html) | How do leveled and tiered policies trade writes, reads, and space? | Interactive policy lab + CLI |
 | [GPU Memory Planner](https://manmeetnain.github.io/storagecraft/simulators/gpu-memory/index.html) | Will an LLM serving configuration fit per GPU? | Interactive inference planner + CLI |
+| [RAG Storage Sizer](https://manmeetnain.github.io/storagecraft/simulators/rag-storage/index.html) | What is the full source, chunk, vector, index, and replica footprint? | Interactive AI-data planner + CLI |
 
 ## Roadmap
 

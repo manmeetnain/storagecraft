@@ -4,6 +4,7 @@ import { calculateErasure, compareReplication } from '../public/lib/erasure-mode
 import { calculateWritePath, WRITE_PRESETS } from '../public/lib/write-amplification-model.js';
 import { calculateLsm } from '../public/lib/lsm-model.js';
 import { calculateGpuMemory, GPU_PRESETS } from '../public/lib/gpu-memory-model.js';
+import { calculateRagStorage } from '../public/lib/rag-storage-model.js';
 
 const c = { reset:'\x1b[0m', bold:'\x1b[1m', dim:'\x1b[2m', cyan:'\x1b[36m', blue:'\x1b[34m', violet:'\x1b[35m', green:'\x1b[32m', yellow:'\x1b[33m', red:'\x1b[31m' };
 const paint = (color, text) => process.stdout.isTTY && !process.env.NO_COLOR ? `${c[color]}${text}${c.reset}` : text;
@@ -25,6 +26,7 @@ function help() {
   console.log(`  ${paint('yellow','write-path')} Trace cumulative write amplification through the storage stack`);
   console.log(`  ${paint('green','lsm')}      Compare leveled and tiered LSM compaction trade-offs`);
   console.log(`  ${paint('violet','gpu-plan')} Size weights, KV cache, runtime reserve, and concurrency per GPU`);
+  console.log(`  ${paint('blue','rag-size')}  Size RAG chunks, embeddings, metadata, index overhead, and replicas`);
   console.log(`  ${paint('violet','kv')}       Estimate transformer KV-cache memory`);
   console.log(`  ${paint('blue','topics')}   Explore the learning roadmap`);
   console.log(`  ${paint('yellow','doctor')}   Check the local StorageCraft workspace`);
@@ -37,6 +39,7 @@ function help() {
   console.log(paint('dim','  npm run craft -- write-path --preset lsm --logical 1'));
   console.log(paint('dim','  npm run craft -- lsm --policy leveled --dataset 500 --memtable 512 --ratio 10'));
   console.log(paint('dim','  npm run craft -- gpu-plan --preset llama70 --gpus 1 --gpu-memory 80 --tokens 8192'));
+  console.log(paint('dim','  npm run craft -- rag-size --documents 1000000 --tokens 1200 --chunk 512 --overlap 64'));
   console.log(paint('dim','  npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2'));
 }
 function raid() {
@@ -90,6 +93,7 @@ function writePath() {
 }
 function lsm(){const result=calculateLsm({policy:String(arg('policy','leveled')),datasetGB:number('dataset',500),memtableMB:number('memtable',512),sizeRatio:number('ratio',10),l0Files:number('l0-files',4),storageMBps:number('bandwidth',500)});header();console.log(`\n${paint('bold','LSM Compaction Lab')}  ${paint('dim',result.policy)}`);console.log(`  ${paint('dim',result.tradeoff)}\n`);console.log(`  Non-empty levels         ${paint('cyan',result.levels)}`);console.log(`  Estimated write amp     ${paint('red',`${fmt(result.writeAmplification)}×`)}`);console.log(`  Point-lookup runs       ${paint('yellow',fmt(result.readRuns))}`);console.log(`  Space amplification    ${paint('violet',`${fmt(result.spaceAmplification)}×`)}`);console.log(`  Ingest ceiling         ${paint('green',`${fmt(result.maxIngestMBps)} MB/s`)}`);console.log(`\n  ${paint('yellow','⚠')} ${paint('dim',result.warning)}`)}
 function gpuPlan(){const presetName=String(arg('preset','llama70')),preset=GPU_PRESETS[presetName];if(!preset)throw new Error('--preset must be llama8, llama70, dense7, or large405');const r=calculateGpuMemory({...preset,weightBits:number('weight-bits',preset.weightBits),tokens:number('tokens',8192),concurrency:number('concurrency',8),kvBytes:number('kv-bytes',2),gpus:number('gpus',1),gpuMemoryGB:number('gpu-memory',80),activationGB:number('activations',2),workspaceGB:number('workspace',3),reservePercent:Number(arg('reserve',10))});header();console.log(`\n${paint('bold','GPU Memory Planner')}  ${paint('dim',preset.name)}\n`);console.log(`  Weights total / per GPU  ${paint('violet',`${fmt(r.totalWeightsGiB)} / ${fmt(r.perGpuWeights)} GiB`)}`);console.log(`  KV per request           ${paint('cyan',`${fmt(r.perRequestKvGiB)} GiB`)}`);console.log(`  KV total / per GPU       ${paint('cyan',`${fmt(r.totalKvGiB)} / ${fmt(r.perGpuKv)} GiB`)}`);console.log(`  Runtime fixed per GPU    ${paint('yellow',`${fmt(r.fixedPerGpu)} GiB`)}`);console.log(`  Required / usable        ${paint(r.fits?'green':'red',`${fmt(r.requiredPerGpu)} / ${fmt(r.usablePerGpu)} GiB`)}`);console.log(`  Maximum concurrency      ${paint('green',fmt(r.maxConcurrency))}`);console.log(`\n  ${r.fits?paint('green','FIT'):paint('red','DOES NOT FIT')} · headroom ${fmt(r.headroomGiB)} GiB per GPU`);console.log(`  ${paint('yellow','⚠')} ${paint('dim',r.warning)}`)}
+function ragSize(){const r=calculateRagStorage({documents:number('documents',1e6),avgTokens:number('tokens',1200),chunkTokens:number('chunk',512),overlapTokens:Number(arg('overlap',64)),embeddingDimensions:number('dimensions',1536),embeddingBytes:number('embedding-bytes',4),metadataBytes:number('metadata-bytes',512),indexOverheadPercent:Number(arg('index-overhead',30)),replicas:number('replicas',2)});header();console.log(`\n${paint('bold','RAG Storage Sizer')}  ${paint('dim',`${fmt(r.documents)} documents`)}\n`);console.log(`  Chunks / total           ${paint('cyan',`${r.chunksPerDocument} / ${fmt(r.chunks)}`)}`);console.log(`  Source corpus            ${paint('blue',`${fmt(r.sourceGiB)} GiB`)}`);console.log(`  Raw embeddings           ${paint('violet',`${fmt(r.embeddingGiB)} GiB`)}`);console.log(`  Metadata + index         ${paint('yellow',`${fmt(r.metadataGiB+r.indexGiB)} GiB`)}`);console.log(`  Replicated vector store  ${paint('cyan',`${fmt(r.vectorReplicatedGiB)} GiB`)}`);console.log(`  Total modeled physical   ${paint('green',`${fmt(r.totalPhysicalGiB)} GiB`)}`);console.log(`\n  ${paint('yellow','⚠')} ${paint('dim',r.warning)}`)}
 function kv() {
   const layers=number('layers',32), heads=number('heads',32), dim=number('dim',128), tokens=number('tokens',8192), bytes=number('bytes',2), batch=number('batch',1);
   const total=2*layers*heads*dim*tokens*bytes*batch, gib=total/1024**3; header();
@@ -111,5 +115,5 @@ async function doctor() {
   console.log(); checks.forEach(([name,ok])=>console.log(`  ${ok?paint('green','✓'):paint('red','✗')} ${name}`)); if(checks.some(([,ok])=>!ok)) process.exitCode=1;
 }
 const command=process.argv[2]||'help';
-try { if(command==='raid') raid(); else if(command==='erasure') erasure(); else if(command==='write-path') writePath(); else if(command==='lsm') lsm(); else if(command==='gpu-plan') gpuPlan(); else if(command==='kv') kv(); else if(command==='topics') topics(); else if(command==='doctor') await doctor(); else help(); }
+try { if(command==='raid') raid(); else if(command==='erasure') erasure(); else if(command==='write-path') writePath(); else if(command==='lsm') lsm(); else if(command==='gpu-plan') gpuPlan(); else if(command==='rag-size') ragSize(); else if(command==='kv') kv(); else if(command==='topics') topics(); else if(command==='doctor') await doctor(); else help(); }
 catch(error) { console.error(`\n${paint('red','error:')} ${error.message}\n`); process.exitCode=1; }
