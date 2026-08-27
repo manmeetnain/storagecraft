@@ -384,6 +384,32 @@
       .topology-summary { color:var(--green); font:10px var(--mono); }
       .topology-summary[data-state="DEGRADED"] { color:var(--amber); }
       .topology-summary[data-state="OUTAGE"] { color:var(--red); }
+      .operations-incidents { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+      .operations-incident { background:rgba(251,113,133,.06); color:var(--muted); border:1px solid rgba(251,113,133,.3); border-radius:7px; padding:6px 9px; font:9px var(--mono); cursor:pointer; }
+      .terminal-tabs { display:flex; gap:6px; flex-wrap:wrap; padding:8px 10px; border-bottom:1px solid var(--line); background:#07101c; }
+      .terminal-tab { background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:7px; padding:6px 9px; font:9px var(--mono); cursor:pointer; }
+      .terminal-tab.active { color:var(--text); border-color:var(--cyan); background:rgba(34,211,238,.08); }
+      .config-safety { border-bottom:1px solid var(--line); background:#081321; padding:8px 10px; }
+      .config-safety summary { cursor:pointer; color:var(--amber); font:9px var(--mono); letter-spacing:.08em; }
+      .config-grid { display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:8px; margin-top:8px; }
+      .config-grid textarea, .config-grid input { width:100%; background:#030914; color:var(--text); border:1px solid var(--line); border-radius:7px; padding:8px; font:9px/1.5 var(--mono); }
+      .config-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:7px; }
+      .config-actions button { background:#101d2e; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font:9px var(--mono); cursor:pointer; }
+      #config-result { margin:0; max-height:120px; overflow:auto; white-space:pre-wrap; color:var(--muted); font:9px/1.5 var(--mono); }
+      .governance { display:flex; gap:7px; align-items:center; flex-wrap:wrap; padding:7px 10px; border-bottom:1px solid var(--line); background:#091728; }
+      .governance label { color:var(--muted); font:9px var(--mono); }
+      .governance input, .governance select { background:#030914; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:5px 7px; font:9px var(--mono); }
+      .governance button { margin-left:auto; background:transparent; color:var(--cyan); border:1px solid var(--line); border-radius:6px; padding:5px 8px; font:9px var(--mono); cursor:pointer; }
+      #compatibility-label { color:var(--violet); font:9px var(--mono); }
+      .certification { margin-bottom:14px; padding:12px 14px; }
+      .cert-head { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+      .cert-head strong { font:750 10px var(--mono); margin-right:auto; }
+      .cert-head input { background:#030914; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font:9px var(--mono); }
+      .cert-head button, .cert-head a { background:#101d2e; color:var(--cyan); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font:9px var(--mono); cursor:pointer; text-decoration:none; }
+      .cert-tasks { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-top:10px; }
+      .cert-task { border:1px solid var(--line); border-radius:7px; padding:7px; font:9px/1.4 var(--mono); color:var(--muted); }
+      .cert-task.complete { border-color:var(--green); color:var(--green); }
+      @media(max-width:900px){.cert-tasks{grid-template-columns:1fr 1fr}}
       @media (max-width: 1100px) {
         .workspace {
           grid-template-columns: 235px 1fr;
@@ -449,7 +475,9 @@
       <section class="panel topology" aria-label="Live dual-fabric topology">
         <div class="topology-head"><strong>LIVE DUAL-FABRIC TOPOLOGY · v2.0</strong><div class="topology-actions"><button id="fabric-a">TOGGLE A</button> <button id="fabric-b">TOGGLE B</button> <button id="fabric-reset">RESTORE</button></div><span class="topology-summary" id="topology-summary"></span></div>
         <div class="topology-grid" id="topology-grid"></div>
+        <div class="operations-incidents" id="operations-incidents" aria-label="Advanced cross-fabric incidents"></div>
       </section>
+      <section class="panel certification" aria-label="Practical certification assessment"><div class="cert-head"><strong>PRACTICAL CERTIFICATION · EVIDENCE-BASED</strong><input id="candidate-name" aria-label="Certification candidate" value="Storage Learner"><button id="cert-start">START / RESET</button><a id="cert-json" href="#" download>DOWNLOAD JSON</a><a id="cert-csv" href="#" download>DOWNLOAD CSV</a><span class="topology-summary" id="cert-summary">0/5 · IN PROGRESS</span></div><div class="cert-tasks" id="cert-tasks"></div></section>
       <div class="workspace">
         <aside class="panel">
           <div class="panel-title">Choose environment</div>
@@ -461,6 +489,10 @@
           </div>
         </aside>
         <section class="panel terminal-wrap">
+          <div class="terminal-tabs" id="terminal-tabs" aria-label="Simulated device terminal sessions"></div>
+          <div class="governance"><label>ACTOR <input id="actor" value="learner01" aria-label="Audit actor"></label><label>ROLE <select id="role" aria-label="Academy role"><option value="observer">Observer</option><option value="operator">Operator</option><option value="administrator" selected>Administrator</option></select></label><span id="compatibility-label"></span><button id="audit-view">AUDIT LOG</button></div>
+          <details class="config-safety"><summary>CONFIGURATION SAFETY · ATOMIC SCRIPTS / DIFF / CHECKPOINT / ROLLBACK</summary><div class="config-grid"><div><textarea id="config-script" rows="5" aria-label="Multi-device configuration script">[brocade-a1] switchname PROD-A1
+[brocade-b1] switchname PROD-B1</textarea><div class="config-actions"><button id="script-run">RUN ATOMIC</button><input id="checkpoint-name" aria-label="Checkpoint name" value="known-good"><button id="checkpoint-create">CHECKPOINT</button><button id="checkpoint-rollback">ROLLBACK</button></div></div><pre id="config-result">Create a checkpoint, run a script, inspect its exact state diff, or roll back.</pre></div></details>
           <div class="terminal-head">
             <div class="lights"><i></i><i></i><i></i></div>
             <span id="profile-title"></span>
@@ -516,20 +548,28 @@
       } from "/storagecraft/lib/network-academy-engine.js";
       import { STORAGECRAFT_BRAND, creatorAttribution, productTitle } from "/storagecraft/lib/storagecraft-brand.js";
       import { createDualFabricTopology, setFabricState, topologyHealth } from "/storagecraft/lib/academy-topology.js";
+      import { ACADEMY_DEVICES, OPERATIONS_INCIDENTS, createOperationsWorkspace, selectOperationsDevice, executeOperationsCommand, loadOperationsIncident, evaluateOperationsIncident } from "/storagecraft/lib/academy-operations.js";
+      import { createConfigurationSafety, createCheckpoint, rollbackCheckpoint, runConfigurationScript } from "/storagecraft/lib/academy-config-safety.js";
+      import { COMPATIBILITY_PROFILES, createGovernedWorkspace, setGovernedIdentity, executeGovernedCommand, exportAuditLog } from "/storagecraft/lib/academy-governance.js";
+      import { CERTIFICATION_BLUEPRINT, createCertificationAttempt, recordCertificationTask, certificationSummary, certificationReportJson, certificationReportCsv } from "/storagecraft/lib/academy-certification.js";
       const $ = (id) => document.getElementById(id);
       document.title = productTitle(STORAGECRAFT_BRAND.academyName);
       document.getElementById("creator-attribution").innerHTML = `${creatorAttribution()} · <a href="${STORAGECRAFT_BRAND.repositoryUrl}">GitHub ↗</a>`;
-      let topology = createDualFabricTopology();
+      const operationsWorkspace = createOperationsWorkspace();
+      const configurationSafety = createConfigurationSafety(operationsWorkspace);
+      const governance = createGovernedWorkspace(operationsWorkspace, { actor: 'learner01', role: 'administrator' });
+      let certification = createCertificationAttempt('Storage Learner');
+      let topology = operationsWorkspace.topology;
       function renderTopology() {
         const health = topologyHealth(topology);
         $("topology-summary").textContent = `${health.state} · A ${health.paths.A ? 'UP' : 'DOWN'} · B ${health.paths.B ? 'UP' : 'DOWN'}`;
         $("topology-summary").dataset.state = health.state;
         $("topology-grid").innerHTML = topology.nodes.map((node) => `<div class="topology-node" data-fabric="${node.fabric || ''}">${node.label}<small>${node.type}${node.fabric ? ` · Fabric ${node.fabric}` : ''}</small></div>`).join('');
       }
-      function toggleFabric(fabric) { const up = topologyHealth(topology).paths[fabric]; topology = setFabricState(topology, fabric, up ? 'down' : 'up'); renderTopology(); }
+      function toggleFabric(fabric) { const up = topologyHealth(topology).paths[fabric]; topology = setFabricState(topology, fabric, up ? 'down' : 'up'); operationsWorkspace.topology = topology; renderTopology(); }
       $("fabric-a").onclick = () => toggleFabric('A');
       $("fabric-b").onclick = () => toggleFabric('B');
-      $("fabric-reset").onclick = () => { topology = createDualFabricTopology(); renderTopology(); };
+      $("fabric-reset").onclick = () => { topology = createDualFabricTopology(); operationsWorkspace.topology = topology; renderTopology(); };
       const curricula = {
         brocade: [
           {
@@ -723,41 +763,46 @@
         ],
       };
       let profile = localStorage.getItem("academy-profile") || "brocade",
-        sessions = {},
+        activeDevice = localStorage.getItem("academy-device") || "brocade-a1",
         lesson = 0,
         step = 0,
         history = [],
         historyIndex = 0,
         incidentMode = false,
         activeScenario = null;
+      if (!ACADEMY_DEVICES[activeDevice]) activeDevice = 'brocade-a1';
+      profile = ACADEMY_DEVICES[activeDevice].profile;
+      selectOperationsDevice(operationsWorkspace, activeDevice);
       function getSession() {
-        if (!sessions[profile]) {
-          const saved = localStorage.getItem(`academy-state-${profile}`);
-          sessions[profile] = createAcademySession(profile);
+        if (!operationsWorkspace.sessions[activeDevice]) {
+          const saved = localStorage.getItem(`academy-state-${activeDevice}`);
+          operationsWorkspace.sessions[activeDevice] = createAcademySession(profile);
+          operationsWorkspace.sessions[activeDevice].state.hostname = ACADEMY_DEVICES[activeDevice]?.label || operationsWorkspace.sessions[activeDevice].state.hostname;
           const assessments = localStorage.getItem(
-            `academy-assessments-${profile}`,
+            `academy-assessments-${activeDevice}`,
           );
           if (assessments)
             try {
-              sessions[profile].assessments = JSON.parse(assessments);
+              operationsWorkspace.sessions[activeDevice].assessments = JSON.parse(assessments);
             } catch {}
           if (saved)
             try {
-              sessions[profile].state = JSON.parse(saved);
+              operationsWorkspace.sessions[activeDevice].state = JSON.parse(saved);
             } catch {}
         }
-        return sessions[profile];
+        return operationsWorkspace.sessions[activeDevice];
       }
       function save() {
         localStorage.setItem(
-          `academy-state-${profile}`,
+          `academy-state-${activeDevice}`,
           JSON.stringify(getSession().state),
         );
         localStorage.setItem(
-          `academy-assessments-${profile}`,
+          `academy-assessments-${activeDevice}`,
           JSON.stringify(getSession().assessments),
         );
         localStorage.setItem("academy-profile", profile);
+        localStorage.setItem("academy-device", activeDevice);
       }
       function write(kind, text) {
         const div = document.createElement("div");
@@ -777,14 +822,82 @@
           .querySelectorAll(".profile")
           .forEach((b) => (b.onclick = () => switchProfile(b.dataset.profile)));
       }
+      function renderTerminalTabs() {
+        $("terminal-tabs").innerHTML = Object.entries(ACADEMY_DEVICES).map(([id, device]) => `<button class="terminal-tab ${id === activeDevice ? 'active' : ''}" data-device="${id}">${device.label} · ${device.fabric}</button>`).join('');
+        document.querySelectorAll('.terminal-tab').forEach((button) => button.onclick = () => switchDevice(button.dataset.device));
+        const compatibility = COMPATIBILITY_PROFILES[ACADEMY_DEVICES[activeDevice].profile];
+        $("compatibility-label").textContent = compatibility.label;
+      }
+      function updateIdentity() {
+        try { setGovernedIdentity(governance, $("actor").value, $("role").value); $("actor").setAttribute('aria-invalid', 'false'); }
+        catch (error) { $("actor").setAttribute('aria-invalid', 'true'); write('error', error.message); }
+      }
+      $("actor").onchange = updateIdentity;
+      $("role").onchange = updateIdentity;
+      $("audit-view").onclick = () => {
+        const audit = exportAuditLog(governance);
+        write('system', `AUDIT LOG · ${audit.verified ? 'CHAIN VERIFIED' : 'CHAIN INVALID'}\n${audit.events.map((event) => `${event.sequence} ${event.decision} ${event.actor}/${event.role} ${event.deviceId} ${event.command} ${event.hash}`).join('\n') || 'No audited commands yet.'}`);
+        if (audit.verified && audit.events.some((event) => event.decision === 'DENY')) recordCertificationTask(certification, 'governance', 100, 'Verified chained audit containing an RBAC denial.');
+        renderCertification();
+      };
+      function renderCertification() {
+        const summary = certificationSummary(certification);
+        $("cert-summary").textContent = `${summary.completed}/${summary.total} · ${summary.weightedScore}/100 · ${summary.status.replaceAll('_',' ')}`;
+        $("cert-tasks").innerHTML = CERTIFICATION_BLUEPRINT.map((task) => { const result=certification.tasks[task.id]; return `<div class="cert-task ${result.completed?'complete':''}">${result.completed?'✓':'○'} ${task.title}<br>${task.weight}%${result.completed?` · ${result.score}/100`:''}</div>`; }).join('');
+        const audit = exportAuditLog(governance);
+        const context = { auditVerified: audit.verified, compatibilityProfiles: Object.values(governance.compatibility) };
+        $("cert-json").href = `data:application/json;charset=utf-8,${encodeURIComponent(certificationReportJson(certification, context))}`;
+        $("cert-json").download = `storagecraft-academy-${certification.attemptId}.json`;
+        $("cert-csv").href = `data:text/csv;charset=utf-8,${encodeURIComponent(certificationReportCsv(certification, context))}`;
+        $("cert-csv").download = `storagecraft-academy-${certification.attemptId}.csv`;
+      }
+      $("cert-start").onclick = () => { try { certification=createCertificationAttempt($("candidate-name").value); renderCertification(); } catch(error) { write('error',error.message); } };
+      function switchDevice(id) {
+        activeDevice = id;
+        selectOperationsDevice(operationsWorkspace, id);
+        profile = ACADEMY_DEVICES[id].profile;
+        lesson = 0; step = 0; incidentMode = false; activeScenario = null;
+        $("terminal").innerHTML = "";
+        renderProfiles(); renderTerminalTabs(); renderLessons(); renderScenarios(); boot();
+      }
+      function renderOperationsIncidents() {
+        $("operations-incidents").innerHTML = OPERATIONS_INCIDENTS.map((item) => `<button class="operations-incident" data-operation-incident="${item.id}">${item.title}</button>`).join('');
+        document.querySelectorAll('[data-operation-incident]').forEach((button) => button.onclick = () => {
+          const item = loadOperationsIncident(operationsWorkspace, button.dataset.operationIncident);
+          topology = operationsWorkspace.topology;
+          activeDevice = operationsWorkspace.activeDevice;
+          profile = ACADEMY_DEVICES[activeDevice].profile;
+          incidentMode = true;
+          $("terminal").innerHTML = '';
+          renderTopology(); renderProfiles(); renderTerminalTabs(); renderLessons(); renderScenarios(); boot();
+          write('system', `ADVANCED INCIDENT · ${item.title}\n${item.brief}\nUse any device terminal, then run: incident check`);
+          $("lesson-title").textContent = item.title;
+          $("lesson-goal").textContent = item.brief;
+          $("expected").textContent = 'Switch terminals, investigate, remediate, then run: incident check';
+        });
+      }
+      $("checkpoint-create").onclick = () => {
+        try { const result = createCheckpoint(configurationSafety, $("checkpoint-name").value); $("config-result").textContent = `Checkpoint ${result.name} captured across ${result.devices} devices.`; }
+        catch (error) { $("config-result").textContent = error.message; }
+      };
+      $("checkpoint-rollback").onclick = () => {
+        try { const result = rollbackCheckpoint(configurationSafety, $("checkpoint-name").value); activeDevice = result.activeDevice; profile = ACADEMY_DEVICES[activeDevice].profile; topology = operationsWorkspace.topology; renderTopology(); renderProfiles(); renderTerminalTabs(); boot(); $("config-result").textContent = `Rolled back to ${result.name}.`; }
+        catch (error) { $("config-result").textContent = error.message; }
+      };
+      $("script-run").onclick = () => {
+        try { const result = runConfigurationScript(configurationSafety, $("config-script").value); activeDevice = operationsWorkspace.activeDevice; profile = ACADEMY_DEVICES[activeDevice].profile; renderProfiles(); renderTerminalTabs(); $("prompt").textContent = academyPrompt(getSession()); $("config-result").textContent = result.rolledBack ? `FAILED · atomic rollback complete\n${result.results.at(-1).output}` : `${result.ok ? 'PASS' : 'PARTIAL'} · ${result.results.length} commands · ${result.diff.length} state changes\n${result.diff.slice(0, 12).map((change) => `${change.path}: ${JSON.stringify(change.before)} → ${JSON.stringify(change.after)}`).join('\n')}`; if(result.ok){recordCertificationTask(certification,'configuration-safety',100,`Atomic script completed with ${result.diff.length} desired-state changes.`);renderCertification();} }
+        catch (error) { $("config-result").textContent = error.message; }
+      };
       function switchProfile(id) {
         profile = id;
+        activeDevice = Object.keys(ACADEMY_DEVICES).find((key) => ACADEMY_DEVICES[key].profile === id) || 'iscsi-gw1';
         lesson = 0;
         step = 0;
         incidentMode = false;
         activeScenario = null;
         $("terminal").innerHTML = "";
         renderProfiles();
+        renderTerminalTabs();
         renderLessons();
         renderScenarios();
         boot();
@@ -859,7 +972,14 @@
         if (!command.trim()) return;
         const s = getSession();
         write("command", `${academyPrompt(s)} ${command}`);
-        const r = executeAcademyCommand(s, command);
+        if (command.trim().toLowerCase() === 'incident check' && operationsWorkspace.incident) {
+          const assessment = evaluateOperationsIncident(operationsWorkspace);
+          write(assessment.passed ? 'output' : 'error', `${assessment.passed ? 'PASS' : 'NOT YET RESOLVED'} · ${assessment.score}/100 · ${assessment.commands} commands · topology ${assessment.state}`);
+          $("progress").style.width = assessment.passed ? '100%' : '25%';
+          if (assessment.passed) { recordCertificationTask(certification, 'fabric-resilience', assessment.score, `Resolved ${operationsWorkspace.incident.id} in ${assessment.commands} commands.`); renderCertification(); }
+          return;
+        }
+        const r = executeGovernedCommand(governance, command);
         if (r.output) write(r.ok ? "output" : "error", r.output);
         $("prompt").textContent = r.prompt;
         history.push(command);
@@ -870,6 +990,7 @@
           $("hint").textContent = r.assessment.passed
             ? `Incident resolved · score ${r.assessment.score}/100 in ${r.assessment.commands} commands.`
             : r.assessment.hint;
+          if (r.assessment.passed) { recordCertificationTask(certification, profile === 'iscsi' ? 'iscsi-operations' : 'fabric-health', r.assessment.score, `Completed ${activeScenario} on ${activeDevice}.`); renderCertification(); }
         }
         const expected = curricula[profile][lesson].commands[step];
         if (
@@ -911,7 +1032,10 @@
           run("reset");
       };
       renderProfiles();
+      renderTerminalTabs();
       renderTopology();
+      renderOperationsIncidents();
+      renderCertification();
       renderLessons();
       renderScenarios();
       boot();
