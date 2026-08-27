@@ -1,0 +1,11 @@
+/* StorageCraft experience layer — Manmeet Nain */
+:where(header,.topbar,.hdr){backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+:where(.card,.metric,.domain,.stage,.path,.scheme,.item,.panel){box-shadow:0 16px 42px rgba(0,0,0,.14)}
+:where(.card,.metric,.domain,.stage,.path,.scheme,.item,.panel,.preset,.tab,.link,.hdr-link,button,input,select){transition:border-color .2s,transform .2s,box-shadow .2s,background-color .2s}
+:where(.card,.metric,.domain,.stage,.path,.scheme,.item,.panel):hover{border-color:#435a78}
+:where(button,.preset,.tab,.link,.hdr-link,a):focus-visible,:where(input,select,textarea):focus-visible{outline:3px solid rgba(34,211,238,.35)!important;outline-offset:3px}
+:where(button,.preset,.tab,.link,.hdr-link):hover{transform:translateY(-1px)}
+:where(input,select,textarea){box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+header :where(strong){font-size:11px;line-height:1.2}header :where(small){font:8px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em}
+@media(max-width:620px){header :where(small){display:none!important}header :where(strong){font-size:9px}header :where(a){white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
