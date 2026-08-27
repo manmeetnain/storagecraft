@@ -1,0 +1,5 @@
+import test from'node:test';import assert from'node:assert/strict';import{calculateAiDataPath}from'../public/lib/ai-data-path-model.js';
+test('identifies the slowest training stage',()=>{const r=calculateAiDataPath({objectReadMBps:9000,fabricMBps:12000,preprocessMBps:3000,trainerIngestMBps:6000});assert.equal(r.bottleneck,'Preprocessing');assert.equal(r.effectiveTrainingMBps,3000);assert.equal(r.stages.find(s=>s.isBottleneck).utilization,1)});
+test('faster non-bottleneck stage does not change pass time',()=>{const a=calculateAiDataPath({objectReadMBps:2000,fabricMBps:5000}),b=calculateAiDataPath({objectReadMBps:2000,fabricMBps:20000});assert.equal(a.trainingHours,b.trainingHours)});
+test('checkpoint and cold load use their slowest links',()=>{const r=calculateAiDataPath({fabricMBps:5000,checkpointWriteMBps:9000,modelReadMBps:7000,gpuLoadMBps:3000});assert.equal(r.checkpointEffectiveMBps,5000);assert.equal(r.modelEffectiveMBps,3000)});
+test('rejects invalid throughput',()=>{assert.throws(()=>calculateAiDataPath({preprocessMBps:0}),/positive/) });

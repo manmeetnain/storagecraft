@@ -23,8 +23,8 @@ A capsule can move to `shipped` only when it has:
 | 90 | LSM-Tree Compaction Lab | Shipped | Database and vector-database engineers |
 | 88 | GPU Memory Planner | Shipped | LLM inference engineers |
 | 86 | RAG Storage Sizer | Shipped | RAG platform engineers |
-| 82 | AI Data Path Lab | Active | AI infrastructure architects |
-| 78 | NVMe Queue Lab | Queued | Systems and performance engineers |
+| 82 | AI Data Path Lab | Shipped | AI infrastructure architects |
+| 78 | NVMe Queue Lab | Active | Systems and performance engineers |
 | 76 | SAN Failure-Domain Lab | Queued | Enterprise storage engineers |
 
 Priorities may change when repository traffic, search demand, user issues, or commercial enquiries provide better evidence.

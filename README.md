@@ -63,6 +63,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [LSM-Tree Compaction Lab](https://manmeetnain.github.io/storagecraft/simulators/lsm-compaction/index.html) | How do leveled and tiered policies trade writes, reads, and space? | Interactive policy lab + CLI |
 | [GPU Memory Planner](https://manmeetnain.github.io/storagecraft/simulators/gpu-memory/index.html) | Will an LLM serving configuration fit per GPU? | Interactive inference planner + CLI |
 | [RAG Storage Sizer](https://manmeetnain.github.io/storagecraft/simulators/rag-storage/index.html) | What is the full source, chunk, vector, index, and replica footprint? | Interactive AI-data planner + CLI |
+| [AI Data Path Lab](https://manmeetnain.github.io/storagecraft/simulators/ai-data-path/index.html) | Which storage, fabric, CPU, or accelerator stage limits an AI workload? | Interactive bottleneck lab + CLI |
 
 ## Roadmap
 
@@ -71,8 +72,9 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 - [x] Storage internals and AI-infrastructure foundation
 - [x] Erasure Coding Lab v1
 - [x] Write Amplification Explorer v1
-- [ ] GPU Memory Planner
-- [ ] RAG Storage Sizer
+- [x] GPU Memory Planner
+- [x] RAG Storage Sizer
+- [x] AI Data Path Lab
 - [ ] Reproducible benchmark capsule format
 
 Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml).
