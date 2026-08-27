@@ -8,7 +8,7 @@ hero:
     file: ../../../public/brand/storagecraft-social.png
   actions:
     - text: Launch RAID Lab
-      link: /storagecraft/simulators/raid/index.html
+      link: /storagecraft/simulators/raid-planner/index.html
       icon: rocket
       variant: primary
     - text: Use the CLI
@@ -37,9 +37,9 @@ import { Card, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
 ## The five-minute experiment
 
 <Steps>
-1. Open the **RAID-5 Visualizer** and write two stripes.
-2. Fail one disk and inspect how XOR reconstructs missing blocks.
-3. Rebuild the array, then compare the behavior with erasure coding.
+1. Open the **Universal RAID Planner** and compare RAID 6, RAID 10, and RAID-Z2.
+2. Launch the focused RAID-5 Visualizer and fail one disk.
+3. Inspect how XOR reconstruction restores the missing blocks.
 </Steps>
 
 > StorageCraft is educational engineering software. Validate workload, durability, recovery objectives, and vendor behavior before making production decisions.

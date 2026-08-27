@@ -6,6 +6,8 @@ lastUpdated: 2026-08-27
 
 The interactive RAID-5 lab shows data and rotating parity placement across disks. Trigger writes, fail a drive, and observe the XOR reconstruction path.
 
+Need to compare other layouts first? Use the [Universal RAID Planner](/storagecraft/simulators/raid-planner/).
+
 <a class="sl-link-button primary" href="/storagecraft/simulators/raid/index.html">Launch interactive lab →</a>
 
 ## Experiment

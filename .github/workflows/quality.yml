@@ -28,4 +28,7 @@ jobs:
       - run: npm run check
       - run: NO_COLOR=1 npm run craft -- doctor
       - run: NO_COLOR=1 npm run craft -- raid --level 6 --disks 8 --size 4
+      - run: NO_COLOR=1 npm run craft -- raid --level 60 --disks 16 --size 8 --groups 2
+      - run: NO_COLOR=1 npm run craft -- raid --compare --disks 12 --size 8 --groups 2
+      - run: NO_COLOR=1 npm run craft -- erasure --data 10 --parity 4 --dataset 100 --failures 2
       - run: NO_COLOR=1 npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2

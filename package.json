@@ -11,7 +11,8 @@
     "gen:index": "python3 scripts/gen_content_index.py",
     "validate": "python3 scripts/validate_frontmatter.py",
     "craft": "node scripts/storagecraft.mjs",
-    "check": "npm run validate && npm run build"
+    "test": "node --test",
+    "check": "npm run validate && npm test && npm run build"
   },
   "bin": {
     "storagecraft": "./scripts/storagecraft.mjs"

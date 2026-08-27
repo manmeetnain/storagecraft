@@ -21,7 +21,21 @@ npm run craft -- topics
 npm run craft -- raid --level 6 --disks 8 --size 4
 ```
 
-This reports raw capacity, usable capacity, parity overhead, efficiency, and nominal drive-failure tolerance.
+Supported values are `jbod`, `0`, `1`, `2`, `3`, `4`, `5`, `6`, `01`, `10`, `50`, `60`, `z1`, `z2`, and `z3`.
+
+Nested RAID accepts a group count:
+
+```bash
+npm run craft -- raid --level 60 --disks 16 --size 8 --groups 2
+```
+
+Compare every valid layout for one hardware set:
+
+```bash
+npm run craft -- raid --compare --disks 12 --size 8 --groups 2
+```
+
+Results separate guaranteed failure tolerance from the higher, placement-dependent maximum possible in mirrored and grouped layouts.
 
 ### KV-cache memory
 

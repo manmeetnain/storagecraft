@@ -7,7 +7,7 @@
 
   Interactive labs, transparent engineering models, and visual deep dives spanning storage internals, distributed data, and LLM infrastructure.
 
-  [![Live Lab](https://img.shields.io/badge/LAUNCH-INTERACTIVE_LAB-22d3ee?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)
+  [![Live Lab](https://img.shields.io/badge/LAUNCH-RAID_PLANNER-22d3ee?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html)
   [![Documentation](https://img.shields.io/badge/EXPLORE-DOCUMENTATION-8b5cf6?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/)
   [![Sponsor](https://img.shields.io/badge/SPONSOR-THE_LAB-34d399?style=for-the-badge)](https://github.com/sponsors/manmeetnain)
 
@@ -31,7 +31,7 @@ The storage layer is usually invisible—until latency spikes, a disk fails, com
 
 ### Browser lab
 
-Open the **[RAID-5 Visualizer](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)**, write two stripes, fail a disk, and watch XOR reconstruct the missing blocks.
+Open the **[Universal RAID Planner](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html)** to compare RAID 0–6, nested RAID, and RAID-Z. Then use the focused **[RAID-5 Visualizer](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html)** to write stripes, fail a disk, and watch XOR reconstruction.
 
 ### Colored CLI
 
@@ -39,7 +39,8 @@ Open the **[RAID-5 Visualizer](https://manmeetnain.github.io/storagecraft/simula
 git clone https://github.com/manmeetnain/storagecraft.git
 cd storagecraft
 npm install
-npm run craft -- raid --level 6 --disks 8 --size 4
+npm run craft -- raid --level 60 --disks 16 --size 8 --groups 2
+npm run craft -- raid --compare --disks 12 --size 8 --groups 2
 npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2
 ```
 
@@ -56,13 +57,15 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [KV Cache](https://manmeetnain.github.io/storagecraft/ai-infra/kv-cache/) | Why does inference memory grow with live tokens? | AI-infra deep dive |
 | [GPU Memory Anatomy](https://manmeetnain.github.io/storagecraft/ai-infra/gpu-memory/) | What competes for accelerator memory? | Sizing workflow |
 | [RAID-5](https://manmeetnain.github.io/storagecraft/simulators/raid/index.html) | How does distributed parity recover missing data? | Interactive lab |
+| [Universal RAID Planner](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html) | How do standard, nested, and RAID-Z layouts compare? | Interactive planner + CLI |
+| [Erasure Coding Lab](https://manmeetnain.github.io/storagecraft/simulators/erasure-coding/index.html) | How does k+m coding trade capacity for recoverability? | Interactive failure lab + CLI |
 
 ## Roadmap
 
 - [x] RAID failure and rebuild lab
-- [x] RAID and KV-cache CLI models
+- [x] Universal RAID planner and RAID/KV-cache CLI models
 - [x] Storage internals and AI-infrastructure foundation
-- [ ] Erasure Coding Lab
+- [x] Erasure Coding Lab v1
 - [ ] Write Amplification Explorer
 - [ ] GPU Memory Planner
 - [ ] RAG Storage Sizer

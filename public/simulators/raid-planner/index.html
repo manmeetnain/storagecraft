@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Compare RAID 0–6, RAID 10, 50, 60, RAID-Z, and JBOD capacity, overhead, failure tolerance, and write penalty.">
+  <meta property="og:title" content="Universal RAID Planner — StorageCraft">
+  <meta property="og:description" content="Model standard, nested, and RAID-Z layouts with transparent assumptions.">
+  <meta property="og:image" content="https://manmeetnain.github.io/storagecraft/brand/storagecraft-social.png">
+  <title>Universal RAID Planner — StorageCraft</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box} :root{color-scheme:dark;--bg:#050b14;--panel:#0b172a;--panel2:#101f35;--line:#223650;--text:#f4f8ff;--muted:#91a6c3;--cyan:#22d3ee;--blue:#60a5fa;--violet:#a78bfa;--green:#34d399;--amber:#fbbf24;--red:#fb7185;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,ui-sans-serif,system-ui,sans-serif}
+    body{margin:0;background:radial-gradient(circle at 80% -10%,rgba(34,211,238,.12),transparent 35rem),var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+    a{color:inherit}.topbar{height:68px;padding:0 clamp(18px,4vw,54px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:rgba(5,11,20,.85);backdrop-filter:blur(16px);position:sticky;top:0;z-index:5}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:850;letter-spacing:-.03em}.mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0891b2,#7c3aed);display:grid;place-items:center;font-family:var(--mono)}.brand span span{color:var(--cyan)}
+    .links{display:flex;gap:9px}.link{font:600 12px var(--mono);text-decoration:none;padding:8px 11px;border:1px solid var(--line);border-radius:8px;color:var(--muted)}.link:hover{border-color:var(--cyan);color:var(--cyan)}
+    main{max-width:1440px;margin:auto;padding:clamp(28px,5vw,68px) clamp(18px,4vw,54px)}
+    .eyebrow{font:700 11px var(--mono);color:var(--cyan);letter-spacing:.16em;text-transform:uppercase}.hero{max-width:850px;margin-bottom:34px}.hero h1{font-size:clamp(38px,7vw,76px);line-height:.98;letter-spacing:-.055em;margin:14px 0 20px;background:linear-gradient(100deg,#fff,#67e8f9 58%,#c4b5fd);background-clip:text;color:transparent}.hero p{font-size:clamp(16px,2vw,20px);line-height:1.65;color:var(--muted);max-width:760px}
+    .workspace{display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:20px;align-items:start}.card{background:linear-gradient(145deg,rgba(16,31,53,.94),rgba(8,18,33,.94));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+    h2,h3{letter-spacing:-.025em}h2{margin:0 0 18px;font-size:20px}.field{display:grid;gap:7px;margin:0 0 16px}.field label{font:700 10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em}.field input,.field select{width:100%;background:#07111f;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:12px 13px;font:600 14px var(--mono);outline:none}.field input:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.1)}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{font:11px/1.5 var(--mono);color:#6f86a4}.presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}.preset{border:1px solid var(--line);background:#07111f;color:var(--muted);font:650 11px var(--mono);padding:7px 9px;border-radius:7px;cursor:pointer}.preset:hover{color:var(--cyan);border-color:var(--cyan)}
+    .primary{width:100%;border:0;border-radius:10px;background:linear-gradient(110deg,#0891b2,#7c3aed);color:#fff;padding:13px 16px;font:800 13px var(--mono);cursor:pointer;box-shadow:0 12px 28px rgba(8,145,178,.2)}.primary:hover{filter:brightness(1.12)}
+    .result-head{display:flex;align-items:start;justify-content:space-between;gap:16px}.result-head h2{font-size:26px;margin-bottom:6px}.family{font:700 10px var(--mono);color:var(--violet);letter-spacing:.1em;text-transform:uppercase}.status{font:700 10px var(--mono);padding:6px 8px;border-radius:999px;background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.25);text-transform:uppercase}.status.rare,.status.historical{background:rgba(251,191,36,.1);color:var(--amber);border-color:rgba(251,191,36,.25)}.desc{color:var(--muted);line-height:1.6;margin:10px 0 24px}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}.metric{padding:14px;background:#07111f;border:1px solid var(--line);border-radius:11px}.value{font:800 clamp(18px,2.5vw,28px) var(--mono);color:var(--cyan)}.label{font:10px var(--mono);color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+    .capacity{display:grid;gap:11px;margin:20px 0}.bar-row{display:grid;grid-template-columns:80px 1fr 80px;align-items:center;gap:11px;font:12px var(--mono);color:var(--muted)}.track{height:11px;background:#172941;border-radius:999px;overflow:hidden}.fill{height:100%;border-radius:inherit}.raw{background:var(--blue)}.usable{background:linear-gradient(90deg,#059669,var(--green))}.overhead{background:linear-gradient(90deg,#7c3aed,var(--violet))}.amount{text-align:right;color:var(--text)}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font:12px var(--mono)}.detail span{color:var(--muted)}.warning{margin-top:14px;padding:12px 14px;border:1px solid rgba(251,191,36,.25);background:rgba(251,191,36,.07);border-radius:9px;color:#fde68a;font:12px/1.55 var(--mono)}.error{border-color:rgba(251,113,133,.3);background:rgba(251,113,133,.08);color:#fecdd3}.hidden{display:none!important}
+    .compare{margin-top:20px}.compare-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:15px}.compare-head p{margin:0;color:var(--muted);font-size:13px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:760px;font:12px var(--mono)}th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;background:#07111f;position:sticky;top:0}td.num{text-align:right}.level-name{color:var(--cyan);font-weight:750}.invalid{color:var(--red)}tbody tr:hover{background:rgba(34,211,238,.035)}
+    .footnote{margin-top:18px;color:#6f86a4;font:11px/1.7 var(--mono)}footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;color:#6f86a4;font:11px var(--mono)}
+    @media(max-width:900px){.workspace{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.controls{position:static}.links .docs{display:none}}
+    @media(max-width:520px){.metrics,.detail-grid,.pair{grid-template-columns:1fr}.topbar{height:60px}.brand span{font-size:14px}.bar-row{grid-template-columns:65px 1fr 65px}.hero h1{font-size:42px}footer{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/storagecraft/"><span class="mark" aria-hidden="true">SC</span><span>Storage<span>Craft</span></span></a>
+    <nav class="links" aria-label="Project links"><a class="link docs" href="/storagecraft/simulators/raid/">RAID-5 Lab</a><a class="link" href="https://github.com/manmeetnain/storagecraft">GitHub ↗</a></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Interactive systems lab · v1</div>
+      <h1>Universal RAID Planner</h1>
+      <p>Compare standard, nested, historical, and RAID-Z layouts with transparent capacity formulas, guaranteed failure tolerance, write penalties, and implementation warnings.</p>
+    </section>
+    <div class="workspace">
+      <section class="card controls" aria-labelledby="config-title">
+        <h2 id="config-title">Array configuration</h2>
+        <div class="presets" aria-label="Configuration presets">
+          <button class="preset" type="button" data-level="5" data-disks="6">RAID 5</button>
+          <button class="preset" type="button" data-level="6" data-disks="8">RAID 6</button>
+          <button class="preset" type="button" data-level="10" data-disks="8">RAID 10</button>
+          <button class="preset" type="button" data-level="60" data-disks="16" data-groups="2">RAID 60</button>
+          <button class="preset" type="button" data-level="z2" data-disks="8">RAID-Z2</button>
+        </div>
+        <form id="planner-form">
+          <div class="field"><label for="level">Protection layout</label><select id="level" name="level"></select><div class="hint" id="level-hint"></div></div>
+          <div class="pair">
+            <div class="field"><label for="disks">Member disks</label><input id="disks" name="disks" type="number" min="1" max="256" step="1" value="8" inputmode="numeric"></div>
+            <div class="field"><label for="size">Smallest disk (TB)</label><input id="size" name="size" type="number" min="0.01" max="1000" step="0.01" value="4" inputmode="decimal"></div>
+          </div>
+          <div class="field" id="groups-field"><label for="groups">Nested groups</label><input id="groups" name="groups" type="number" min="2" max="32" step="1" value="2" inputmode="numeric"><div class="hint">Used by RAID 50 and RAID 60.</div></div>
+          <button class="primary" type="submit">Calculate and compare →</button>
+        </form>
+      </section>
+      <section class="card" aria-live="polite" aria-labelledby="result-title">
+        <div id="result"></div>
+        <div id="result-error" class="warning error hidden" role="alert"></div>
+      </section>
+    </div>
+    <section class="card compare" aria-labelledby="compare-title">
+      <div class="compare-head"><div><h2 id="compare-title">All-layout comparison</h2><p>Same members and smallest-member capacity; invalid layouts remain visible.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Layout</th><th>Family</th><th>Usable</th><th>Efficiency</th><th>Guaranteed failures</th><th>Write model</th></tr></thead><tbody id="comparison"></tbody></table></div>
+      <div class="footnote">Capacity is a simplified upper bound using equal-sized members. RAID does not replace backup. Failure tolerance describes member loss, not controller failure, silent corruption, operator error, malware, or site loss. RAID-Z results exclude ZFS metadata, slop space, padding, ashift, and record-size effects.</div>
+    </section>
+    <footer><span>StorageCraft · Storage × AI systems lab</span><span>Open source · MIT · Built by Manmeet Nain</span></footer>
+  </main>
+  <script type="module">
+    import { RAID_LEVELS, calculateRaid, compareRaids } from '/storagecraft/lib/raid-model.js';
+    const $=id=>document.getElementById(id), fmt=n=>new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n);
+    const level=$('level');
+    Object.entries(RAID_LEVELS).sort((a,b)=>a[1].name.localeCompare(b[1].name,undefined,{numeric:true})).forEach(([key,spec])=>{const option=document.createElement('option');option.value=key;option.textContent=`${spec.name} — ${spec.family}`;level.append(option)}); level.value='6';
+    function inputs(){return{level:level.value,disks:Number($('disks').value),size:Number($('size').value),groups:Number($('groups').value)}}
+    function updateHint(){const spec=RAID_LEVELS[level.value];$('level-hint').textContent=`${spec.description} Minimum ${spec.min} member(s).`;$('groups-field').classList.toggle('hidden',!['50','60'].includes(level.value))}
+    function renderResult(r){
+      $('result-error').classList.add('hidden');
+      const pct=n=>`${Math.max(0,Math.min(100,n))}%`;
+      $('result').innerHTML=`<div class="result-head"><div><div class="family">${r.family}</div><h2 id="result-title">${r.name}</h2></div><span class="status ${r.status}">${r.status}</span></div><p class="desc">${r.description}</p><div class="metrics"><div class="metric"><div class="value">${fmt(r.usable)} TB</div><div class="label">Usable ceiling</div></div><div class="metric"><div class="value">${fmt(r.efficiency*100)}%</div><div class="label">Efficiency</div></div><div class="metric"><div class="value">${r.guaranteedFailures}</div><div class="label">Guaranteed failures</div></div><div class="metric"><div class="value">${r.writePenalty??'—'}</div><div class="label">Small-write I/O</div></div></div><div class="capacity"><div class="bar-row"><span>Raw</span><div class="track"><div class="fill raw" style="width:100%"></div></div><span class="amount">${fmt(r.raw)} TB</span></div><div class="bar-row"><span>Usable</span><div class="track"><div class="fill usable" style="width:${pct(r.efficiency*100)}"></div></div><span class="amount">${fmt(r.usable)} TB</span></div><div class="bar-row"><span>Overhead</span><div class="track"><div class="fill overhead" style="width:${pct((1-r.efficiency)*100)}"></div></div><span class="amount">${fmt(r.overhead)} TB</span></div></div><div class="detail-grid"><div class="detail"><span>Data-equivalent disks</span><strong>${r.dataDisks}</strong></div><div class="detail"><span>Parity-equivalent disks</span><strong>${r.parityDisks}</strong></div><div class="detail"><span>Read profile</span><strong>${r.readProfile}</strong></div><div class="detail"><span>Write profile</span><strong>${r.writeProfile}</strong></div>${r.maximumFailures!==r.guaranteedFailures?`<div class="detail"><span>Layout-dependent max</span><strong>${r.maximumFailures}</strong></div>`:''}</div>${r.warnings.map(w=>`<div class="warning">⚠ ${w}</div>`).join('')}`;
+    }
+    function renderComparison(config){$('comparison').innerHTML=compareRaids(config).map(r=>r.error?`<tr><td class="level-name">${r.name}</td><td colspan="5" class="invalid">${r.error}</td></tr>`:`<tr><td class="level-name">${r.name}</td><td>${r.family}</td><td class="num">${fmt(r.usable)} TB</td><td class="num">${fmt(r.efficiency*100)}%</td><td class="num">${r.guaranteedFailures}${r.maximumFailures!==r.guaranteedFailures?`–${r.maximumFailures}*`:''}</td><td>${r.writePenalty?`${r.writePenalty} I/O`:'implementation-specific'}</td></tr>`).join('')}
+    function calculate(){updateHint();const config=inputs();try{const result=calculateRaid(config);renderResult(result)}catch(error){$('result').innerHTML='';$('result-error').textContent=error.message;$('result-error').classList.remove('hidden')}renderComparison(config)}
+    $('planner-form').addEventListener('submit',e=>{e.preventDefault();calculate()});
+    level.addEventListener('change',calculate);['disks','size','groups'].forEach(id=>$(id).addEventListener('input',calculate));
+    document.querySelectorAll('.preset').forEach(button=>button.addEventListener('click',()=>{level.value=button.dataset.level;$('disks').value=button.dataset.disks;if(button.dataset.groups)$('groups').value=button.dataset.groups;calculate()}));
+    calculate();
+  </script>
+</body>
+</html>
