@@ -10,6 +10,8 @@ Storage Network Academy is a browser-local training environment for new hires, s
 
 Academy v2 adds a live Fabric A/B topology, independent Brocade-style and Cisco MDS-style switch terminals, an iSCSI gateway terminal, cross-fabric incidents, atomic multi-device configuration scripts, path-level diffs, named checkpoints and rollback, Observer/Operator/Administrator roles, chained audit evidence, version-labelled compatibility profiles, and a five-domain practical certification with JSON and CSV reports.
 
+The **Continue Learning** card remembers completed stages, guided-lab command position, resolved incidents, and certification domains in versioned browser-local storage. Return to the page and select **Continue** to reopen the last incomplete lab at the next command. Progress can be exported as JSON or reset independently without deleting the simulated switch configuration.
+
 Every device mutation remains local to the browser. Vendor names describe educational command styles; the simulator does not claim exact firmware emulation and must not replace the documentation for the installed production release.
 
 ## Beginner-first learning journey

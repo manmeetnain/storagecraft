@@ -5,7 +5,24 @@ const academy = 'simulators/network-academy/index.html';
 
 test.beforeEach(async ({ page }) => {
   await page.goto(academy);
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
   await expect(page.getByRole('heading', { name: 'Storage Network Academy' })).toBeVisible();
+});
+
+test('persists and resumes guided learning after a reload', async ({ page }) => {
+  await expect(page.locator('#continue-title')).toHaveText('Ready to begin');
+  await expect(page.locator('#continue-percent')).toHaveText('0%');
+  await page.getByRole('button', { name: 'START LAB 01' }).click();
+  await page.getByLabel('Simulator command').fill('version');
+  await page.getByRole('button', { name: 'RUN', exact: true }).click();
+  await expect(page.locator('#continue-title')).toContainText('command 2/24');
+  await expect(page.locator('#progress-export')).toHaveAttribute('download', 'storagecraft-academy-progress.json');
+
+  await page.reload();
+  await expect(page.locator('#continue-title')).toContainText('command 2/24');
+  await page.getByRole('button', { name: 'CONTINUE', exact: true }).click();
+  await expect(page.locator('#expected')).toHaveText('firmwareshow');
 });
 
 test('renders branded topology, five terminals, and three incidents', async ({ page }) => {

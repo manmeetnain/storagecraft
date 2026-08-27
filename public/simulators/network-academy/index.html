@@ -103,6 +103,15 @@
         white-space: nowrap;
       }
       .journey { margin-bottom:14px; padding:16px; }
+      .continue-card { margin-bottom:14px; padding:14px 16px; display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:14px; border-color:rgba(52,211,153,.35); }
+      .continue-ring { width:52px; height:52px; border-radius:50%; display:grid; place-items:center; background:conic-gradient(var(--green) var(--resume-progress,0%),#17273c 0); position:relative; font:800 10px var(--mono); }
+      .continue-ring::before { content:''; position:absolute; inset:5px; border-radius:50%; background:var(--panel); }
+      .continue-ring span { position:relative; }
+      .continue-copy strong { display:block; font-size:13px; }
+      .continue-copy small { display:block; color:var(--muted); font:9px/1.5 var(--mono); margin-top:3px; }
+      .continue-actions { display:flex; gap:6px; }
+      .continue-actions button, .continue-actions a { border:1px solid var(--line); border-radius:7px; padding:8px 10px; background:#0d1b2c; color:var(--text); font:800 9px var(--mono); text-decoration:none; cursor:pointer; }
+      .continue-actions .primary { background:var(--green); color:#03140f; border-color:var(--green); }
       .journey-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
       .journey-head strong { font-size:14px; }
       .journey-head span { color:var(--cyan); font:10px var(--mono); }
@@ -482,6 +491,8 @@
         .journey-steps { grid-template-columns:1fr 1fr; }
         .stage-guide { grid-template-columns:1fr; }
         .cert-tasks { grid-template-columns:1fr; }
+        .continue-card { grid-template-columns:auto 1fr; }
+        .continue-actions { grid-column:1/-1; }
       }
     </style>
   </head>
@@ -504,6 +515,7 @@
         </div>
         <div class="status">● SIMULATION ONLY · NO REAL DEVICES</div>
       </div>
+      <section class="panel continue-card" aria-label="Continue learning progress"><div class="continue-ring" id="continue-ring"><span id="continue-percent">0%</span></div><div class="continue-copy"><strong id="continue-title">Ready to begin</strong><small id="continue-detail">Your lab, incident, and certification progress stays in this browser.</small></div><div class="continue-actions"><button class="primary" id="continue-learning">START LEARNING</button><a id="progress-export" href="#" download>EXPORT</a><button id="progress-reset">RESET</button></div></section>
       <section class="panel journey" aria-label="Academy learning journey">
         <div class="journey-head"><strong>Choose your learning stage</strong><span id="stage-progress">STAGE 1 OF 5 · BEGINNER</span></div>
         <div class="journey-steps" id="journey-steps"></div>
@@ -589,7 +601,20 @@
       import { createConfigurationSafety, createCheckpoint, rollbackCheckpoint, runConfigurationScript } from "/storagecraft/lib/academy-config-safety.js";
       import { COMPATIBILITY_PROFILES, createGovernedWorkspace, setGovernedIdentity, executeGovernedCommand, exportAuditLog } from "/storagecraft/lib/academy-governance.js";
       import { CERTIFICATION_BLUEPRINT, createCertificationAttempt, recordCertificationTask, certificationSummary, certificationReportJson, certificationReportCsv } from "/storagecraft/lib/academy-certification.js";
+      import { ACADEMY_PROGRESS_KEY, createLearningProgress, parseLearningProgress, recordStageVisit, recordLabProgress, recordIncidentProgress, recordCertificationProgress, learningProgressSummary, exportLearningProgress } from "/storagecraft/lib/academy-progress.js";
       const $ = (id) => document.getElementById(id);
+      let learningProgress = parseLearningProgress(localStorage.getItem(ACADEMY_PROGRESS_KEY));
+      function saveLearningProgress() { localStorage.setItem(ACADEMY_PROGRESS_KEY, JSON.stringify(learningProgress)); renderContinueLearning(); }
+      function renderContinueLearning() {
+        const summary = learningProgressSummary(learningProgress);
+        $("continue-percent").textContent = `${summary.percent}%`;
+        $("continue-ring").style.setProperty('--resume-progress',`${summary.percent}%`);
+        $("continue-title").textContent = summary.lastActivity ? `Continue: ${summary.resume.label}` : 'Ready to begin';
+        $("continue-detail").textContent = summary.lastActivity ? `${summary.completedLabs} labs · ${summary.completedIncidents} incidents · ${summary.certificationCompleted}/5 assessment domains · saved locally` : 'Your lab, incident, and certification progress stays in this browser.';
+        $("continue-learning").textContent = summary.lastActivity ? 'CONTINUE' : 'START LEARNING';
+        $("progress-export").href = `data:application/json;charset=utf-8,${encodeURIComponent(exportLearningProgress(learningProgress))}`;
+        $("progress-export").download = 'storagecraft-academy-progress.json';
+      }
       document.title = productTitle(STORAGECRAFT_BRAND.academyName);
       document.getElementById("creator-attribution").innerHTML = `${creatorAttribution()} · <a href="${STORAGECRAFT_BRAND.repositoryUrl}">GitHub ↗</a>`;
       const learningStages = [
@@ -605,20 +630,27 @@
         const stage = learningStages[index];
         document.body.dataset.stage = stage.id;
         $("journey-steps").innerHTML = learningStages.map((item, position) => `<button class="journey-step ${item.id===stage.id?'active':''}" data-stage-id="${item.id}" aria-current="${item.id===stage.id?'step':'false'}"><span class="step-number">${String(position+1).padStart(2,'0')}</span><b>${item.title}</b><small>${item.short}</small></button>`).join('');
-        document.querySelectorAll('[data-stage-id]').forEach((button) => button.onclick = () => { learningStage=button.dataset.stageId; renderJourney(); });
+        document.querySelectorAll('[data-stage-id]').forEach((button) => button.onclick = () => { learningStage=button.dataset.stageId; recordStageVisit(learningProgress,learningStage,activeDevice); saveLearningProgress(); renderJourney(); });
         $("stage-progress").textContent = `STAGE ${index+1} OF ${learningStages.length} · ${stage.level}`;
         $("stage-title").textContent = stage.title;
         $("stage-description").textContent = stage.description;
         $("stage-action").textContent = stage.action;
       }
       $("stage-action").onclick = () => {
+        recordStageVisit(learningProgress,learningStage,activeDevice); saveLearningProgress();
         if(learningStage==='basics'){ lesson=0; step=0; renderLessons(); $("command").focus(); }
         if(learningStage==='configure'){ document.querySelector('.config-safety').open=true; document.querySelector('.terminal-wrap').scrollIntoView({behavior:'smooth',block:'start'}); }
         if(learningStage==='fabric') document.querySelector('.topology').scrollIntoView({behavior:'smooth',block:'start'});
         if(learningStage==='incidents') document.querySelector('.advanced-scenarios').scrollIntoView({behavior:'smooth',block:'start'});
         if(learningStage==='certify'){ $("candidate-name").focus(); document.querySelector('.certification').scrollIntoView({behavior:'smooth',block:'start'}); }
       };
-      $("full-workspace").onclick = () => { learningStage='certify'; renderJourney(); document.querySelector('.workspace').scrollIntoView({behavior:'smooth',block:'start'}); };
+      $("full-workspace").onclick = () => { learningStage='certify'; recordStageVisit(learningProgress,learningStage,activeDevice); saveLearningProgress(); renderJourney(); document.querySelector('.workspace').scrollIntoView({behavior:'smooth',block:'start'}); };
+      $("continue-learning").onclick = () => {
+        const summary=learningProgressSummary(learningProgress); learningStage=summary.resume.stage||'basics';
+        if(summary.resume.type==='lab') { const device=ACADEMY_DEVICES[summary.lastDevice]?.profile===summary.resume.profile?summary.lastDevice:Object.keys(ACADEMY_DEVICES).find((id)=>ACADEMY_DEVICES[id].profile===summary.resume.profile); switchDevice(device); lesson=summary.resume.lab; step=summary.resume.step; renderLessons(); }
+        renderJourney(); document.querySelector('.workspace').scrollIntoView({behavior:'smooth',block:'start'});
+      };
+      $("progress-reset").onclick = () => { if(confirm('Reset learning progress? Simulated switch configuration will be kept.')) { learningProgress=createLearningProgress(); saveLearningProgress(); learningStage='basics'; renderJourney(); } };
       const operationsWorkspace = createOperationsWorkspace();
       const configurationSafety = createConfigurationSafety(operationsWorkspace);
       const governance = createGovernedWorkspace(operationsWorkspace, { actor: 'learner01', role: 'administrator' });
@@ -901,7 +933,10 @@
       $("audit-view").onclick = () => {
         const audit = exportAuditLog(governance);
         write('system', `AUDIT LOG · ${audit.verified ? 'CHAIN VERIFIED' : 'CHAIN INVALID'}\n${audit.events.map((event) => `${event.sequence} ${event.decision} ${event.actor}/${event.role} ${event.deviceId} ${event.command} ${event.hash}`).join('\n') || 'No audited commands yet.'}`);
-        if (audit.verified && audit.events.some((event) => event.decision === 'DENY')) recordCertificationTask(certification, 'governance', 100, 'Verified chained audit containing an RBAC denial.');
+        if (audit.verified && audit.events.some((event) => event.decision === 'DENY')) {
+          recordCertificationTask(certification, 'governance', 100, 'Verified chained audit containing an RBAC denial.');
+          syncCertificationLearningProgress();
+        }
         renderCertification();
       };
       function renderCertification() {
@@ -915,11 +950,17 @@
         $("cert-csv").href = `data:text/csv;charset=utf-8,${encodeURIComponent(certificationReportCsv(certification, context))}`;
         $("cert-csv").download = `storagecraft-academy-${certification.attemptId}.csv`;
       }
-      $("cert-start").onclick = () => { try { certification=createCertificationAttempt($("candidate-name").value); renderCertification(); } catch(error) { write('error',error.message); } };
+      function syncCertificationLearningProgress() {
+        recordCertificationProgress(learningProgress, certificationSummary(certification));
+        saveLearningProgress();
+      }
+      $("cert-start").onclick = () => { try { certification=createCertificationAttempt($("candidate-name").value); syncCertificationLearningProgress(); renderCertification(); } catch(error) { write('error',error.message); } };
       function switchDevice(id) {
         activeDevice = id;
         selectOperationsDevice(operationsWorkspace, id);
         profile = ACADEMY_DEVICES[id].profile;
+        recordStageVisit(learningProgress, learningStage, activeDevice);
+        saveLearningProgress();
         lesson = 0; step = 0; incidentMode = false; activeScenario = null;
         $("terminal").innerHTML = "";
         renderProfiles(); renderTerminalTabs(); renderLessons(); renderScenarios(); boot();
@@ -949,12 +990,14 @@
         catch (error) { $("config-result").textContent = error.message; }
       };
       $("script-run").onclick = () => {
-        try { const result = runConfigurationScript(configurationSafety, $("config-script").value); activeDevice = operationsWorkspace.activeDevice; profile = ACADEMY_DEVICES[activeDevice].profile; renderProfiles(); renderTerminalTabs(); $("prompt").textContent = academyPrompt(getSession()); $("config-result").textContent = result.rolledBack ? `FAILED · atomic rollback complete\n${result.results.at(-1).output}` : `${result.ok ? 'PASS' : 'PARTIAL'} · ${result.results.length} commands · ${result.diff.length} state changes\n${result.diff.slice(0, 12).map((change) => `${change.path}: ${JSON.stringify(change.before)} → ${JSON.stringify(change.after)}`).join('\n')}`; if(result.ok){recordCertificationTask(certification,'configuration-safety',100,`Atomic script completed with ${result.diff.length} desired-state changes.`);renderCertification();} }
+        try { const result = runConfigurationScript(configurationSafety, $("config-script").value); activeDevice = operationsWorkspace.activeDevice; profile = ACADEMY_DEVICES[activeDevice].profile; renderProfiles(); renderTerminalTabs(); $("prompt").textContent = academyPrompt(getSession()); $("config-result").textContent = result.rolledBack ? `FAILED · atomic rollback complete\n${result.results.at(-1).output}` : `${result.ok ? 'PASS' : 'PARTIAL'} · ${result.results.length} commands · ${result.diff.length} state changes\n${result.diff.slice(0, 12).map((change) => `${change.path}: ${JSON.stringify(change.before)} → ${JSON.stringify(change.after)}`).join('\n')}`; if(result.ok){recordCertificationTask(certification,'configuration-safety',100,`Atomic script completed with ${result.diff.length} desired-state changes.`);syncCertificationLearningProgress();renderCertification();} }
         catch (error) { $("config-result").textContent = error.message; }
       };
       function switchProfile(id) {
         profile = id;
         activeDevice = Object.keys(ACADEMY_DEVICES).find((key) => ACADEMY_DEVICES[key].profile === id) || 'iscsi-gw1';
+        recordStageVisit(learningProgress, learningStage, activeDevice);
+        saveLearningProgress();
         lesson = 0;
         step = 0;
         incidentMode = false;
@@ -981,6 +1024,8 @@
               activeScenario = null;
               lesson = Number(b.dataset.lesson);
               step = 0;
+              recordLabProgress(learningProgress, { profile, lab: lesson, step, total: curricula[profile][lesson].commands.length, title: curricula[profile][lesson].title });
+              saveLearningProgress();
               renderLessons();
             }),
         );
@@ -1040,7 +1085,7 @@
           const assessment = evaluateOperationsIncident(operationsWorkspace);
           write(assessment.passed ? 'output' : 'error', `${assessment.passed ? 'PASS' : 'NOT YET RESOLVED'} · ${assessment.score}/100 · ${assessment.commands} commands · topology ${assessment.state}`);
           $("progress").style.width = assessment.passed ? '100%' : '25%';
-          if (assessment.passed) { recordCertificationTask(certification, 'fabric-resilience', assessment.score, `Resolved ${operationsWorkspace.incident.id} in ${assessment.commands} commands.`); renderCertification(); }
+          if (assessment.passed) { recordIncidentProgress(learningProgress, operationsWorkspace.incident.id, assessment.score); recordCertificationTask(certification, 'fabric-resilience', assessment.score, `Resolved ${operationsWorkspace.incident.id} in ${assessment.commands} commands.`); syncCertificationLearningProgress(); renderCertification(); }
           return;
         }
         const r = executeGovernedCommand(governance, command);
@@ -1054,7 +1099,7 @@
           $("hint").textContent = r.assessment.passed
             ? `Incident resolved · score ${r.assessment.score}/100 in ${r.assessment.commands} commands.`
             : r.assessment.hint;
-          if (r.assessment.passed) { recordCertificationTask(certification, profile === 'iscsi' ? 'iscsi-operations' : 'fabric-health', r.assessment.score, `Completed ${activeScenario} on ${activeDevice}.`); renderCertification(); }
+          if (r.assessment.passed) { recordIncidentProgress(learningProgress, `${profile}:${activeScenario}`, r.assessment.score); recordCertificationTask(certification, profile === 'iscsi' ? 'iscsi-operations' : 'fabric-health', r.assessment.score, `Completed ${activeScenario} on ${activeDevice}.`); syncCertificationLearningProgress(); renderCertification(); }
         }
         const expected = curricula[profile][lesson].commands[step];
         if (
@@ -1063,6 +1108,8 @@
           command.trim().toLowerCase() === expected?.toLowerCase()
         ) {
           step++;
+          recordLabProgress(learningProgress, { profile, lab: lesson, step, total: curricula[profile][lesson].commands.length, title: curricula[profile][lesson].title });
+          saveLearningProgress();
           renderLessons();
         }
         $("command").value = "";
@@ -1096,6 +1143,7 @@
           run("reset");
       };
       renderJourney();
+      renderContinueLearning();
       renderProfiles();
       renderTerminalTabs();
       renderTopology();

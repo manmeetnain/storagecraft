@@ -10,6 +10,7 @@ on:
       - 'public/lib/academy-config-safety.js'
       - 'public/lib/academy-governance.js'
       - 'public/lib/academy-certification.js'
+      - 'public/lib/academy-progress.js'
       - 'public/simulators/network-academy/**'
       - 'test/network-academy-engine.test.mjs'
       - 'test/storagecraft-brand.test.mjs'
@@ -18,6 +19,7 @@ on:
       - 'test/academy-config-safety.test.mjs'
       - 'test/academy-governance.test.mjs'
       - 'test/academy-certification.test.mjs'
+      - 'test/academy-progress.test.mjs'
       - 'test/e2e/**'
       - 'playwright.config.mjs'
       - 'package.json'
@@ -34,6 +36,7 @@ on:
       - 'public/lib/academy-config-safety.js'
       - 'public/lib/academy-governance.js'
       - 'public/lib/academy-certification.js'
+      - 'public/lib/academy-progress.js'
       - 'public/simulators/network-academy/**'
       - 'test/network-academy-engine.test.mjs'
       - 'test/storagecraft-brand.test.mjs'
@@ -42,6 +45,7 @@ on:
       - 'test/academy-config-safety.test.mjs'
       - 'test/academy-governance.test.mjs'
       - 'test/academy-certification.test.mjs'
+      - 'test/academy-progress.test.mjs'
       - 'test/e2e/**'
       - 'playwright.config.mjs'
       - 'package.json'
@@ -70,7 +74,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate:brand
-      - run: node --test test/network-academy-engine.test.mjs test/storagecraft-brand.test.mjs test/academy-topology.test.mjs test/academy-operations.test.mjs test/academy-config-safety.test.mjs test/academy-governance.test.mjs test/academy-certification.test.mjs
+      - run: node --test test/network-academy-engine.test.mjs test/storagecraft-brand.test.mjs test/academy-topology.test.mjs test/academy-operations.test.mjs test/academy-config-safety.test.mjs test/academy-governance.test.mjs test/academy-certification.test.mjs test/academy-progress.test.mjs
       - run: npm run validate:capsules
       - run: npm run build
       - run: npx playwright install --with-deps chromium

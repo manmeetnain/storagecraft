@@ -25,6 +25,7 @@ Only one stage is `active` in [`capsules/catalog.json`](capsules/catalog.json). 
 - **Evidence:** every mutation records actor, command, target, time, result, and reversible state reference.
 - **Presentation:** accessible keyboard operation, responsive visuals, high-contrast status that does not rely on color alone.
 - **Learning experience:** progressive disclosure through Start, Configure, Dual Fabric, Troubleshoot, and Certify stages; new learners see one guided action while experts retain direct full-workspace access.
+- **Learning continuity:** versioned browser-local progress records the last command, completed labs, resolved incidents, and certification domains; learners can resume, export, or independently reset it.
 
 ## Current topology baseline
 
@@ -54,4 +55,4 @@ npm run craft -- academy --governance
 npm run craft -- academy --certification --candidate "Storage Learner"
 ```
 
-The E2E release gate executes seven journeys in desktop Chromium and a mobile viewport: identity/topology rendering, fabric failure and restoration, state retention across vendor terminals, atomic configuration and rollback, RBAC denial and audit verification, JSON/CSV certification downloads, and automated serious/critical accessibility plus horizontal-overflow checks.
+The E2E release gate executes eight journeys in desktop Chromium and a mobile viewport: identity/topology rendering, persisted learning resume, fabric failure and restoration, state retention across vendor terminals, atomic configuration and rollback, RBAC denial and audit verification, JSON/CSV certification downloads, and automated serious/critical accessibility plus horizontal-overflow checks.
