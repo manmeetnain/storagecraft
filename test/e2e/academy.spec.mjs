@@ -10,6 +10,10 @@ test.beforeEach(async ({ page }) => {
 
 test('renders branded topology, five terminals, and three incidents', async ({ page }) => {
   await expect(page.getByText('Built by Manmeet Nain (@manmeetnain)')).toBeVisible();
+  await expect(page.locator('#stage-progress')).toHaveText('STAGE 1 OF 5 · BEGINNER');
+  await expect(page.locator('.lesson:visible')).toHaveCount(1);
+  await expect(page.locator('.topology')).toBeHidden();
+  await expect(page.locator('.certification')).toBeHidden();
   await expect(page.locator('.topology-node')).toHaveCount(6);
   await expect(page.locator('.terminal-tab')).toHaveCount(5);
   await expect(page.locator('.operations-incident')).toHaveCount(3);
@@ -17,6 +21,7 @@ test('renders branded topology, five terminals, and three incidents', async ({ p
 });
 
 test('fails and restores a redundant fabric', async ({ page }) => {
+  await page.getByRole('button', { name: /Understand dual fabrics/ }).click();
   await page.getByRole('button', { name: 'TOGGLE A' }).click();
   await expect(page.locator('#topology-summary')).toHaveText('DEGRADED · A DOWN · B UP');
   await page.getByRole('button', { name: 'RESTORE', exact: true }).click();
@@ -24,6 +29,7 @@ test('fails and restores a redundant fabric', async ({ page }) => {
 });
 
 test('retains independent terminal state across vendors', async ({ page }) => {
+  await page.getByRole('button', { name: /Configure safely/ }).click();
   await page.getByRole('button', { name: 'FC-A1 · A' }).click();
   await page.getByLabel('Simulator command').fill('switchname E2E-A1');
   await page.getByRole('button', { name: 'RUN', exact: true }).click();
@@ -34,6 +40,7 @@ test('retains independent terminal state across vendors', async ({ page }) => {
 });
 
 test('runs atomic configuration, reports diff, and rolls back', async ({ page }) => {
+  await page.getByRole('button', { name: /Configure safely/ }).click();
   await page.getByText('CONFIGURATION SAFETY · ATOMIC SCRIPTS / DIFF / CHECKPOINT / ROLLBACK').click();
   await page.getByRole('button', { name: 'CHECKPOINT' }).click();
   await expect(page.locator('#config-result')).toContainText('captured across 5 devices');
@@ -44,6 +51,7 @@ test('runs atomic configuration, reports diff, and rolls back', async ({ page })
 });
 
 test('enforces observer RBAC and exposes a verified audit chain', async ({ page }) => {
+  await page.getByRole('button', { name: /Configure safely/ }).click();
   await page.getByLabel('Academy role').selectOption('observer');
   await page.getByLabel('Simulator command').fill('switchname DENIED');
   await page.getByRole('button', { name: 'RUN', exact: true }).click();
@@ -53,6 +61,7 @@ test('enforces observer RBAC and exposes a verified audit chain', async ({ page 
 });
 
 test('provides structured downloadable certification reports', async ({ page }) => {
+  await page.getByRole('button', { name: /Prove job readiness/ }).click();
   await expect(page.locator('.cert-task')).toHaveCount(5);
   await expect(page.locator('#cert-json')).toHaveAttribute('download', /\.json$/);
   await expect(page.locator('#cert-json')).toHaveAttribute('href', /^data:application\/json/);
@@ -61,8 +70,11 @@ test('provides structured downloadable certification reports', async ({ page }) 
 });
 
 test('has no serious accessibility violations or horizontal viewport overflow', async ({ page }) => {
-  const results = await new AxeBuilder({ page }).analyze();
-  const material = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact));
-  expect(material).toEqual([]);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+  for (const stage of ['Start with one switch','Configure safely','Understand dual fabrics','Troubleshoot incidents','Prove job readiness']) {
+    await page.getByRole('button', { name: new RegExp(stage) }).click();
+    const results = await new AxeBuilder({ page }).analyze();
+    const material = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact));
+    expect(material, `${stage} accessibility`).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), `${stage} overflow`).toBe(true);
+  }
 });

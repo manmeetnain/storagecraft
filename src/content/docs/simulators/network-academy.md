@@ -12,6 +12,18 @@ Academy v2 adds a live Fabric A/B topology, independent Brocade-style and Cisco 
 
 Every device mutation remains local to the browser. Vendor names describe educational command styles; the simulator does not claim exact firmware emulation and must not replace the documentation for the installed production release.
 
+## Beginner-first learning journey
+
+The Academy uses progressive disclosure instead of presenting every engineering control at once:
+
+1. **Start with one switch** — choose an environment and complete a guided health inspection.
+2. **Configure safely** — build and remove configuration, then learn scripts, diffs, checkpoints, and rollback.
+3. **Understand dual fabrics** — trace independent Fabric A/B paths and test degraded operation.
+4. **Troubleshoot incidents** — diagnose vendor-specific and cross-fabric failures across multiple terminals.
+5. **Prove job readiness** — complete the evidence-based assessment and download the result.
+
+New sessions open at Stage 1 with advanced controls hidden. Experienced users can select any stage or open the full workspace immediately.
+
 <a class="sl-link-button primary" href="/storagecraft/simulators/network-academy/index.html">Launch Storage Network Academy →</a>
 
 ## Environments

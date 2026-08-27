@@ -24,6 +24,7 @@ Only one stage is `active` in [`capsules/catalog.json`](capsules/catalog.json). 
 - **Operations:** terminals issue commands against an explicitly selected simulated device and identity.
 - **Evidence:** every mutation records actor, command, target, time, result, and reversible state reference.
 - **Presentation:** accessible keyboard operation, responsive visuals, high-contrast status that does not rely on color alone.
+- **Learning experience:** progressive disclosure through Start, Configure, Dual Fabric, Troubleshoot, and Certify stages; new learners see one guided action while experts retain direct full-workspace access.
 
 ## Current topology baseline
 
