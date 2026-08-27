@@ -33,6 +33,10 @@ Command names modeled after vendor CLIs are implemented from public documentatio
 | 114 | iSCSI Lab | VLAN/IP, target/portal/LUN, CHAP, sessions, multipath |
 | 112 | Guided Curriculum | New-hire steps, hints, validation, scoring, assessments |
 
+## Scenario contract
+
+Scenarios are deterministic state fixtures. A scenario must provide a learner-facing incident brief, hidden machine-checkable success criteria, a diagnostic hint revealed only after an unsuccessful check, and a command-efficiency score. Reloading the same scenario must restore the same fault state.
+
 ## Primary references
 
 - [Cisco MDS 9000 NX-OS Fabric Configuration Guide, Release 9.x](https://www.cisco.com/c/en/us/td/docs/dcn/mds9000/sw/9x/configuration/fabric/cisco-mds-9000-nx-os-fabric-configuration-guide-9x.html)

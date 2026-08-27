@@ -20,6 +20,25 @@ Storage Network Academy is a browser-local training environment for new hires, s
 
 The browser provides guided labs with the next command, command history using arrow keys, Tab insertion for the current guided step, contextual errors, local state persistence, `undo`, and `reset`. Free practice is always available.
 
+## Troubleshooting and assessment
+
+Each environment includes reproducible incidents with hidden success criteria:
+
+- Brocade-style link-speed/CRC diagnosis and defined-but-inactive zoning;
+- Cisco administratively down interfaces and inactive zonesets;
+- iSCSI path loss and CHAP authentication failures.
+
+Use `scenario list`, `scenario load <id>`, and `scenario check` in the terminal. Learners choose their own diagnostic path. An unsuccessful check provides a targeted hint; a successful check reports a score based on command count. Reloading a scenario recreates the same starting fault for repeatable practice.
+
+```text
+scenario list
+scenario load speed-mismatch
+porterrshow
+portshow 0
+portcfgspeed 0 32
+scenario check
+```
+
 ## CLI
 
 ```bash
