@@ -64,6 +64,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [GPU Memory Planner](https://manmeetnain.github.io/storagecraft/simulators/gpu-memory/index.html) | Will an LLM serving configuration fit per GPU? | Interactive inference planner + CLI |
 | [RAG Storage Sizer](https://manmeetnain.github.io/storagecraft/simulators/rag-storage/index.html) | What is the full source, chunk, vector, index, and replica footprint? | Interactive AI-data planner + CLI |
 | [AI Data Path Lab](https://manmeetnain.github.io/storagecraft/simulators/ai-data-path/index.html) | Which storage, fabric, CPU, or accelerator stage limits an AI workload? | Interactive bottleneck lab + CLI |
+| [NVMe Queue Lab](https://manmeetnain.github.io/storagecraft/simulators/nvme-queues/index.html) | When do queue count and depth expose performance versus add latency? | Interactive queue lab + CLI |
 
 ## Roadmap
 
