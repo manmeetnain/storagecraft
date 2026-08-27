@@ -8,6 +8,8 @@ sidebar:
 
 The Universal RAID Planner compares capacity, overhead, guaranteed member-failure tolerance, layout-dependent maximum tolerance, and baseline small-write cost across major RAID families.
 
+Choose a layout and array inputs first, then select **Calculate and compare**. Results remain hidden until requested; changing an input marks the prior calculation stale and hides it until you calculate again.
+
 <a class="sl-link-button primary" href="/storagecraft/simulators/raid-planner/index.html">Launch Universal RAID Planner →</a>
 
 ## Supported layouts
