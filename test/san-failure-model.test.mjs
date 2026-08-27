@@ -1,0 +1,5 @@
+import test from'node:test';import assert from'node:assert/strict';import{calculateSanFailure}from'../public/lib/san-failure-model.js';
+test('dual-fabric topology survives one fabric failure',()=>{const r=calculateSanFailure({failedFabrics:1});assert.equal(r.state,'DEGRADED');assert.equal(r.available,true);assert.equal(r.recoversBeforeTimeout,true);assert.equal(r.remaining.hostPorts,1);assert.equal(r.remaining.targetPorts,2)});
+test('loss of all fabrics produces outage',()=>{const r=calculateSanFailure({failedFabrics:2});assert.equal(r.state,'OUTAGE');assert.equal(r.activePathEstimate,0);assert.equal(r.recoversBeforeTimeout,false)});
+test('reachable storage can still exceed application timeout',()=>{const r=calculateSanFailure({failedControllers:1,multipathFailoverSeconds:45,applicationTimeoutSeconds:30});assert.equal(r.available,true);assert.equal(r.recoversBeforeTimeout,false);assert.match(r.applicationImpact,/exceeds/) });
+test('rejects failures above installed inventory',()=>{assert.throws(()=>calculateSanFailure({controllers:2,failedControllers:3}),/exceed/) });
