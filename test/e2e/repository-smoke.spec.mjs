@@ -70,3 +70,18 @@ test('command center header and bookmarked deep links reveal their destinations'
   await expect(page).toHaveURL(/#skills$/);
   await expect(page.getByRole('heading', { name: 'Skill shelf: invoke a proven workflow' })).toBeVisible();
 });
+
+test('ChatGPT and Codex widgets open useful playbooks', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('ai-resource-hub/index.html#chatgpt');
+  const searchCard = page.locator('.guide-card').filter({ hasText: 'Current answers with source links' });
+  await searchCard.getByRole('button', { name: 'VIEW PLAYBOOK' }).click();
+  await expect(searchCard.getByText('Starter instruction')).toBeVisible();
+  await expect(searchCard.getByRole('link', { name: 'OFFICIAL GUIDE' })).toHaveAttribute('href', /openai\.com/);
+  await searchCard.getByRole('button', { name: 'COPY STARTER' }).click();
+  await expect(searchCard.getByRole('button', { name: 'COPIED' })).toBeVisible();
+  await page.goto('ai-resource-hub/index.html#codex');
+  const cliCard = page.locator('.guide-card').filter({ hasText: 'Terminal-native agent' });
+  await cliCard.click();
+  await expect(cliCard.getByText('Starter instruction')).toBeVisible();
+});
