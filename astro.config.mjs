@@ -29,6 +29,10 @@ export default defineConfig({
           items: [{ autogenerate: { directory: 'ai-infra' } }],
         },
         {
+          label: '✨ AI Practice',
+          items: [{ autogenerate: { directory: 'ai-practice' } }],
+        },
+        {
           label: '⚙️ Storage Internals',
           items: [{ autogenerate: { directory: 'internals' } }],
         },

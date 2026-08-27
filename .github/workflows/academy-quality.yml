@@ -78,7 +78,7 @@ jobs:
       - run: npm run validate:capsules
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:academy:e2e
+      - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

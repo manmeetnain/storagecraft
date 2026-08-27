@@ -8,6 +8,7 @@
   Interactive labs, transparent engineering models, and visual deep dives spanning storage internals, distributed data, and LLM infrastructure.
 
   [![Live Lab](https://img.shields.io/badge/LAUNCH-RAID_PLANNER-22d3ee?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html)
+  [![AI Hub](https://img.shields.io/badge/EXPLORE-AI_PROMPT_HUB-a78bfa?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html)
   [![Documentation](https://img.shields.io/badge/EXPLORE-DOCUMENTATION-8b5cf6?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/)
   [![Sponsor](https://img.shields.io/badge/SPONSOR-THE_LAB-34d399?style=for-the-badge)](https://github.com/sponsors/manmeetnain)
 
@@ -67,6 +68,7 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 | [NVMe Queue Lab](https://manmeetnain.github.io/storagecraft/simulators/nvme-queues/index.html) | When do queue count and depth expose performance versus add latency? | Interactive queue lab + CLI |
 | [SAN Failure-Domain Lab](https://manmeetnain.github.io/storagecraft/simulators/san-failure/index.html) | Will storage remain reachable—and recover before the workload times out? | Interactive resilience lab + CLI |
 | [Storage Network Academy](https://manmeetnain.github.io/storagecraft/simulators/network-academy/index.html) | How can a new hire safely practice FC switching and iSCSI operations? | Stateful terminal academy + guided labs |
+| [AI Resource & Prompt Hub](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) | Which ChatGPT capability, prompt structure, or agentic workflow fits the job? | Sourced interactive learning and prompt library |
 
 ## Roadmap
 

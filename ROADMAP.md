@@ -35,4 +35,8 @@ A capsule can move to `shipped` only when it has:
 | 78 | NVMe Queue Lab | Shipped | Systems and performance engineers |
 | 76 | SAN Failure-Domain Lab | Shipped | Enterprise storage engineers |
 
+## Learning resources outside the capsule pipeline
+
+The [AI Resource & Prompt Hub](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) is a curated learning surface rather than a deterministic engineering capsule. It is covered by repository-wide desktop/mobile browser, accessibility, interaction, and deployment gates.
+
 Priorities may change when repository traffic, search demand, user issues, or commercial enquiries provide better evidence.
