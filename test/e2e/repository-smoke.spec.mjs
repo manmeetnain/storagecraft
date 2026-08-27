@@ -51,3 +51,22 @@ test('command center hero navigation and prompt compiler work', async ({ page })
   await page.getByRole('button', { name: 'COMPILE PROMPT' }).click();
   await expect(page.locator('#compiledPrompt')).toContainText('Design a verified storage learning lab');
 });
+
+test('command center header and bookmarked deep links reveal their destinations', async ({ page }) => {
+  const destinations = [
+    ['chatgpt', 'ChatGPT: think, learn, research, create'],
+    ['codex', 'Codex: inspect, change, verify, ship'],
+    ['skills', 'Skill shelf: invoke a proven workflow'],
+    ['shortcuts', 'Shortcut decoder'],
+    ['connectors', 'Plugins, connectors, and MCP'],
+  ];
+  for (const [hash, heading] of destinations) {
+    await page.goto('about:blank');
+    await page.goto(`ai-resource-hub/index.html#${hash}`);
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+  }
+  await page.goto('ai-resource-hub/index.html');
+  await page.locator('.topbar nav a[href="#skills"]').click();
+  await expect(page).toHaveURL(/#skills$/);
+  await expect(page.getByRole('heading', { name: 'Skill shelf: invoke a proven workflow' })).toBeVisible();
+});
