@@ -9,3 +9,47 @@
 header :where(strong){font-size:11px;line-height:1.2}header :where(small){font:8px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em}
 @media(max-width:620px){header :where(small){display:none!important}header :where(strong){font-size:9px}header :where(a){white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Unified premium-light simulator surface */
+:root{color-scheme:light!important;--bg:#f6f9fc!important;--bg2:#fff!important;--bg3:#eef4f8!important;--panel:#fff!important;--panel2:#eef4f8!important;--p:#fff!important;--p2:#eef4f8!important;--text:#152c45!important;--ink:#152c45!important;--muted:#526980!important;--muted2:#526980!important;--line:#c7d5e2!important;--border:#c7d5e2!important;--border2:#aebfce!important;--cyan:#06657a!important;--accent:#06657a!important;--accent2:#075b70!important;--blue:#245da8!important;--data:#245da8!important;--violet:#6949b8!important;--parity:#6949b8!important;--purple:#6949b8!important;--green:#087653!important;--amber:#875900!important;--red:#b42345!important;--pink:#a82e6b!important;--empty:#dce7ef!important;--failed:#f5c9d3!important}
+body{background:radial-gradient(circle at 82% -8%,rgba(105,73,184,.1),transparent 36rem),radial-gradient(circle at 3% 20%,rgba(8,127,155,.09),transparent 30rem),#f6f9fc!important;color:var(--text,var(--ink))!important}
+body::before{opacity:.08!important}
+:where(header,.topbar,.hdr){background:rgba(255,255,255,.91)!important;border-color:var(--line)!important;box-shadow:0 7px 26px rgba(35,65,91,.06)}
+:where(.brand,.brand strong,h1,h2,h3,.amount){color:#152c45!important}
+h1{background:linear-gradient(105deg,#152c45 12%,#087f9b 52%,#6949b8 86%)!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important}
+:where(.card,.metric,.domain,.stage,.path,.scheme,.item,.panel,.terminal,.console-form,.wizard,.route,.badge,.module){background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(241,247,250,.98))!important;border-color:var(--line)!important;box-shadow:0 16px 40px rgba(31,62,88,.08)!important}
+:where(input,select,textarea,.preset,.tab,.filter,.copy,.goal,.cli-input-row,.code,.prompt,.formula,.track){background:#eef4f8!important;color:#18324d!important;border-color:#bdcedc!important}
+:where(.terminal pre,.cli-output,.starter){color:#18324d!important}
+:where(.warning){color:#684500!important;background:#fff7e2!important;border-color:#dcc28a!important}
+:where(.ok,.fit){color:#075e43!important;background:#e5f7ef!important;border-color:#8bcab3!important}
+:where(.bad,.fail){color:#8d1732!important;background:#fcecf0!important;border-color:#e4a5b4!important}
+:where(.tradeoff){color:#314e68!important;background:#edf8f4!important}
+:where(.core,.sat){background:#fff!important;color:#18324d!important}
+:where(.action.primary,.btn.primary,.run,.primary){color:#fff!important}
+
+/* Normalize legacy dark controls and teaching surfaces without flattening hierarchy. */
+:where(button,.journey-step,.continue-actions a,.continue-actions button,.impact,.footer,.motion-control,.cli-shell,.terminal-bar,.playbook .starter,.recommendation>div){background:#eef4f8!important;color:#18324d!important;border-color:#bdcedc!important}
+:where(.journey-step b,.footer strong,.terminal-bar,.motion-control,.cli-output,.terminal pre,.playbook .starter){color:#18324d!important}
+:where(.journey-step.active,.goal[aria-pressed=true]){background:#e1f3f7!important;border-color:#06657a!important}
+:where(.command-chips button,.goal,.copy,.filter,.tab,.preset){background:#fff!important;color:#314e68!important;border-color:#bdcedc!important}
+:where(.cli-input-row){background:#fff!important;border-color:#bdcedc!important}
+:where(.cli-run,.playbook-toggle){background:#fff!important;color:#075e43!important;border-color:#087653!important}
+.outcome-runner{background:#075b70!important;color:#fff!important;box-shadow:0 0 26px rgba(7,91,112,.35)!important}
+.outcome-runner[style]{color:#fff!important}
+:where(.run,.action.primary,.btn.primary,.continue-actions .primary){background:#075e43!important;color:#fff!important;border-color:#075e43!important}
+
+/* Academy terminal and lesson chrome remain code-like, but use a calm light canvas. */
+:where(#terminal,.input-row,.expected,.terminal-tabs,.terminal-head,.lesson,.scenario,.tool,.progress){background:#eef4f8!important;color:#18324d!important;border-color:#bdcedc!important;scrollbar-color:#8aa4b8 #eef4f8!important}
+:where(#terminal .line,#terminal .output,#terminal .system,#prompt,.expected,.lesson small,.scenario small,.guide p){color:#314e68!important}
+:where(#terminal .command,.expected){color:#06657a!important}
+:where(#terminal .error){color:#9b1c3d!important}
+:where(.terminal-tab.active,.lesson.active){background:#e9e4f7!important;color:#4f378e!important;border-color:#6949b8!important}
+:where(.governance,.config-safety,.config-grid textarea,.config-grid input,.config-actions button,.topology-actions button,.cert-head input,.cert-head button,.cert-head a){background:#eef4f8!important;color:#314e68!important;border-color:#bdcedc!important}
+:where(.governance label,#config-result,.cert-task){color:#314e68!important}
+#compatibility-label{color:#4f378e!important}
+.config-safety summary{color:#684500!important}
+
+/* The original RAID visualizer has its own token names and inline accents. */
+:where(.sidebar-card,.footer){background:#eef4f8!important;color:#314e68!important;border-color:#bdcedc!important}
+:where(.sidebar-card .card-title,.sidebar-card span,.footer span){color:#314e68!important}
+:where(.sidebar-card a,.footer a,.sidebar-card [style*="var(--accent)"],.footer [style*="var(--accent)"]){color:#06657a!important}
