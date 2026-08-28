@@ -392,6 +392,13 @@
         color: var(--cyan);
         word-break: break-word;
       }
+      .guide-actions { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+      .guide-actions button { border:1px solid var(--line); border-radius:7px; padding:8px; background:#0c1828; color:var(--text); font:800 9px var(--mono); cursor:pointer; }
+      .guide-actions .suggested { border-color:var(--cyan); color:var(--cyan); }
+      .guide-actions button:disabled { opacity:.48; cursor:not-allowed; }
+      .command-queue { margin:10px 0 0; padding:0; list-style:none; display:grid; gap:5px; }
+      .command-queue li { display:grid; grid-template-columns:28px 1fr; gap:7px; color:var(--muted); font:9px/1.4 var(--mono); }
+      .command-queue li.current { color:var(--cyan); font-weight:800; }
       .progress {
         height: 5px;
         background: #17273c;
@@ -582,6 +589,8 @@
               Choose a guided exercise or use the terminal freely.
             </p>
             <div class="expected" id="expected">help</div>
+            <div class="guide-actions"><button class="suggested" id="run-suggested" type="button">RUN SUGGESTED</button><button id="next-lab" type="button">NEXT LAB</button></div>
+            <ol class="command-queue" id="command-queue" aria-label="Current lab command sequence"></ol>
             <div class="progress"><i id="progress"></i></div>
             <div class="hint" id="hint"></div>
           </div>
@@ -595,14 +604,15 @@
         createAcademySession,
         executeAcademyCommand,
         academyPrompt,
-      } from "/storagecraft/lib/network-academy-engine.js";
-      import { STORAGECRAFT_BRAND, creatorAttribution, productTitle } from "/storagecraft/lib/storagecraft-brand.js";
-      import { createDualFabricTopology, setFabricState, topologyHealth } from "/storagecraft/lib/academy-topology.js";
-      import { ACADEMY_DEVICES, OPERATIONS_INCIDENTS, createOperationsWorkspace, selectOperationsDevice, executeOperationsCommand, loadOperationsIncident, evaluateOperationsIncident } from "/storagecraft/lib/academy-operations.js";
-      import { createConfigurationSafety, createCheckpoint, rollbackCheckpoint, runConfigurationScript } from "/storagecraft/lib/academy-config-safety.js";
-      import { COMPATIBILITY_PROFILES, createGovernedWorkspace, setGovernedIdentity, executeGovernedCommand, exportAuditLog } from "/storagecraft/lib/academy-governance.js";
-      import { CERTIFICATION_BLUEPRINT, createCertificationAttempt, recordCertificationTask, certificationSummary, certificationReportJson, certificationReportCsv } from "/storagecraft/lib/academy-certification.js";
-      import { ACADEMY_PROGRESS_KEY, createLearningProgress, parseLearningProgress, recordStageVisit, recordLabProgress, recordIncidentProgress, recordCertificationProgress, learningProgressSummary, exportLearningProgress } from "/storagecraft/lib/academy-progress.js";
+      } from "/storagecraft/lib/network-academy-engine.js?v=academy-20260828-2";
+      import { STORAGECRAFT_BRAND, creatorAttribution, productTitle } from "/storagecraft/lib/storagecraft-brand.js?v=academy-20260828-2";
+      import { ACADEMY_CURRICULA } from "/storagecraft/lib/academy-curriculum.js?v=academy-20260828-2";
+      import { createDualFabricTopology, setFabricState, topologyHealth } from "/storagecraft/lib/academy-topology.js?v=academy-20260828-2";
+      import { ACADEMY_DEVICES, OPERATIONS_INCIDENTS, createOperationsWorkspace, selectOperationsDevice, executeOperationsCommand, loadOperationsIncident, evaluateOperationsIncident } from "/storagecraft/lib/academy-operations.js?v=academy-20260828-2";
+      import { createConfigurationSafety, createCheckpoint, rollbackCheckpoint, runConfigurationScript } from "/storagecraft/lib/academy-config-safety.js?v=academy-20260828-2";
+      import { COMPATIBILITY_PROFILES, createGovernedWorkspace, setGovernedIdentity, executeGovernedCommand, exportAuditLog } from "/storagecraft/lib/academy-governance.js?v=academy-20260828-2";
+      import { CERTIFICATION_BLUEPRINT, createCertificationAttempt, recordCertificationTask, certificationSummary, certificationReportJson, certificationReportCsv } from "/storagecraft/lib/academy-certification.js?v=academy-20260828-2";
+      import { ACADEMY_PROGRESS_KEY, createLearningProgress, parseLearningProgress, recordStageVisit, recordLabProgress, recordIncidentProgress, recordCertificationProgress, learningProgressSummary, exportLearningProgress } from "/storagecraft/lib/academy-progress.js?v=academy-20260828-2";
       const $ = (id) => document.getElementById(id);
       let learningProgress = parseLearningProgress(localStorage.getItem(ACADEMY_PROGRESS_KEY));
       function saveLearningProgress() { localStorage.setItem(ACADEMY_PROGRESS_KEY, JSON.stringify(learningProgress)); renderContinueLearning(); }
@@ -667,198 +677,7 @@
       $("fabric-a").onclick = () => toggleFabric('A');
       $("fabric-b").onclick = () => toggleFabric('B');
       $("fabric-reset").onclick = () => { topology = createDualFabricTopology(); operationsWorkspace.topology = topology; renderTopology(); };
-      const curricula = {
-        brocade: [
-          {
-            title: "Complete fabric health check",
-            goal:
-              "Run the full new-hire baseline across software, chassis, environment, fabric, ports, optics, zoning, and events.",
-            commands: [
-              "version",
-              "firmwareshow",
-              "uptime",
-              "licenseshow",
-              "chassisshow",
-              "fanshow",
-              "psshow",
-              "tempshow",
-              "sensorshow",
-              "switchstatusshow",
-              "switchstatuspolicyshow",
-              "switchshow",
-              "fabricshow",
-              "islshow",
-              "trunkshow",
-              "topologyshow",
-              "portcfgshow",
-              "portshow 0",
-              "sfpshow 0",
-              "porterrshow",
-              "nsshow",
-              "cfgshow",
-              "errshow",
-              "mapsdb --show",
-            ],
-          },
-          {
-            title: "Build single-initiator zoning",
-            goal: "Create aliases, a zone, a configuration, and activate it.",
-            commands: [
-              "alicreate host1, 10:00:00:00:00:00:00:01",
-              "alicreate array1, 50:00:00:00:00:00:00:01",
-              "zonecreate z_host1_array1, host1; array1",
-              "cfgcreate cfg_prod, z_host1_array1",
-              "cfgenable cfg_prod",
-              "cfgshow",
-            ],
-          },
-          {
-            title: "Safe removal",
-            goal: "Disable and remove objects in dependency order.",
-            commands: [
-              "cfgdisable",
-              "cfgdelete cfg_prod",
-              "zonedelete z_host1_array1",
-              "alidelete host1",
-              "alidelete array1",
-            ],
-          },
-        ],
-        cisco: [
-          {
-            title: "Complete MDS health check",
-            goal:
-              "Baseline time, software, hardware, environment, resources, FC interfaces, registrations, zoning, and logs.",
-            commands: [
-              "show clock",
-              "show version",
-              "show module",
-              "show environment",
-              "show system resources",
-              "show ntp peers",
-              "show vsan",
-              "show interface brief",
-              "show interface fc1/1",
-              "show interface counters errors",
-              "show flogi database",
-              "show fcns database",
-              "show device-alias database",
-              "show zoneset active",
-              "show logging last 20",
-            ],
-          },
-          {
-            title: "Create a VSAN",
-            goal: "Enter configuration mode and create VSAN 20.",
-            commands: ["configure terminal", "vsan 20", "show vsan"],
-          },
-          {
-            title: "Build a zoneset",
-            goal: "Create a device alias, zone, zoneset, and activate it.",
-            commands: [
-              "configure terminal",
-              "device-alias database",
-              "device-alias name host1 pwwn 10:00:00:00:00:00:00:01",
-              "device-alias commit",
-              "exit",
-              "zone name z1 vsan 20",
-              "member device-alias host1",
-              "exit",
-              "zoneset name zs1 vsan 20",
-              "member z1",
-              "exit",
-              "zoneset activate name zs1 vsan 20",
-              "show zoneset active",
-            ],
-          },
-          {
-            title: "Operate an FC port",
-            goal: "Assign a port to VSAN 20 and test shutdown recovery.",
-            commands: [
-              "configure terminal",
-              "interface fc1/1",
-              "switchport vsan 20",
-              "shutdown",
-              "no shutdown",
-              "end",
-              "show interface brief",
-            ],
-          },
-          {
-            title: "Verify logins and save",
-            goal:
-              "Inspect FLOGI and FCNS registrations, review events, and save the running configuration.",
-            commands: [
-              "show flogi database",
-              "show fcns database",
-              "show logging",
-              "copy running-config startup-config",
-              "show startup-config",
-            ],
-          },
-        ],
-        iscsi: [
-          {
-            title: "Complete iSCSI health check",
-            goal:
-              "Baseline interfaces, routes, portals, targets, sessions, and multipath state.",
-            commands: [
-              "show health",
-              "show network",
-              "show routes",
-              "show portals",
-              "show targets",
-              "sessions",
-              "multipath show",
-            ],
-          },
-          {
-            title: "Build the IP path",
-            goal: "Create an isolated storage VLAN and interface.",
-            commands: [
-              "vlan create 110 storage",
-              "interface set eth1 198.51.100.10/24 vlan 110",
-              "show network",
-            ],
-          },
-          {
-            title: "Publish and connect a LUN",
-            goal: "Create a target, portal, LUN mapping, discovery, and session.",
-            commands: [
-              "target create iqn.2026-08.lab:target1",
-              "portal add iqn.2026-08.lab:target1 198.51.100.20:3260",
-              "lun map iqn.2026-08.lab:target1 0 /dev/simdisk0",
-              "discover",
-              "login iqn.2026-08.lab:target1",
-              "sessions",
-            ],
-          },
-          {
-            title: "Test path recovery",
-            goal: "Fail and restore a portal while inspecting multipath state.",
-            commands: [
-              "path fail 198.51.100.20:3260",
-              "multipath show",
-              "path restore 198.51.100.20:3260",
-              "multipath show",
-            ],
-          },
-          {
-            title: "Secure and protect sessions",
-            goal:
-              "Create a CHAP-protected target, authenticate, and select a multipath policy.",
-            commands: [
-              "target create iqn.2026-08.lab:secure",
-              "portal add iqn.2026-08.lab:secure 192.0.2.30:3260",
-              "chap set iqn.2026-08.lab:secure learner strongsecret",
-              "discover",
-              "login iqn.2026-08.lab:secure learner strongsecret",
-              "multipath policy failover",
-              "multipath show",
-            ],
-          },
-        ],
-      };
+      const curricula = ACADEMY_CURRICULA;
       let profile = localStorage.getItem("academy-profile") || "brocade",
         activeDevice = localStorage.getItem("academy-device") || "brocade-a1",
         lesson = 0,
@@ -997,6 +816,7 @@
       function switchProfile(id) {
         profile = id;
         activeDevice = Object.keys(ACADEMY_DEVICES).find((key) => ACADEMY_DEVICES[key].profile === id) || 'iscsi-gw1';
+        selectOperationsDevice(operationsWorkspace, activeDevice);
         recordStageVisit(learningProgress, learningStage, activeDevice);
         saveLearningProgress();
         lesson = 0;
@@ -1039,7 +859,28 @@
           step < l.commands.length
             ? "Run the shown command. Type help whenever you need the command map."
             : "Completed. Reset or choose another lab to practice again.";
+        const visibleCommands = l.commands.slice(Math.max(0, step - 1), step + 6);
+        $("command-queue").innerHTML = visibleCommands.map((command, index) => {
+          const absolute = Math.max(0, step - 1) + index;
+          const state = absolute < step ? '✓' : absolute === step ? '→' : '·';
+          return `<li class="${absolute === step ? 'current' : ''}"><span>${state} ${absolute + 1}</span><code>${command}</code></li>`;
+        }).join('') + (step + 6 < l.commands.length ? `<li><span>…</span><code>${l.commands.length - step - 6} more commands in this lab</code></li>` : '');
+        $("run-suggested").disabled = step >= l.commands.length;
+        $("run-suggested").textContent = step < l.commands.length ? 'RUN SUGGESTED' : 'LAB COMPLETE';
+        $("next-lab").disabled = step < l.commands.length;
+        $("next-lab").textContent = lesson < list.length - 1 ? 'NEXT LAB' : 'NEXT ENVIRONMENT';
       }
+      $("run-suggested").onclick = () => {
+        const expected = curricula[profile][lesson].commands[step];
+        if (expected) { $("command").value = expected; run(expected); }
+      };
+      $("next-lab").onclick = () => {
+        const list = curricula[profile];
+        if (step < list[lesson].commands.length) return;
+        if (lesson < list.length - 1) { lesson += 1; step = 0; renderLessons(); $("command").focus(); return; }
+        const order = ['brocade','cisco','iscsi'];
+        switchProfile(order[(order.indexOf(profile) + 1) % order.length]);
+      };
       function renderScenarios() {
         $("scenarios").innerHTML = ACADEMY_SCENARIOS[profile]
           .map(
