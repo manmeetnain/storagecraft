@@ -3,7 +3,7 @@ title: Storage and SAN glossary
 description: Plain-language definitions for the terms used throughout StorageCraft.
 ---
 
-Use this page when a lab introduces an unfamiliar term. Definitions describe the learning model; vendor implementations can add constraints.
+Use this page when a lab introduces an unfamiliar term. Definitions describe the learning model; vendor implementations can add constraints. For authoritative protocol and platform detail, open the [standards and vendor source shelf](../source-shelf/).
 
 ## Storage foundations
 

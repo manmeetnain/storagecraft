@@ -36,3 +36,5 @@ A learner should not claim completion from reading alone. Finish the linked prac
 ## Before you begin
 
 Use a modern browser. The simulations are educational and never connect to real infrastructure. Vendor-inspired commands model public concepts and an explicit compatibility subset; always verify syntax and behavior against the exact production version.
+
+Use the [standards and vendor source shelf](/storagecraft/reference/source-shelf/) to validate terminology, protocols, and release-specific commands.

@@ -66,7 +66,10 @@ export default defineConfig({
           label: '🔬 Simulators',
           items: [{ autogenerate: { directory: 'simulators' } }],
         },
-        { label: '📖 Glossary', link: '/reference/glossary/' },
+        {
+          label: '📖 Reference',
+          items: [{ autogenerate: { directory: 'reference' } }],
+        },
         { label: '🧑‍🏫 Instructor Kit', link: '/instructors/' },
       ],
     }),
