@@ -132,6 +132,7 @@
       body[data-stage="basics"] .governance,
       body[data-stage="basics"] .config-safety,
       body[data-stage="basics"] .advanced-scenarios { display:none; }
+      body[data-stage="basics"] .workflow-coach { display:none; }
       body[data-stage="basics"] .lesson:not(:first-child) { display:none; }
       body[data-stage="configure"] .topology,
       body[data-stage="configure"] .certification,
@@ -140,6 +141,32 @@
       body[data-stage="fabric"] .advanced-scenarios,
       body[data-stage="fabric"] .config-safety { display:none; }
       body[data-stage="incidents"] .certification { display:none; }
+      .workflow-coach { margin-bottom:14px; padding:14px; }
+      .workflow-head { display:flex; justify-content:space-between; align-items:start; gap:16px; }
+      .workflow-head h2 { margin:0 0 5px; font-size:18px; }
+      .workflow-head p { margin:0; color:var(--muted); font:10px/1.55 var(--mono); max-width:760px; }
+      .workflow-list { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-top:12px; }
+      .workflow-choice { text-align:left; border:1px solid var(--line); border-radius:9px; background:#091321; color:var(--text); padding:10px; cursor:pointer; }
+      .workflow-choice span { display:block; color:var(--cyan); font:8px var(--mono); text-transform:uppercase; }
+      .workflow-choice b { display:block; margin:4px 0; font-size:11px; }
+      .workflow-choice small { color:var(--muted); font:9px/1.4 var(--mono); }
+      .workflow-choice.active { border-color:var(--cyan); background:rgba(34,211,238,.08); }
+      .workflow-stages { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:10px; }
+      .workflow-stage { border:1px solid var(--line); border-radius:8px; background:#07101c; color:var(--muted); padding:8px; text-align:left; font:8px var(--mono); }
+      .workflow-stage b { display:block; color:var(--text); font-size:10px; margin-top:3px; }
+      .workflow-stage.active { border-color:var(--violet); background:rgba(167,139,250,.08); }
+      .workflow-stage.complete { border-color:var(--green); }
+      .workflow-detail { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
+      .workflow-detail h3 { margin:0 0 5px; }
+      .workflow-detail p { color:var(--muted); font:10px/1.55 var(--mono); }
+      .workflow-commands { display:grid; gap:5px; }
+      .workflow-command { display:grid; grid-template-columns:24px 1fr; gap:7px; padding:7px; border:1px solid var(--line); border-radius:7px; background:#050c16; color:var(--text); font:9px/1.4 var(--mono); text-align:left; cursor:pointer; }
+      .workflow-command span { color:var(--cyan); }
+      .workflow-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+      .workflow-actions button { border:1px solid var(--line); border-radius:7px; padding:8px 10px; background:#101d2e; color:var(--text); font:800 9px var(--mono); cursor:pointer; }
+      .workflow-actions .primary { background:var(--green); color:#03140f; border-color:var(--green); }
+      .workflow-result { min-height:42px; padding:9px; border-radius:7px; background:#050c16; color:var(--muted); font:9px/1.5 var(--mono); }
+      .workflow-caution { color:var(--amber)!important; }
       .workspace {
         display: grid;
         grid-template-columns: 290px minmax(0, 1fr) 300px;
@@ -471,6 +498,7 @@
           grid-column: 1/-1;
         }
       }
+      @media(max-width:760px){.workflow-list,.workflow-stages{grid-template-columns:1fr 1fr}.workflow-detail{grid-template-columns:1fr}.workflow-head{display:block}}
       @media (max-width: 760px) {
         .top {
           display: block;
@@ -528,6 +556,12 @@
         <div class="journey-head"><strong>Choose your learning stage</strong><span id="stage-progress">STAGE 1 OF 5 · BEGINNER</span></div>
         <div class="journey-steps" id="journey-steps"></div>
         <div class="stage-guide"><div><h2 id="stage-title">Start with one switch</h2><p id="stage-description">Learn how to inspect a healthy switch before making any changes. Choose an environment, follow Lab 01, and run the highlighted command.</p></div><div><button id="stage-action">START LAB 01</button><button class="full-workspace" id="full-workspace">FULL WORKSPACE</button></div></div>
+      </section>
+      <section class="panel workflow-coach" aria-label="Operational workflow practice">
+        <div class="workflow-head"><div><h2>Operational workflow practice</h2><p>Practice complete change lifecycles with commands tied to evidence: inspect → diagnose → configure → verify → rollback.</p></div><span class="topology-summary" id="workflow-profile"></span></div>
+        <div class="workflow-list" id="workflow-list"></div>
+        <div class="workflow-stages" id="workflow-stages"></div>
+        <div class="workflow-detail"><div><h3 id="workflow-title"></h3><p id="workflow-objective"></p><div class="workflow-commands" id="workflow-commands"></div><div class="workflow-actions"><button id="workflow-start">START CLEAN WORKFLOW</button><button class="primary" id="workflow-run-stage">RUN THIS STAGE</button><button id="workflow-next">NEXT STAGE</button></div></div><div><div class="workflow-result" id="workflow-result">Choose a workflow and start from a clean simulator state.</div><p class="workflow-caution" id="workflow-caution"></p></div></div>
       </section>
       <section class="panel topology" aria-label="Live dual-fabric topology">
         <div class="topology-head"><strong>LIVE DUAL-FABRIC TOPOLOGY · v2.0</strong><div class="topology-actions"><button id="fabric-a">TOGGLE A</button> <button id="fabric-b">TOGGLE B</button> <button id="fabric-reset">RESTORE</button></div><span class="topology-summary" id="topology-summary"></span></div>
@@ -607,6 +641,7 @@
       } from "/storagecraft/lib/network-academy-engine.js?v=academy-20260828-2";
       import { STORAGECRAFT_BRAND, creatorAttribution, productTitle } from "/storagecraft/lib/storagecraft-brand.js?v=academy-20260828-2";
       import { ACADEMY_CURRICULA } from "/storagecraft/lib/academy-curriculum.js?v=academy-20260828-2";
+      import { ACADEMY_WORKFLOWS, WORKFLOW_STAGES } from "/storagecraft/lib/academy-workflows.js?v=academy-20260828-3";
       import { createDualFabricTopology, setFabricState, topologyHealth } from "/storagecraft/lib/academy-topology.js?v=academy-20260828-2";
       import { ACADEMY_DEVICES, OPERATIONS_INCIDENTS, createOperationsWorkspace, selectOperationsDevice, executeOperationsCommand, loadOperationsIncident, evaluateOperationsIncident } from "/storagecraft/lib/academy-operations.js?v=academy-20260828-2";
       import { createConfigurationSafety, createCheckpoint, rollbackCheckpoint, runConfigurationScript } from "/storagecraft/lib/academy-config-safety.js?v=academy-20260828-2";
@@ -686,6 +721,7 @@
         historyIndex = 0,
         incidentMode = false,
         activeScenario = null;
+      let activeWorkflowIndex = 0, workflowStageIndex = 0, workflowMode = false, completedWorkflowStages = new Set();
       if (!ACADEMY_DEVICES[activeDevice]) activeDevice = 'brocade-a1';
       profile = ACADEMY_DEVICES[activeDevice].profile;
       selectOperationsDevice(operationsWorkspace, activeDevice);
@@ -781,9 +817,9 @@
         profile = ACADEMY_DEVICES[id].profile;
         recordStageVisit(learningProgress, learningStage, activeDevice);
         saveLearningProgress();
-        lesson = 0; step = 0; incidentMode = false; activeScenario = null;
+        lesson = 0; step = 0; incidentMode = false; activeScenario = null; workflowMode = false; activeWorkflowIndex = 0; workflowStageIndex = 0; completedWorkflowStages = new Set();
         $("terminal").innerHTML = "";
-        renderProfiles(); renderTerminalTabs(); renderLessons(); renderScenarios(); boot();
+        renderProfiles(); renderTerminalTabs(); renderLessons(); renderScenarios(); renderWorkflows(); boot();
       }
       function renderOperationsIncidents() {
         $("operations-incidents").innerHTML = OPERATIONS_INCIDENTS.map((item) => `<button class="operations-incident" data-operation-incident="${item.id}">${item.title}</button>`).join('');
@@ -823,11 +859,16 @@
         step = 0;
         incidentMode = false;
         activeScenario = null;
+        workflowMode = false;
+        activeWorkflowIndex = 0;
+        workflowStageIndex = 0;
+        completedWorkflowStages = new Set();
         $("terminal").innerHTML = "";
         renderProfiles();
         renderTerminalTabs();
         renderLessons();
         renderScenarios();
+        renderWorkflows();
         boot();
       }
       function renderLessons() {
@@ -842,6 +883,7 @@
           (b) =>
             (b.onclick = () => {
               incidentMode = false;
+              workflowMode = false;
               activeScenario = null;
               lesson = Number(b.dataset.lesson);
               step = 0;
@@ -880,6 +922,48 @@
         if (lesson < list.length - 1) { lesson += 1; step = 0; renderLessons(); $("command").focus(); return; }
         const order = ['brocade','cisco','iscsi'];
         switchProfile(order[(order.indexOf(profile) + 1) % order.length]);
+      };
+      function renderWorkflows() {
+        const workflows = ACADEMY_WORKFLOWS[profile];
+        if (!workflows?.length) return;
+        if (!workflows[activeWorkflowIndex]) activeWorkflowIndex = 0;
+        const workflow = workflows[activeWorkflowIndex];
+        const current = workflow.stages[workflowStageIndex];
+        $("workflow-profile").textContent = `${ACADEMY_PROFILES[profile].name} · ${workflows.length} WORKFLOWS`;
+        $("workflow-list").innerHTML = workflows.map((item,index)=>`<button class="workflow-choice ${index===activeWorkflowIndex?'active':''}" data-workflow-index="${index}"><span>${item.family}</span><b>${item.title}</b><small>${item.outcome}</small></button>`).join('');
+        document.querySelectorAll('[data-workflow-index]').forEach(button=>button.onclick=()=>{activeWorkflowIndex=Number(button.dataset.workflowIndex);workflowStageIndex=0;workflowMode=false;completedWorkflowStages=new Set();$("workflow-result").textContent='Start from a clean simulator state, then run each stage in order.';renderWorkflows()});
+        $("workflow-stages").innerHTML = workflow.stages.map((item,index)=>`<div class="workflow-stage ${index===workflowStageIndex?'active':''} ${completedWorkflowStages.has(index)?'complete':''}"><span>${String(index+1).padStart(2,'0')}</span><b>${item.name}</b></div>`).join('');
+        $("workflow-title").textContent = `${current.name} · ${workflow.title}`;
+        $("workflow-objective").textContent = current.objective;
+        $("workflow-caution").textContent = `Production caution · ${workflow.caution}`;
+        $("workflow-commands").innerHTML = current.commands.map((command,index)=>`<button class="workflow-command" data-workflow-command="${index}"><span>${index+1}</span><code>${command}</code></button>`).join('');
+        document.querySelectorAll('[data-workflow-command]').forEach(button=>button.onclick=()=>{$("command").value=current.commands[Number(button.dataset.workflowCommand)];$("command").focus()});
+        $("workflow-run-stage").disabled = !workflowMode;
+        $("workflow-next").disabled = !completedWorkflowStages.has(workflowStageIndex);
+        $("workflow-next").textContent = workflowStageIndex < WORKFLOW_STAGES.length-1 ? 'NEXT STAGE' : 'WORKFLOW COMPLETE';
+      }
+      $("workflow-start").onclick = () => {
+        workflowMode = true; workflowStageIndex = 0; completedWorkflowStages = new Set();
+        const result = run('reset');
+        $("workflow-result").textContent = result?.ok ? 'Clean baseline loaded. Run the Inspect stage.' : result?.output || 'Unable to reset workflow.';
+        renderWorkflows();
+      };
+      $("workflow-run-stage").onclick = () => {
+        if (!workflowMode) return;
+        const workflow = ACADEMY_WORKFLOWS[profile][activeWorkflowIndex], current = workflow.stages[workflowStageIndex];
+        const results = current.commands.map(command=>({command,result:run(command)}));
+        const failed = results.find(item=>!item.result?.ok);
+        if (failed) { $("workflow-result").textContent = `STOPPED · ${failed.command} · ${failed.result?.output || 'command failed'}`; return; }
+        completedWorkflowStages.add(workflowStageIndex);
+        $("workflow-result").textContent = `PASS · ${current.name} · ${current.evidence}`;
+        renderWorkflows();
+      };
+      $("workflow-next").onclick = () => {
+        if (!completedWorkflowStages.has(workflowStageIndex)) return;
+        if (workflowStageIndex < WORKFLOW_STAGES.length-1) { workflowStageIndex += 1; renderWorkflows(); return; }
+        workflowMode = false;
+        $("workflow-result").textContent = `COMPLETE · ${ACADEMY_WORKFLOWS[profile][activeWorkflowIndex].outcome}`;
+        renderWorkflows();
       };
       function renderScenarios() {
         $("scenarios").innerHTML = ACADEMY_SCENARIOS[profile]
@@ -955,6 +1039,7 @@
           renderLessons();
         }
         $("command").value = "";
+        return r;
       }
       $("form").onsubmit = (e) => {
         e.preventDefault();
@@ -993,6 +1078,7 @@
       renderCertification();
       renderLessons();
       renderScenarios();
+      renderWorkflows();
       boot();
     </script>
   </body>

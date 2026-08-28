@@ -71,6 +71,21 @@ test('runs Cisco guided commands and advances without an invalid-command dead en
   await expect(page.getByText(/Invalid command/)).toHaveCount(0);
 });
 
+test('completes an inspect diagnose configure verify rollback workflow', async ({ page }) => {
+  await page.getByRole('button', { name: /Configure safely/ }).click();
+  await page.getByRole('button', { name: /Vendor-neutral iSCSI/ }).click();
+  await page.getByRole('button', { name: /Publish a LUN and establish a session/ }).click();
+  await page.getByRole('button', { name: 'START CLEAN WORKFLOW', exact: true }).click();
+  for (const stage of ['Inspect','Diagnose','Configure','Verify','Rollback']) {
+    await expect(page.locator('#workflow-title')).toContainText(stage);
+    await page.getByRole('button', { name: 'RUN THIS STAGE', exact: true }).click();
+    await expect(page.locator('#workflow-result')).toContainText(`PASS · ${stage}`);
+    await page.locator('#workflow-next').click();
+  }
+  await expect(page.locator('#workflow-result')).toContainText('COMPLETE');
+  await expect(page.getByText(/Invalid command/)).toHaveCount(0);
+});
+
 test('runs atomic configuration, reports diff, and rolls back', async ({ page }) => {
   await page.getByRole('button', { name: /Configure safely/ }).click();
   await page.getByText('CONFIGURATION SAFETY · ATOMIC SCRIPTS / DIFF / CHECKPOINT / ROLLBACK').click();

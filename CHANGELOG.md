@@ -17,6 +17,7 @@ All notable StorageCraft changes are recorded here. Releases follow semantic ver
 - Browser-local learning dashboard with module tracking, milestone badges, and JSON evidence export
 - Unified high-contrast light visual system across documentation, planners, simulators, academy, and AI hub
 - Academy curriculum/terminal synchronization, cache-safe command modules, visible command queues, one-click suggested commands, and guarded next-lab progression
+- Nine evidence-driven Academy workflows covering fabric health, zoning, FC ports, VSANs, interfaces, iSCSI networking, targets/LUNs, CHAP, multipathing, verification, and rollback
 - Automated internal-route and AI-anchor validation
 - Expanded Codex shortcut directory covering session, context, tools, plugins, agents, and terminal operations
 

@@ -92,7 +92,7 @@ The program is backed by [`learning/catalog.json`](learning/catalog.json), valid
 | [AI Data Path Lab](https://manmeetnain.github.io/storagecraft/simulators/ai-data-path/index.html) | Which storage, fabric, CPU, or accelerator stage limits an AI workload? | Interactive bottleneck lab + CLI |
 | [NVMe Queue Lab](https://manmeetnain.github.io/storagecraft/simulators/nvme-queues/index.html) | When do queue count and depth expose performance versus add latency? | Interactive queue lab + CLI |
 | [SAN Failure-Domain Lab](https://manmeetnain.github.io/storagecraft/simulators/san-failure/index.html) | Will storage remain reachable—and recover before the workload times out? | Interactive resilience lab + CLI |
-| [Storage Network Academy](https://manmeetnain.github.io/storagecraft/simulators/network-academy/index.html) | How can a new hire safely practice FC switching and iSCSI operations? | Stateful terminal academy + guided labs |
+| [Storage Network Academy](https://manmeetnain.github.io/storagecraft/simulators/network-academy/index.html) | How can a new hire safely practice FC switching and iSCSI operations? | Stateful terminal academy + nine inspect-to-rollback workflows |
 | [Manmeet AI Command Center](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) | Which AI platform, capability, skill, connector, shortcut, or prompt pattern fits the job? | Multi-platform deep-dive guide and interactive prompt console |
 
 ## Roadmap
@@ -107,6 +107,7 @@ The program is backed by [`learning/catalog.json`](learning/catalog.json), valid
 - [x] AI Data Path Lab
 - [x] Storage Network Academy: Brocade-style FC, Cisco MDS-style FC, and iSCSI
 - [x] Storage Network Academy v2: dual fabrics, multi-switch operations, incidents, configuration safety, governance, certification, and desktop/mobile E2E ([execution contract](ACADEMY_V2.md))
+- [x] Academy operational workflows: inspect, diagnose, configure, verify, and rollback across Brocade, Cisco MDS, and iSCSI
 - [x] Zero-to-SAN curriculum, glossary, operational runbooks, and instructor kit
 - [x] Learner progress, milestone badges, and portable evidence export
 - [x] Full Python model parity foundation and executable notebook

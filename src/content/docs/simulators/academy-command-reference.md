@@ -1,12 +1,30 @@
 ---
 title: Academy command reference
 description: Supported Brocade-style FC, Cisco MDS-style FC, iSCSI, safety, and scenario commands.
-lastUpdated: 2026-08-27
+lastUpdated: 2026-08-28
 sidebar:
   order: 11
 ---
 
 This matrix is the authoritative compatibility surface for Storage Network Academy. Commands not listed here must fail explicitly rather than silently changing simulated state.
+
+## Operational workflow practice
+
+The Academy now combines individual commands into nine complete operational workflows. Every workflow uses the same evidence-driven sequence:
+
+1. **Inspect** the current state before touching configuration.
+2. **Diagnose** by correlating the most relevant command outputs.
+3. **Configure** only the scoped objects required by the task.
+4. **Verify** the intended state and surrounding service health.
+5. **Rollback** in dependency-safe order or restore the prior simulator snapshot.
+
+| Environment | Workflow families |
+|---|---|
+| Brocade FOS-style | Fabric health, zoning lifecycle, ports and optics recovery |
+| Cisco MDS-style | MDS health, VSAN and zoneset lifecycle, FC-interface recovery |
+| Vendor-neutral iSCSI | Network path, target/LUN/session lifecycle, CHAP and multipath recovery |
+
+Selecting a displayed workflow command loads it into the terminal for manual practice. **Run This Stage** executes the complete stage for guided demonstration. A stage must pass before **Next Stage** becomes available, and **Start Clean Workflow** restores a deterministic baseline.
 
 ## Simulator controls
 

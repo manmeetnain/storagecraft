@@ -49,6 +49,17 @@ h1{background:linear-gradient(105deg,#152c45 12%,#087f9b 52%,#6949b8 86%)!import
 #compatibility-label{color:#4f378e!important}
 .config-safety summary{color:#684500!important}
 
+/* Five-stage Academy workflow navigator: readable, distinct, and fully light. */
+:where(.workflow-choice,.workflow-stage,.workflow-command,.workflow-result,.workflow-actions button){background:#eef4f8!important;color:#314e68!important;border-color:#bdcedc!important}
+:where(.workflow-choice b,.workflow-stage b,.workflow-command code,.workflow-result b){color:#18324d!important}
+:where(.workflow-choice.active,.workflow-stage.active){background:#e9e4f7!important;color:#4f378e!important;border-color:#6949b8!important;box-shadow:0 8px 22px rgba(105,73,184,.12)!important}
+:where(.workflow-choice.active b,.workflow-stage.active b){color:#4f378e!important}
+.workflow-stage.complete{background:#e5f7ef!important;color:#075e43!important;border-color:#087653!important}
+.workflow-stage.complete b{color:#075e43!important}
+.workflow-command:hover{background:#e1f3f7!important;border-color:#06657a!important}
+.workflow-result{background:#fff!important}
+:where(.workflow-actions .primary,.workflow-actions button.primary){background:#075e43!important;color:#fff!important;border-color:#075e43!important}
+
 /* The original RAID visualizer has its own token names and inline accents. */
 :where(.sidebar-card,.footer){background:#eef4f8!important;color:#314e68!important;border-color:#bdcedc!important}
 :where(.sidebar-card .card-title,.sidebar-card span,.footer span){color:#314e68!important}
