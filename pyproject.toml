@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "storagecraft-tools"
+version = "0.1.0"
+description = "Dependency-free Python learning tools for storage capacity and the StorageCraft curriculum."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Manmeet Nain" }]
+keywords = ["storage", "raid", "san", "fibre-channel", "iscsi", "education"]
+
+[project.scripts]
+storagecraft-py = "storagecraft_tools.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "python"}
+
+[tool.setuptools.packages.find]
+where = ["python"]

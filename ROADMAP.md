@@ -46,6 +46,10 @@ A capsule can move to `shipped` only when it has:
 | 66 | AI checkpoint and data pipeline lab | Discovery | Checkpoint sizing, restart time, throughput, and tiering trade-offs |
 | 64 | Instructor scenario pack | Planned | Facilitator notes, evidence rubric, resettable cohorts, and answer keys |
 
+## Python companion direction
+
+The Python package now provides a tested foundation for notebooks, automation, and community contributions. Extend it model-by-model only when results remain transparent and can be checked against the browser/JavaScript implementation. Priority candidates are all-RAID parity with the planner, erasure coding, performance equations, RAG sizing, and report export.
+
 ## Learning resources outside the capsule pipeline
 
 The [AI Resource & Prompt Hub](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) is a curated learning surface rather than a deterministic engineering capsule. It is covered by repository-wide desktop/mobile browser, accessibility, interaction, and deployment gates.

@@ -88,6 +88,16 @@ test('command center header and bookmarked deep links reveal their destinations'
   await expect(page.getByRole('heading', { name: 'Skill shelf: invoke a proven workflow' })).toBeVisible();
 });
 
+test('shortcut directory exposes current command families and connector guidance', async ({ page }) => {
+  await page.goto('ai-resource-hub/index.html#shortcuts');
+  for (const command of ['/model', '/plan', '/goal', '/status', '/diff', '/mcp verbose', '/apps', '/hooks', '/agent']) {
+    await expect(page.getByText(command, { exact: true })).toBeVisible();
+  }
+  await page.goto('ai-resource-hub/index.html#connectors');
+  await expect(page.getByRole('heading', { name: 'Plugins, connectors, and MCP', exact: true })).toBeVisible();
+  await expect(page.getByText('Read access and write access are different risk levels', { exact: false })).toBeVisible();
+});
+
 test('ChatGPT and Codex widgets open useful playbooks', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('ai-resource-hub/index.html#chatgpt');

@@ -109,7 +109,39 @@
       ['$','Codex skill mention','Select a reusable workflow, for example $visualize:visualize.','--cyan'],['@','ChatGPT skill / plugin mention','Explicitly choose a supported skill or plugin in ChatGPT.','--violet'],['/','Session command','Type / in Codex CLI or supported Codex surfaces to discover available commands.','--green'],['⌘ / Ctrl','Keyboard command','Use the app or IDE shortcut settings to search, customize, and reset bindings.','--amber']
     ];
     const shortcuts=[
-      ['Skill mention','Codex','$skill-name','Explicitly activate an installed skill; a natural-language match may also activate it.'],['Command discovery','Codex CLI','/','Open the slash-command menu instead of memorizing a changing command list.'],['Review','Codex','/review','Ask Codex to review working-tree or selected changes; exact options depend on the surface.'],['Plugins','Codex CLI','/plugins','Open the plugin browser to inspect, enable, install, or manage available plugins.'],['New IDE chat','IDE extension','Cmd+N / Ctrl+N','Create a new Codex chat when the editor focus and binding apply.'],['Command Palette','VS Code','Cmd+Shift+P / Ctrl+Shift+P','Search Codex commands or assign custom key bindings.'],['Steer vs queue','IDE extension','Cmd/Ctrl+Shift+Enter','Invert the configured follow-up behavior for one message.'],['App shortcut search','Desktop app','Settings → Keyboard Shortcuts','Find, customize, or reset current app commands; this is the source of truth for bindings.'],['Open skills','Desktop deep link','codex://skills','Open the Skills page in the ChatGPT desktop app.'],['Open scheduled','Desktop deep link','codex://automations','Open Scheduled with the create flow.'],['New local chat','Desktop deep link','codex://threads/new','Open a new local chat; advanced links can include encoded prompt and workspace path.'],['Open settings','Desktop deep link','codex://settings','Jump to the main desktop settings screen.']
+      ['Discover commands','Codex CLI','/','Open the live slash-command menu; availability can depend on surface, platform, model, and session state.'],
+      ['Select model','Codex CLI','/model','Choose the active model, then confirm it with /status.'],
+      ['Plan mode','Codex CLI','/plan','Switch the active chat into planning mode, optionally with an inline planning request.'],
+      ['Persistent goal','Codex CLI','/goal','Set or view the active objective; edit, pause, resume, or clear it from the goal workflow.'],
+      ['Session status','Codex CLI','/status','Inspect model, approval policy, writable roots, remote state, and context usage.'],
+      ['Permissions','Codex CLI','/permissions','Choose the approval preset or an allowed named permission profile.'],
+      ['Working diff','Codex CLI','/diff','Review staged, unstaged, and untracked changes in the terminal.'],
+      ['Code review','Codex CLI','/review','Ask Codex to review the working tree; follow with /diff for exact changes.'],
+      ['Mention file','Codex CLI','/mention path','Attach a matching file explicitly to the next request.'],
+      ['Compact context','Codex CLI','/compact','Summarize a long exchange to free context while preserving critical details.'],
+      ['New chat','Codex CLI','/new name','Start and optionally name a fresh chat without clearing the terminal view.'],
+      ['Fork chat','Codex CLI','/fork','Clone the current conversation to explore another approach independently.'],
+      ['Side chat','Codex CLI','/side prompt','Open a focused ephemeral fork while the main task remains visible.'],
+      ['Resume chat','Codex CLI','/resume','Open the saved-session picker and continue an earlier conversation.'],
+      ['Initialize guidance','Codex CLI','/init','Generate an AGENTS.md scaffold for durable repository instructions.'],
+      ['Skills picker','Codex CLI','/skills','Choose an installed skill and insert its workflow context.'],
+      ['Apps picker','Codex CLI','/apps','Browse authorized apps and insert an app mention into the composer.'],
+      ['Plugin browser','Codex CLI','/plugins','Inspect, discover, install, enable, or disable allowed plugins.'],
+      ['MCP diagnostics','Codex CLI','/mcp verbose','List configured MCP tools and include server diagnostics.'],
+      ['Lifecycle hooks','Codex CLI','/hooks','Inspect, trust, disable, or re-enable non-managed lifecycle hooks.'],
+      ['Agent threads','Codex CLI','/agent','Switch between the main thread and available subagent threads.'],
+      ['Background terminals','Codex CLI','/ps','Inspect background commands and their latest useful output.'],
+      ['Copy response','Codex CLI','/copy or Ctrl+O','Copy the latest completed Codex response.'],
+      ['Key bindings','Codex CLI','/keymap','Inspect and remap context-specific TUI keyboard shortcuts.'],
+      ['Skill mention','Codex / ChatGPT','$skill-name','Explicitly activate an installed skill; natural language can also match a skill.'],
+      ['Command Palette','VS Code','Cmd+Shift+P / Ctrl+Shift+P','Search Codex commands and manage editor key bindings.'],
+      ['New IDE chat','IDE extension','Cmd+N / Ctrl+N','Create a new Codex chat when editor focus and bindings apply.'],
+      ['Steer vs queue','IDE extension','Cmd/Ctrl+Shift+Enter','Invert the configured follow-up behavior for one message.'],
+      ['Shortcut settings','Desktop app','Settings → Keyboard Shortcuts','Search, customize, or reset current desktop commands; this is the binding source of truth.'],
+      ['Open skills','Desktop deep link','codex://skills','Open the Skills page in the ChatGPT desktop app.'],
+      ['Open scheduled','Desktop deep link','codex://automations','Open Scheduled with the create flow.'],
+      ['New local chat','Desktop deep link','codex://threads/new','Open a new local chat; supported links can include encoded prompt and workspace context.'],
+      ['Open settings','Desktop deep link','codex://settings','Jump to the desktop settings screen.']
     ];
     const connectorLegend=[
       ['Skill','Repeatable know-how','Instructions, templates, examples, and resources for one focused workflow.','--cyan'],['Connector','Service access','Authenticated context or actions from a service such as GitHub, Drive, Slack, or Gmail.','--green'],['MCP server','Tool protocol','A standard way to expose tools and resources; it can optionally return custom UI.','--violet'],['Plugin','Installable bundle','A shareable package that can combine skills, connectors, MCP servers, and UI.','--amber']

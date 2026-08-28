@@ -11,6 +11,9 @@ All notable StorageCraft changes are recorded here. Releases follow semantic ver
 - Operations runbooks for health checks, provisioning, incidents, and rollback
 - Instructor kit and assessment rubric
 - Learning-first homepage and repository navigation
+- Dependency-free Python toolkit with typed RAID models, CLI, JSON output, and tests
+- Automated internal-route and AI-anchor validation
+- Expanded Codex shortcut directory covering session, context, tools, plugins, agents, and terminal operations
 
 ## 1.0.0 — 2026-08-28
 

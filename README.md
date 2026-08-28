@@ -50,6 +50,15 @@ npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2
 
 The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](https://no-color.org/) convention.
 
+### Python toolkit
+
+```bash
+PYTHONPATH=python python3 -m storagecraft_tools.cli raid --level 6 --disks 8 --size 4
+PYTHONPATH=python python3 -m storagecraft_tools.cli learn
+```
+
+The dependency-free [Python package](python/storagecraft_tools) exposes typed, tested functions for notebooks and automation. The first release covers RAID 0/1/5/6/10 and curriculum discovery; the browser planner remains the comprehensive all-RAID experience.
+
 ## Guided learning program
 
 | Stage | Capability | Practice |
