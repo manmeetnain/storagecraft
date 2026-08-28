@@ -11,15 +11,21 @@ export default defineConfig({
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/manmeetnain/storagecraft' },
       ],
+      editLink: { baseUrl: 'https://github.com/manmeetnain/storagecraft/edit/main/' },
       lastUpdated: true,
       pagination: true,
       customCss: ['./src/assets/custom.css'],
       logo: { src: './src/assets/storagecraft-mark.svg' },
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://manmeetnain.github.io/storagecraft/brand/storagecraft-social.png' } },
+        { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
+        { tag: 'meta', attrs: { property: 'og:site_name', content: 'StorageCraft by Manmeet Nain' } },
+        { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+        { tag: 'meta', attrs: { name: 'author', content: 'Manmeet Nain' } },
         { tag: 'meta', attrs: { name: 'theme-color', content: '#07111f' } },
       ],
       sidebar: [
+        { label: 'About', link: '/about/' },
         {
           label: '🧠 Core Concepts',
           items: [{ autogenerate: { directory: 'concepts' } }],

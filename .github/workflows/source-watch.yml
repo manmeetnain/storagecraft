@@ -1,0 +1,27 @@
+name: Official AI source watch
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-official-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify update channels remain reachable
+        run: |
+          urls=(
+            "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+            "https://docs.anthropic.com/en/release-notes/overview"
+            "https://support.google.com/gemini/answer/14517446?hl=en"
+            "https://github.blog/changelog/label/copilot/"
+            "https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new"
+          )
+          for url in "${urls[@]}"; do
+            curl --fail --location --retry 3 --retry-all-errors --max-time 45 --user-agent "StorageCraft-Source-Watch/1.0" --output /dev/null "$url"
+          done

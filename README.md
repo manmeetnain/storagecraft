@@ -22,6 +22,8 @@
 
 The storage layer is usually invisible—until latency spikes, a disk fails, compaction stalls, or an LLM server runs out of memory. StorageCraft exposes those mechanisms through experiments you can operate and models you can inspect.
 
+> **New here?** Choose a mission on the [interactive homepage](https://manmeetnain.github.io/storagecraft/), meet the project on the [About page](https://manmeetnain.github.io/storagecraft/about/), or open the [Manmeet AI Command Center](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) to search current official AI update channels.
+
 | Explore | Operate | Measure |
 |---|---|---|
 | Canonical systems explanations | Browser-based failure labs | Capacity and memory calculators |

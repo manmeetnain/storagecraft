@@ -33,12 +33,13 @@ test('AI atlas search, filters, shortcuts, and prompt copy controls work', async
   await page.goto('ai-resource-hub/index.html');
   await page.getByLabel('Search Manmeet AI Command Center').fill('research');
   await expect(page.getByRole('heading', { name: 'Deep research', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'PROMPTS' }).click();
+  await page.getByRole('button', { name: 'PROMPT STUDIO', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Research brief' })).toBeVisible();
-  await page.locator('.copy:visible').click();
-  await expect(page.locator('.copy:visible')).toHaveText('COPIED');
+  const researchCopy = page.getByRole('button', { name: 'Copy Research brief prompt' });
+  await researchCopy.click();
+  await expect(researchCopy).toHaveText('COPIED');
   await page.getByLabel('Search Manmeet AI Command Center').fill('codex://skills');
-  await page.getByRole('button', { name: 'SHORTCUTS' }).click();
+  await page.getByRole('button', { name: 'SHORTCUTS', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Open skills', exact: true })).toBeVisible();
 });
 
@@ -46,7 +47,7 @@ test('command center hero navigation and prompt compiler work', async ({ page })
   await page.goto('ai-resource-hub/index.html');
   await page.getByRole('button', { name: 'Explore skills' }).click();
   await expect(page.getByRole('heading', { name: 'Skill shelf: invoke a proven workflow' })).toBeVisible();
-  await page.getByRole('button', { name: 'PROMPT LAB' }).click();
+  await page.getByRole('button', { name: 'PROMPT STUDIO', exact: true }).click();
   await page.getByLabel('Outcome', { exact: true }).fill('Design a verified storage learning lab');
   await page.getByRole('button', { name: 'COMPILE PROMPT' }).click();
   await expect(page.locator('#compiledPrompt')).toContainText('Design a verified storage learning lab');
@@ -102,7 +103,7 @@ test('guided goals, workflows, CLI lab, and updates produce useful outcomes', as
   await expect(page.locator('#cliOutput')).toContainText('explore <platform>');
   await page.getByRole('button', { name: 'UPDATES' }).click();
   await expect(page.getByRole('heading', { name: 'What changed: maintained source watch' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'CHECK CURRENT UPDATES' }).first()).toHaveAttribute('href', /^https:/);
+  await expect(page.getByRole('link', { name: 'SEARCH LATEST UPDATES' }).first()).toHaveAttribute('href', /^https:/);
 });
 
 test('animated outcome journey advances through product stages', async ({ page }) => {
@@ -114,4 +115,16 @@ test('animated outcome journey advances through product stages', async ({ page }
   await expect(page.locator('#journeyTitle')).toHaveText('BUILD');
   const animationName = await page.locator('.outcome-runner').evaluate(el => getComputedStyle(el).animationName);
   expect(animationName).toBe('outcome-journey');
+  await page.getByRole('button', { name: 'PAUSE MOTION' }).click();
+  await expect(page.getByRole('button', { name: 'RESUME MOTION' })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('outcome journey remains visible on mobile and official updates are searchable', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('ai-resource-hub/index.html');
+  await expect(page.locator('#outcomeOrbit')).toBeVisible();
+  await page.getByRole('button', { name: 'UPDATES' }).click();
+  await page.getByLabel('Search official AI update sources').fill('Copilot');
+  await expect(page.getByRole('heading', { name: 'GitHub Copilot changelog' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'OpenAI product updates' })).toBeHidden();
 });
