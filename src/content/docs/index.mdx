@@ -3,29 +3,28 @@ title: StorageCraft
 description: Interactive systems lab for storage engineering and AI infrastructure.
 template: splash
 hero:
-  tagline: Understand the data path beneath modern AI—from disk arrays and write paths to GPU memory and KV caches—through visual labs, precise models, and reproducible experiments.
-  image:
-    file: ../../../public/brand/storagecraft-social.png
+  tagline: A visual systems lab for understanding, operating, and troubleshooting the data path beneath modern AI—from disk arrays and SAN fabrics to GPU memory and KV caches.
   actions:
-    - text: Launch RAID Lab
-      link: /storagecraft/simulators/raid-planner/index.html
+    - text: Enter the Labs
+      link: /storagecraft/#choose-your-mission
       icon: rocket
       variant: primary
-    - text: Use the CLI
-      link: /storagecraft/internals/cli/
-    - text: Star on GitHub
+    - text: Manmeet Nain · @manmeetnain
+      link: https://github.com/manmeetnain
+      icon: external
+    - text: View Repository
       link: https://github.com/manmeetnain/storagecraft
       icon: external
 ---
 
 import { Card, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
 
-## One repository. Three ways to learn.
+## The repository at a glance
 
 <CardGrid>
-  <Card title="17+ interactive experiences" icon="rocket">Operate RAID, erasure coding, SAN fabrics, NVMe queues, GPU memory, RAG storage, and the AI data path in the browser.</Card>
-  <Card title="A stateful network academy" icon="puzzle">Practice Brocade-style FC, Cisco MDS-style FC, iSCSI, dual-fabric operations, incidents, and recovery in a safe terminal.</Card>
-  <Card title="An AI command center" icon="star">Search platforms, skills, shortcuts, connectors, official update sources, workflows, and execution-ready prompt patterns.</Card>
+  <Card title="17 shipped learning capsules" icon="rocket">Browser labs with visible state, explicit assumptions, failure behavior, and automated validation.</Card>
+  <Card title="Brocade · Cisco · iSCSI academy" icon="puzzle">Stateful terminals, dual fabrics, guided health checks, configuration safety, incidents, rollback, and certification.</Card>
+  <Card title="Storage × AI systems map" icon="star">One path from physical writes and protection to RAG footprints, inference memory, KV cache, and bottleneck analysis.</Card>
 </CardGrid>
 
 ## Systems become intuitive when you can operate them
@@ -36,12 +35,12 @@ import { Card, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
   <Card title="Production context" icon="puzzle">Connect fundamentals to enterprise storage, distributed data systems, and LLM inference.</Card>
 </CardGrid>
 
-## Start with a learning path
+## Find information fast
 
-<LinkCard title="Storage mechanics" description="Write amplification, WAL, Copy-on-Write, RAID, and erasure coding." href="/storagecraft/concepts/write-amplification/" />
-<LinkCard title="AI inference memory" description="KV-cache sizing, GPU memory pressure, and serving trade-offs." href="/storagecraft/ai-infra/kv-cache/" />
-<LinkCard title="Manmeet AI Command Center" description="Compare major AI platforms, explore capabilities and skills, and compile execution-ready prompts." href="/storagecraft/ai-resource-hub/index.html" />
-<LinkCard title="StorageCraft CLI" description="Run colored capacity and KV-cache models directly from your terminal." href="/storagecraft/internals/cli/" />
+<LinkCard title="Concept index" description="Precise mental models for write paths, durability, snapshots, protection, and AI memory." href="/storagecraft/concepts/" />
+<LinkCard title="Simulator index" description="Open every calculator, visual experiment, failure lab, and terminal academy." href="/storagecraft/simulators/raid-planner/" />
+<LinkCard title="Command reference" description="Find Brocade-style, Cisco MDS-style, iSCSI, health-check, and recovery commands." href="/storagecraft/simulators/academy-command-reference/" />
+<LinkCard title="AI Command Center" description="Search AI capabilities, workflows, skills, shortcuts, prompts, and official update channels." href="/storagecraft/ai-resource-hub/index.html" />
 
 ## Choose your mission
 

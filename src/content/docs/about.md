@@ -3,7 +3,7 @@ title: About StorageCraft
 description: The mission, maintainer, design principles, and contribution path behind StorageCraft.
 ---
 
-# Built to make invisible systems operable
+## Built to make invisible systems operable
 
 StorageCraft is an open learning lab for storage engineering and AI infrastructure. It replaces passive diagrams with models you can change, terminals you can operate, and failures you can safely trigger.
 

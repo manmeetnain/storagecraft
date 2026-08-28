@@ -6,10 +6,20 @@ sidebar:
   badge:
     text: AI Infra
     variant: caution
-lastUpdated: 2026-05-26
+lastUpdated: 2026-08-28
 ---
 
-The KV-cache is the single most impactful performance optimization in LLM inference. Understanding it is essential for anyone building or scaling AI systems.
+The key-value (KV) cache stores attention keys and values already computed for earlier tokens. During autoregressive decoding, it avoids recomputing those projections at every step—trading compute for accelerator memory and memory bandwidth.
+
+## Quick reference
+
+| Question | Answer |
+|---|---|
+| What is stored? | key and value vectors for cached tokens, per layer |
+| What is not stored? | a permanent query vector for every past token |
+| What grows memory? | live tokens, concurrent sequences, layers, KV heads, head dimension, and bytes per element |
+| What improves reuse? | prefix caching when identical eligible prefixes can safely share blocks |
+| What releases memory? | request completion, eviction, cancellation, or cache-policy action |
 
 ## The problem it solves
 
@@ -22,12 +32,14 @@ Without KV-cache:
   Token N:   N attention computations
   Total:     O(N²) computations ← quadratic!
 
-With KV-cache:
+With KV-cache during token-by-token decode:
   Token 1:   1 computation → store K,V in cache
   Token 2:   1 computation → append K,V to cache
   Token N:   1 computation → append K,V to cache
-  Total:     O(N) computations ← linear!
+  Each step reuses prior K,V projections; attention still reads and scores the cached sequence.
 ```
+
+The cache removes repeated K/V projection work for old tokens. It does **not** make attention independent of context length; decode cost and memory traffic still grow as the cached sequence grows.
 
 ## What gets cached
 
@@ -80,9 +92,9 @@ print(f"KV-cache per request: {size / (1024 ** 3):.2f} GiB")
 
 This cache alone consumes 2 GiB per fully occupied request. Real concurrency must also leave room for weights, activations, runtime workspaces, allocator fragmentation, and operational reserve.
 
-## PagedAttention (vLLM)
+## Paged KV-cache management
 
-vLLM solved the KV-cache memory fragmentation problem by treating GPU memory exactly like OS virtual memory — **paged, demand-allocated**.
+Paged cache managers divide KV memory into blocks and map a sequence to non-contiguous blocks. This reduces waste from reserving one maximum-size contiguous region per request and makes block reuse, eviction, and scheduling more flexible.
 
 ```
 Traditional KV-cache:           PagedAttention (vLLM):
@@ -96,7 +108,35 @@ Traditional KV-cache:           PagedAttention (vLLM):
 └────────────────────┘          Pages allocated on demand — no waste
 ```
 
-Result: vLLM achieves **2–4x higher throughput** than naive implementations on the same hardware.
+Real throughput gains depend on model architecture, sequence distribution, batching, kernel choice, cache precision, and hardware. Benchmark the target workload rather than treating a published speedup as universal.
+
+## Lifecycle and pressure
+
+```text
+prefill prompt → allocate/write KV blocks
+decode token   → read prior KV + append one token
+batch changes  → scheduler remaps active sequences
+request ends   → release blocks
+```
+
+Long prompts make prefill compute-heavy; large live-token populations make decode memory capacity and bandwidth critical. Continuous batching improves utilization but means the peak aggregate live-token count—not one request’s context limit—is the key capacity variable.
+
+## Operational signals
+
+- KV blocks used/free and allocation failures;
+- active, queued, and preempted sequences;
+- aggregate live tokens and prefix-cache hit rate;
+- prefill time, inter-token latency, and tokens per second;
+- cache eviction/recompute rate;
+- GPU memory headroom and memory-bandwidth utilization.
+
+## Failure and design questions
+
+- Does tensor parallelism shard KV heads for this architecture and runtime?
+- Is cache quantization acceptable for quality and kernel support?
+- Can prefixes be shared without crossing tenant or authorization boundaries?
+- What happens when the block pool is exhausted: queue, preempt, recompute, or reject?
+- Are reported limits based on configured context, reserved tokens, or actual live tokens?
 
 ## Key takeaways
 
@@ -106,6 +146,6 @@ Result: vLLM achieves **2–4x higher throughput** than naive implementations on
 | Memory grows | Linearly with sequence length |
 | GPU memory limit | Defines max concurrent requests |
 | vLLM innovation | Paged KV-cache — eliminates fragmentation |
-| Quantization win | INT8 KV-cache halves memory → 2x more users |
+| Quantization effect | fewer bytes per element; concurrency gain is workload- and runtime-dependent |
 
-*See also: Flash Attention, GPU Memory Management, vLLM Architecture*
+Use the [GPU Memory Planner](/storagecraft/simulators/gpu-memory/) for a full serving budget and the [StorageCraft CLI](/storagecraft/internals/cli/) for a transparent KV baseline.

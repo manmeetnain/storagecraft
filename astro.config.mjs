@@ -12,6 +12,7 @@ export default defineConfig({
         { icon: 'github', label: 'GitHub', href: 'https://github.com/manmeetnain/storagecraft' },
       ],
       editLink: { baseUrl: 'https://github.com/manmeetnain/storagecraft/edit/main/' },
+      components: { Banner: './src/components/CreatorBanner.astro' },
       lastUpdated: true,
       pagination: true,
       customCss: ['./src/assets/custom.css'],

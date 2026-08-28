@@ -14,6 +14,18 @@ const surfaces = [
   ['Manmeet AI Command Center', 'ai-resource-hub/index.html'],
 ];
 
+test('documentation homepage and concept index expose premium navigation and creator identity', async ({ page }) => {
+  await page.goto('index.html');
+  await expect(page.getByRole('heading', { name: 'StorageCraft', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Manmeet Nain · @manmeetnain', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Repository ↗', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Find information fast', exact: true })).toBeVisible();
+  await page.goto('concepts/index.html');
+  await expect(page.getByRole('heading', { name: 'Storage Concepts Index', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Storage concepts, connected', exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+});
+
 for (const [title, path] of surfaces) {
   test(`${title} loads as a complete, accessible, responsive surface`, async ({ page }) => {
     const errors = [];

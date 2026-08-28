@@ -1,12 +1,23 @@
 ---
 title: Erasure Coding
 description: Turn data into recoverable fragments with lower capacity overhead than replication.
-lastUpdated: 2026-08-27
+lastUpdated: 2026-08-28
 sidebar:
   order: 4
 ---
 
 An erasure code transforms `k` data fragments into `k + m` total fragments. Any `k` suitable fragments can reconstruct the original data; the `m` coding fragments provide failure tolerance.
+
+## Mental model
+
+```text
+object → k data fragments + m coding fragments
+       → place across independent failure domains
+       → read any sufficient k-fragment set
+       → reconstruct missing fragments during degraded access or repair
+```
+
+The mathematical tolerance is only meaningful when fragment placement matches the actual rack, node, device, zone, and maintenance failure model.
 
 ## Capacity efficiency
 
@@ -34,11 +45,33 @@ The mathematics may resemble parity RAID, but distributed erasure coding must al
 
 A healthy read may need only the `k` data fragments. A degraded read retrieves extra fragments and performs decoding. Repair reconstructs missing fragments and writes them to new locations, consuming CPU, network, and storage bandwidth simultaneously.
 
+## Write paths
+
+Full-stripe writes can encode a complete fragment set efficiently. Small updates may require reading old data/coding fragments, calculating a delta or new stripe, and writing multiple fragments. Distributed implementations also need an atomicity strategy so readers do not combine fragments from different object versions.
+
+## Degraded-state economics
+
+| State | Read behavior | System pressure |
+|---|---|---|
+| Healthy | fetch planned data fragments | normal fan-out and tail latency |
+| Degraded | fetch extra fragments and decode | higher network, CPU, and latency |
+| Repairing | decode and write replacements | background bandwidth competes with clients |
+| Beyond tolerance | insufficient valid fragments | data unavailable or lost |
+
 ## Choosing parameters
 
 Larger `k` generally improves capacity efficiency but increases fan-out and the number of resources involved in recovery. Larger `m` tolerates more failures but costs capacity and repair work.
 
 Choose parameters from durability, correlated-failure, recovery-time, bandwidth, latency, and object-size requirements—not capacity efficiency alone.
+
+## Operational signals
+
+- fragments unavailable, misplaced, or on correlated domains;
+- degraded-read rate and decode latency;
+- repair queue depth, throughput, and estimated completion time;
+- scrub coverage and checksum failures;
+- network saturation and tail latency during rebuild;
+- remaining tolerance while maintenance is active.
 
 ## Failure-domain checklist
 
@@ -47,3 +80,5 @@ Choose parameters from durability, correlated-failure, recovery-time, bandwidth,
 3. Bound repair time under realistic throttling.
 4. Test loss of metadata separately from loss of data fragments.
 5. Scrub continuously; redundancy cannot repair corruption it never detects.
+
+Use the [Erasure Coding Lab](/storagecraft/simulators/erasure-coding/) to change `k+m`, fail fragments, compare replication overhead, and observe the recoverability boundary.

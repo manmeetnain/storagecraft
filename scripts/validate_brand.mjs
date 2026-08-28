@@ -6,6 +6,7 @@ const required = {
   'package.json': [STORAGECRAFT_BRAND.creatorName, STORAGECRAFT_BRAND.repositoryUrl],
   'README.md': [STORAGECRAFT_BRAND.creatorName, 'manmeetnain'],
   'src/content/docs/about.md': [STORAGECRAFT_BRAND.creatorName, STORAGECRAFT_BRAND.creatorHandle],
+  'src/components/CreatorBanner.astro': [STORAGECRAFT_BRAND.creatorName, STORAGECRAFT_BRAND.creatorHandle, STORAGECRAFT_BRAND.repositoryUrl],
   'public/ai-resource-hub/index.html': [STORAGECRAFT_BRAND.creatorName, 'motionControl', 'updateSearch'],
   'public/simulators/network-academy/index.html': ['storagecraft-brand.js', 'creator-attribution'],
   'scripts/storagecraft.mjs': ['storagecraft-brand.js', 'creatorAttribution'],
