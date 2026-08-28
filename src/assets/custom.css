@@ -1,43 +1,43 @@
 :root,
 :root[data-theme='light'],
 :root[data-theme='dark'] {
-  --sl-color-accent-low: #0b3651;
-  --sl-color-accent: #54dcff;
-  --sl-color-accent-high: #d6f7ff;
-  --sl-color-white: #f8fbff;
-  --sl-color-gray-1: #e6eefb;
-  --sl-color-gray-2: #aabbd3;
-  --sl-color-gray-3: #7186a3;
-  --sl-color-gray-4: #3b506c;
-  --sl-color-gray-5: #1a2a40;
-  --sl-color-gray-6: #0c1728;
-  --sl-color-black: #050a13;
+  --sl-color-accent-low: #e0f6fb;
+  --sl-color-accent: #087f9b;
+  --sl-color-accent-high: #063e52;
+  --sl-color-white: #102238;
+  --sl-color-gray-1: #233a53;
+  --sl-color-gray-2: #4b6178;
+  --sl-color-gray-3: #718397;
+  --sl-color-gray-4: #a9b7c6;
+  --sl-color-gray-5: #d8e1e9;
+  --sl-color-gray-6: #edf2f6;
+  --sl-color-black: #fbfcfd;
   --sl-font: Inter, ui-sans-serif, system-ui, sans-serif;
   --sl-font-mono: "SFMono-Regular", Consolas, monospace;
 }
-html{color-scheme:dark;background:#050a13}
-body{background:radial-gradient(circle at 82% -5%,rgba(122,92,255,.18),transparent 34rem),radial-gradient(circle at 4% 18%,rgba(21,194,235,.13),transparent 30rem),#050a13;color:#eaf1fb}
-header.header{background:rgba(5,10,19,.88);border-bottom:1px solid rgba(116,148,190,.2);backdrop-filter:blur(18px)}
-.site-title{font-weight:900;letter-spacing:-.04em;color:#f8fbff}.site-title:hover{color:#6ee7ff}
-site-search button{background:#0a1424!important;border:1px solid #2a3c57!important;color:#b9c8dc!important}
-.social-icons a{color:#dce9f8!important}
-.sidebar-pane{background:linear-gradient(180deg,rgba(8,17,31,.98),rgba(5,10,19,.98));border-right-color:rgba(116,148,190,.16)}
-.sidebar-content a[aria-current='page']{background:linear-gradient(90deg,rgba(84,220,255,.14),rgba(159,125,255,.1));border-left:2px solid #54dcff;color:#effcff}
+html{color-scheme:light;background:#f7f9fc}
+body{background:radial-gradient(circle at 84% -4%,rgba(131,104,238,.11),transparent 34rem),radial-gradient(circle at 4% 18%,rgba(26,177,207,.1),transparent 30rem),#f7f9fc;color:#172b43}
+header.header{background:rgba(255,255,255,.9);border-bottom:1px solid rgba(66,91,122,.16);backdrop-filter:blur(18px);box-shadow:0 6px 24px rgba(31,57,83,.05)}
+.site-title{font-weight:900;letter-spacing:-.04em;color:#142a43}.site-title:hover{color:#087f9b}
+site-search button{background:#f4f7fa!important;border:1px solid #ccd8e3!important;color:#496078!important}
+.social-icons a{color:#29445f!important}
+.sidebar-pane{background:linear-gradient(180deg,rgba(250,252,254,.98),rgba(242,247,250,.98));border-right-color:rgba(66,91,122,.14)}
+.sidebar-content a[aria-current='page']{background:linear-gradient(90deg,rgba(18,153,181,.12),rgba(125,92,218,.08));border-left:2px solid #1299b5;color:#123d55}
 .main-frame{background:transparent}
 .hero{padding-block:6rem 4rem;position:relative;overflow:hidden}
 .hero>.stack{grid-column:1/-1;justify-self:start;width:min(100%,58rem)}
-.hero::before{content:"MANMEET NAIN  /  @MANMEETNAIN  /  OPEN SYSTEMS LAB";display:block;margin-bottom:1.25rem;color:#63defa;font:800 .72rem/1.4 var(--sl-font-mono);letter-spacing:.16em}
-.hero::after{content:"";position:absolute;width:32rem;height:32rem;right:-10rem;top:-12rem;border:1px solid rgba(84,220,255,.2);border-radius:50%;box-shadow:0 0 0 4rem rgba(159,125,255,.035),0 0 0 8rem rgba(84,220,255,.025);pointer-events:none}
-.hero h1{font-size:clamp(3.5rem,9vw,7.5rem);line-height:.9;background:linear-gradient(105deg,#fff 12%,#78e7ff 48%,#b9a2ff 78%,#ff9fc9);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.065em;max-width:900px}
-.hero .tagline{color:#aabbd3;max-width:56rem;font-size:clamp(1.1rem,2vw,1.38rem);line-height:1.7}
-.actions{gap:.75rem}.action{border-radius:.75rem!important;font-weight:800!important}.action.primary{background:linear-gradient(120deg,#25c7e8,#8d69f6);color:#04101a;border:0;box-shadow:0 14px 38px rgba(36,199,232,.24)}.action.secondary{border-color:#344863!important;background:#0a1424!important;color:#dce8f8!important}
-.content-panel{border-top:1px solid rgba(116,148,190,.14)}
-.sl-markdown-content h2{margin-top:3.5rem;padding-top:.75rem;border-top:1px solid rgba(116,148,190,.16);font-size:clamp(1.55rem,3vw,2.25rem);letter-spacing:-.035em;color:#f4f8ff}.sl-markdown-content h3{color:#7ee7ff}.sl-markdown-content>p,.sl-markdown-content>ul,.sl-markdown-content>ol{color:#b5c4d8;line-height:1.8}.sl-markdown-content strong{color:#f5f8ff}
-.card{border-color:rgba(116,148,190,.2)!important;background:linear-gradient(145deg,rgba(16,31,52,.93),rgba(7,14,26,.96));border-radius:1.1rem!important;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;box-shadow:0 18px 46px rgba(0,0,0,.18)}
-.card:hover{transform:translateY(-4px);border-color:rgba(84,220,255,.55)!important;box-shadow:0 22px 58px rgba(17,161,196,.12)}
-.sl-link-card{border-radius:1rem!important;background:linear-gradient(125deg,rgba(13,29,49,.95),rgba(9,17,31,.95))!important}
-.sl-markdown-content table{border:1px solid rgba(116,148,190,.22);border-radius:.85rem;overflow:hidden}.sl-markdown-content th{background:#101e33;color:#76e3fb}.sl-markdown-content td{border-color:rgba(116,148,190,.15)}
-.sl-markdown-content blockquote{border-left:3px solid #54dcff;background:linear-gradient(90deg,rgba(84,220,255,.09),transparent);padding:1rem 1.2rem;border-radius:0 .8rem .8rem 0;color:#d7e5f6}
+.hero::before{content:"MANMEET NAIN  /  @MANMEETNAIN  /  OPEN SYSTEMS LAB";display:block;margin-bottom:1.25rem;color:#087f9b;font:800 .72rem/1.4 var(--sl-font-mono);letter-spacing:.16em}
+.hero::after{content:"";position:absolute;width:32rem;height:32rem;right:-10rem;top:-12rem;border:1px solid rgba(18,153,181,.16);border-radius:50%;box-shadow:0 0 0 4rem rgba(125,92,218,.035),0 0 0 8rem rgba(18,153,181,.025);pointer-events:none}
+.hero h1{font-size:clamp(3.5rem,9vw,7.5rem);line-height:.9;background:linear-gradient(105deg,#102238 12%,#087f9b 48%,#7051bf 78%,#b74676);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.065em;max-width:900px}
+.hero .tagline{color:#4b6178;max-width:56rem;font-size:clamp(1.1rem,2vw,1.38rem);line-height:1.7}
+.actions{gap:.75rem}.action{border-radius:.75rem!important;font-weight:800!important}.action.primary{background:linear-gradient(120deg,#17a9c5,#7657cc);color:#fff;border:0;box-shadow:0 14px 34px rgba(30,139,169,.2)}.action.secondary{border-color:#cad6e2!important;background:rgba(255,255,255,.78)!important;color:#29445f!important}
+.content-panel{border-top:1px solid rgba(66,91,122,.12)}
+.sl-markdown-content h2{margin-top:3.5rem;padding-top:.75rem;border-top:1px solid rgba(66,91,122,.14);font-size:clamp(1.55rem,3vw,2.25rem);letter-spacing:-.035em;color:#172b43}.sl-markdown-content h3{color:#087f9b}.sl-markdown-content>p,.sl-markdown-content>ul,.sl-markdown-content>ol{color:#445b73;line-height:1.8}.sl-markdown-content strong{color:#162c44}
+.card{border-color:rgba(88,112,139,.18)!important;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(243,248,251,.96));border-radius:1.1rem!important;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;box-shadow:0 16px 38px rgba(39,65,92,.08)}
+.card:hover{transform:translateY(-4px);border-color:rgba(18,153,181,.48)!important;box-shadow:0 22px 48px rgba(39,100,122,.13)}
+.sl-link-card{border-radius:1rem!important;background:linear-gradient(125deg,rgba(255,255,255,.98),rgba(240,247,250,.98))!important}
+.sl-markdown-content table{border:1px solid rgba(88,112,139,.2);border-radius:.85rem;overflow:hidden;background:rgba(255,255,255,.62)}.sl-markdown-content th{background:#e8f2f6;color:#075d72}.sl-markdown-content td{border-color:rgba(88,112,139,.14)}
+.sl-markdown-content blockquote{border-left:3px solid #159ab6;background:linear-gradient(90deg,rgba(21,154,182,.09),rgba(255,255,255,.4));padding:1rem 1.2rem;border-radius:0 .8rem .8rem 0;color:#29445f}
 code { border-radius:.35rem; }
 table { display:table; width:100%; }
 @media (max-width:50rem){.hero{padding-block:3.5rem 2rem}.hero::before{font-size:.6rem}.hero::after{opacity:.5}.hero h1{font-size:3.8rem}}
