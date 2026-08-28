@@ -8,6 +8,7 @@
   Interactive labs, transparent engineering models, and visual deep dives spanning storage internals, distributed data, and LLM infrastructure.
 
   [![Learning Path](https://img.shields.io/badge/START-ZERO_TO_SAN-0f766e?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/learning/)
+  [![Progress](https://img.shields.io/badge/TRACK-LEARNING_PROGRESS-0e7490?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/learning-dashboard/index.html)
   [![Live Lab](https://img.shields.io/badge/LAUNCH-NETWORK_ACADEMY-2563eb?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/network-academy/)
   [![AI Hub](https://img.shields.io/badge/EXPLORE-AI_PROMPT_HUB-a78bfa?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html)
   [![Documentation](https://img.shields.io/badge/EXPLORE-DOCUMENTATION-8b5cf6?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/)
@@ -54,10 +55,11 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 
 ```bash
 PYTHONPATH=python python3 -m storagecraft_tools.cli raid --level 6 --disks 8 --size 4
+PYTHONPATH=python python3 -m storagecraft_tools.cli raid --compare --disks 12 --size 8 --groups 2
 PYTHONPATH=python python3 -m storagecraft_tools.cli learn
 ```
 
-The dependency-free [Python package](python/storagecraft_tools) exposes typed, tested functions for notebooks and automation. The first release covers RAID 0/1/5/6/10 and curriculum discovery; the browser planner remains the comprehensive all-RAID experience.
+The dependency-free [Python package](python/storagecraft_tools) exposes typed, tested functions for notebooks and automation. It covers JBOD; RAID 0–6, 01, 10, 50, and 60; RAID-Z1/Z2/Z3; erasure coding; NVMe queues; RAG storage; and GPU memory. Start with the executable [quick-start notebook](notebooks/storagecraft_quickstart.ipynb), and use the browser planner for visual comparison.
 
 ## Guided learning program
 
@@ -68,7 +70,7 @@ The dependency-free [Python package](python/storagecraft_tools) exposes typed, t
 | 7–8 | iSCSI, multipathing, daily operations, incident handling | Failure labs, runbooks, Challenge mode |
 | 9 | Explain, operate, troubleshoot, and communicate safely | Practical assessment |
 
-The program is backed by [`learning/catalog.json`](learning/catalog.json), validated in CI, and supported by a [glossary](https://manmeetnain.github.io/storagecraft/reference/glossary/), [operations runbooks](https://manmeetnain.github.io/storagecraft/runbooks/), and [instructor kit](https://manmeetnain.github.io/storagecraft/instructors/).
+The program is backed by [`learning/catalog.json`](learning/catalog.json), validated in CI, and supported by a [progress and evidence dashboard](https://manmeetnain.github.io/storagecraft/learning-dashboard/index.html), [glossary](https://manmeetnain.github.io/storagecraft/reference/glossary/), [operations runbooks](https://manmeetnain.github.io/storagecraft/runbooks/), and [instructor kit](https://manmeetnain.github.io/storagecraft/instructors/).
 
 ## Current learning capsules
 
@@ -106,6 +108,8 @@ The program is backed by [`learning/catalog.json`](learning/catalog.json), valid
 - [x] Storage Network Academy: Brocade-style FC, Cisco MDS-style FC, and iSCSI
 - [x] Storage Network Academy v2: dual fabrics, multi-switch operations, incidents, configuration safety, governance, certification, and desktop/mobile E2E ([execution contract](ACADEMY_V2.md))
 - [x] Zero-to-SAN curriculum, glossary, operational runbooks, and instructor kit
+- [x] Learner progress, milestone badges, and portable evidence export
+- [x] Full Python model parity foundation and executable notebook
 - [ ] Reproducible benchmark capsule format
 
 Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml), ask a learning question in [Discussions](https://github.com/manmeetnain/storagecraft/discussions), or follow versioned changes in the [changelog](CHANGELOG.md).

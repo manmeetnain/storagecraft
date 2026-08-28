@@ -39,6 +39,7 @@ for (const file of files) {
   const source = readFileSync(file, 'utf8');
   const hrefs = [...source.matchAll(/(?:href=["']|\]\()([^"')\s]+)(?:["']|\))/g)].map(match => match[1]);
   for (const href of hrefs) {
+    if (href.includes('${')) continue;
     if (/^(https?:|mailto:|#|javascript:)/.test(href)) continue;
     if (href.startsWith('/') && !hasRoute(href)) errors.push(`${file}: unresolved route ${href}`);
   }

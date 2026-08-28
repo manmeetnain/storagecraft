@@ -34,6 +34,7 @@ A capsule can move to `shipped` only when it has:
 | 82 | AI Data Path Lab | Shipped | AI infrastructure architects |
 | 78 | NVMe Queue Lab | Shipped | Systems and performance engineers |
 | 76 | SAN Failure-Domain Lab | Shipped | Enterprise storage engineers |
+| 75 | Learner progress and evidence dashboard | Shipped | Self-directed learners and hiring teams |
 
 ## Next evidence-driven releases
 
@@ -48,7 +49,7 @@ A capsule can move to `shipped` only when it has:
 
 ## Python companion direction
 
-The Python package now provides a tested foundation for notebooks, automation, and community contributions. Extend it model-by-model only when results remain transparent and can be checked against the browser/JavaScript implementation. Priority candidates are all-RAID parity with the planner, erasure coding, performance equations, RAG sizing, and report export.
+The Python package now provides a tested foundation for notebooks, automation, and community contributions, including all-RAID parity, erasure coding, NVMe queues, RAG sizing, and GPU-memory planning. Next candidates are browser/Python parity fixtures, richer report export, benchmark datasets, and versioned package releases.
 
 ## Learning resources outside the capsule pipeline
 

@@ -33,7 +33,9 @@ print(plan.usable_tb, plan.efficiency)
 
 ## Scope
 
-The first Python release covers transparent, idealized RAID 0/1/5/6/10 capacity and curriculum discovery. The browser Universal RAID Planner remains the comprehensive surface for RAID 2/3/4, RAID 01/10/50/60, RAID-Z1/Z2/Z3, comparison, constraints, and visual explanation.
+The package covers JBOD, RAID 0–6, RAID 0+1/10/50/60, RAID-Z1/Z2/Z3, erasure coding, NVMe queue ceilings, RAG storage, GPU memory, and curriculum discovery. The browser labs remain the richer visual and guided-learning surfaces.
+
+Open [`notebooks/storagecraft_quickstart.ipynb`](https://github.com/manmeetnain/storagecraft/blob/main/notebooks/storagecraft_quickstart.ipynb) for a ready-to-run notebook tour.
 
 ## Contribute
 

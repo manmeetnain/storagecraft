@@ -12,6 +12,10 @@ All notable StorageCraft changes are recorded here. Releases follow semantic ver
 - Instructor kit and assessment rubric
 - Learning-first homepage and repository navigation
 - Dependency-free Python toolkit with typed RAID models, CLI, JSON output, and tests
+- Complete Python RAID family support plus erasure-coding, NVMe, RAG-storage, and GPU-memory models
+- Executable Python quick-start notebook and Python 3.9–3.13 quality matrix
+- Browser-local learning dashboard with module tracking, milestone badges, and JSON evidence export
+- Unified high-contrast light visual system across documentation, planners, simulators, academy, and AI hub
 - Automated internal-route and AI-anchor validation
 - Expanded Codex shortcut directory covering session, context, tools, plugins, agents, and terminal operations
 

@@ -33,6 +33,8 @@ This program turns StorageCraft's concepts, calculators, failure labs, and termi
 
 A learner should not claim completion from reading alone. Finish the linked practice, explain the check questions in your own words, and capture the evidence requested by the assessment module.
 
+Use the [Learning Dashboard](/storagecraft/learning-dashboard/index.html) to record module completion, see milestones, and export self-recorded JSON evidence. Practical assessment evidence remains separate in the Network Academy.
+
 ## Before you begin
 
 Use a modern browser. The simulations are educational and never connect to real infrastructure. Vendor-inspired commands model public concepts and an explicit compatibility subset; always verify syntax and behavior against the exact production version.

@@ -12,6 +12,7 @@ const surfaces = [
   ['SAN Failure-Domain Lab', 'simulators/san-failure/index.html'],
   ['Write Amplification Explorer', 'simulators/write-amplification/index.html'],
   ['Manmeet AI Command Center', 'ai-resource-hub/index.html'],
+  ['Learning dashboard', 'learning-dashboard/index.html'],
 ];
 
 test('documentation homepage exposes the learning journey and creator identity', async ({ page }) => {
@@ -27,6 +28,17 @@ test('documentation homepage exposes the learning journey and creator identity',
   await expect(page.getByRole('heading', { name: 'Storage Concepts Index', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Storage concepts, connected', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+});
+
+test('learning dashboard persists progress and unlocks milestones', async ({ page }) => {
+  await page.goto('learning-dashboard/index.html');
+  const modules = page.locator('[data-id]');
+  await expect(modules).toHaveCount(9);
+  for (let index = 0; index < 4; index += 1) await modules.nth(index).check();
+  await expect(page.locator('#done')).toHaveText('4/9');
+  await expect(page.locator('.badge.earned')).toContainText('Foundation');
+  await page.reload();
+  await expect(page.locator('#done')).toHaveText('4/9');
 });
 
 for (const [title, path] of surfaces) {
