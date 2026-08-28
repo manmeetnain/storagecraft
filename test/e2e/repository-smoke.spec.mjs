@@ -14,12 +14,15 @@ const surfaces = [
   ['Manmeet AI Command Center', 'ai-resource-hub/index.html'],
 ];
 
-test('documentation homepage and concept index expose premium navigation and creator identity', async ({ page }) => {
+test('documentation homepage exposes the learning journey and creator identity', async ({ page }) => {
   await page.goto('index.html');
   await expect(page.getByRole('heading', { name: 'StorageCraft', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Manmeet Nain · @manmeetnain', exact: true }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Repository ↗', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Find information fast', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Start at your level', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Start Zero-to-SAN', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'StorageCraft Foundations: Zero-to-SAN Engineer', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The complete path', exact: true })).toBeVisible();
   await page.goto('concepts/index.html');
   await expect(page.getByRole('heading', { name: 'Storage Concepts Index', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Storage concepts, connected', exact: true })).toBeVisible();

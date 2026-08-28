@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Learning questions and ideas
+    url: https://github.com/manmeetnain/storagecraft/discussions
+    about: Ask questions, share lab results, and suggest learning journeys.
+  - name: Live learning site
+    url: https://manmeetnain.github.io/storagecraft/
+    about: Check the current documentation and interactive labs first.

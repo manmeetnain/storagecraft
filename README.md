@@ -3,11 +3,12 @@
 
   # StorageCraft
 
-  **Operate the data path beneath modern AI.**
+  **Learn and operate the data path—from first principles to production-minded practice.**
 
   Interactive labs, transparent engineering models, and visual deep dives spanning storage internals, distributed data, and LLM infrastructure.
 
-  [![Live Lab](https://img.shields.io/badge/LAUNCH-RAID_PLANNER-22d3ee?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/raid-planner/index.html)
+  [![Learning Path](https://img.shields.io/badge/START-ZERO_TO_SAN-0f766e?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/learning/)
+  [![Live Lab](https://img.shields.io/badge/LAUNCH-NETWORK_ACADEMY-2563eb?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/simulators/network-academy/)
   [![AI Hub](https://img.shields.io/badge/EXPLORE-AI_PROMPT_HUB-a78bfa?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html)
   [![Documentation](https://img.shields.io/badge/EXPLORE-DOCUMENTATION-8b5cf6?style=for-the-badge)](https://manmeetnain.github.io/storagecraft/)
   [![Sponsor](https://img.shields.io/badge/SPONSOR-THE_LAB-34d399?style=for-the-badge)](https://github.com/sponsors/manmeetnain)
@@ -22,7 +23,7 @@
 
 The storage layer is usually invisible—until latency spikes, a disk fails, compaction stalls, or an LLM server runs out of memory. StorageCraft exposes those mechanisms through experiments you can operate and models you can inspect.
 
-> **New here?** Choose a mission on the [interactive homepage](https://manmeetnain.github.io/storagecraft/), meet the project on the [About page](https://manmeetnain.github.io/storagecraft/about/), or open the [Manmeet AI Command Center](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) to search current official AI update channels.
+> **New here?** Start the ordered **[StorageCraft Foundations: Zero-to-SAN Engineer](https://manmeetnain.github.io/storagecraft/learning/)** program. Use Learn, Practice, Challenge, and Assess modes to progress from storage vocabulary to fabric operations and incident response.
 
 | Explore | Operate | Measure |
 |---|---|---|
@@ -48,6 +49,17 @@ npm run craft -- kv --layers 32 --heads 8 --dim 128 --tokens 8192 --bytes 2
 ```
 
 The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](https://no-color.org/) convention.
+
+## Guided learning program
+
+| Stage | Capability | Practice |
+|---:|---|---|
+| 1–3 | Storage types, performance, RAID, erasure coding, backup, RPO/RTO | RAID and erasure-coding labs |
+| 4–6 | SAN paths, FC identity/login, zoning and masking | Network Academy Learn + Practice modes |
+| 7–8 | iSCSI, multipathing, daily operations, incident handling | Failure labs, runbooks, Challenge mode |
+| 9 | Explain, operate, troubleshoot, and communicate safely | Practical assessment |
+
+The program is backed by [`learning/catalog.json`](learning/catalog.json), validated in CI, and supported by a [glossary](https://manmeetnain.github.io/storagecraft/reference/glossary/), [operations runbooks](https://manmeetnain.github.io/storagecraft/runbooks/), and [instructor kit](https://manmeetnain.github.io/storagecraft/instructors/).
 
 ## Current learning capsules
 
@@ -84,9 +96,10 @@ The CLI uses no additional runtime dependencies and respects the [`NO_COLOR`](ht
 - [x] AI Data Path Lab
 - [x] Storage Network Academy: Brocade-style FC, Cisco MDS-style FC, and iSCSI
 - [x] Storage Network Academy v2: dual fabrics, multi-switch operations, incidents, configuration safety, governance, certification, and desktop/mobile E2E ([execution contract](ACADEMY_V2.md))
+- [x] Zero-to-SAN curriculum, glossary, operational runbooks, and instructor kit
 - [ ] Reproducible benchmark capsule format
 
-Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml).
+Vote for the next capsule through a [topic proposal](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml), ask a learning question in [Discussions](https://github.com/manmeetnain/storagecraft/discussions), or follow versioned changes in the [changelog](CHANGELOG.md).
 
 ## Quality contract
 

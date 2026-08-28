@@ -1,0 +1,13 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+  categories:
+    - title: Learning and documentation
+      labels: [documentation, learning]
+    - title: Labs and simulators
+      labels: [enhancement, simulator]
+    - title: Reliability and quality
+      labels: [bug, quality]
+    - title: Other changes
+      labels: ['*']

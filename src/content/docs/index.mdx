@@ -1,64 +1,62 @@
 ---
 title: StorageCraft
-description: Interactive systems lab for storage engineering and AI infrastructure.
+description: Learn storage and SAN engineering through guided explanations, operational runbooks, and safe interactive labs.
 template: splash
 hero:
-  tagline: A visual systems lab for understanding, operating, and troubleshooting the data path beneath modern AI—from disk arrays and SAN fabrics to GPU memory and KV caches.
+  tagline: Learn the data path beneath modern infrastructure—from storage fundamentals to Fibre Channel, iSCSI, failure recovery, and AI systems—through guided, testable practice.
   actions:
-    - text: Enter the Labs
-      link: /storagecraft/#choose-your-mission
+    - text: Start Zero-to-SAN
+      link: /storagecraft/learning/
       icon: rocket
       variant: primary
+    - text: Open Network Academy
+      link: /storagecraft/simulators/network-academy/
+      icon: puzzle
     - text: Manmeet Nain · @manmeetnain
       link: https://github.com/manmeetnain
-      icon: external
-    - text: View Repository
-      link: https://github.com/manmeetnain/storagecraft
       icon: external
 ---
 
 import { Card, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
 
-## The repository at a glance
+## One learning system, four ways to build skill
 
 <CardGrid>
-  <Card title="17 shipped learning capsules" icon="rocket">Browser labs with visible state, explicit assumptions, failure behavior, and automated validation.</Card>
-  <Card title="Brocade · Cisco · iSCSI academy" icon="puzzle">Stateful terminals, dual fabrics, guided health checks, configuration safety, incidents, rollback, and certification.</Card>
-  <Card title="Storage × AI systems map" icon="star">One path from physical writes and protection to RAG footprints, inference memory, KV cache, and bottleneck analysis.</Card>
+  <Card title="Learn" icon="open-book">Build a precise mental model with plain-language explanations and a glossary.</Card>
+  <Card title="Practice" icon="puzzle">Operate visible state in calculators, failure labs, and vendor-style terminals.</Card>
+  <Card title="Challenge" icon="rocket">Diagnose incidents and make safe changes without step-by-step prompts.</Card>
+  <Card title="Assess" icon="approve-check">Prove command selection, troubleshooting, rollback, and communication.</Card>
 </CardGrid>
 
-## Systems become intuitive when you can operate them
+## Start at your level
 
-<CardGrid>
-  <Card title="Interactive labs" icon="rocket">Change parameters, trigger failures, and observe system behavior instead of memorizing diagrams.</Card>
-  <Card title="Engineering models" icon="approve-check">Calculate capacity, overhead, memory pressure, and trade-offs with explicit assumptions.</Card>
-  <Card title="Production context" icon="puzzle">Connect fundamentals to enterprise storage, distributed data systems, and LLM inference.</Card>
-</CardGrid>
+<LinkCard title="Beginner · Zero-to-SAN Engineer" description="Nine ordered modules: storage, performance, protection, SAN, FC, zoning, iSCSI, operations, and assessment." href="/storagecraft/learning/" />
+<LinkCard title="Operator · Runbooks" description="Use repeatable procedures for daily checks, provisioning, incident triage, and safe rollback." href="/storagecraft/runbooks/" />
+<LinkCard title="Practitioner · Storage Network Academy" description="Operate Brocade-style FC, Cisco MDS-style FC, iSCSI, dual fabrics, incidents, and certification scenarios." href="/storagecraft/simulators/network-academy/" />
+<LinkCard title="Architect · Storage × AI Labs" description="Model GPU memory, KV cache, RAG footprints, NVMe queues, and end-to-end AI bottlenecks." href="/storagecraft/ai-infra/gpu-memory/" />
 
-## Find information fast
-
-<LinkCard title="Concept index" description="Precise mental models for write paths, durability, snapshots, protection, and AI memory." href="/storagecraft/concepts/" />
-<LinkCard title="Simulator index" description="Open every calculator, visual experiment, failure lab, and terminal academy." href="/storagecraft/simulators/raid-planner/" />
-<LinkCard title="Command reference" description="Find Brocade-style, Cisco MDS-style, iSCSI, health-check, and recovery commands." href="/storagecraft/simulators/academy-command-reference/" />
-<LinkCard title="AI Command Center" description="Search AI capabilities, workflows, skills, shortcuts, prompts, and official update channels." href="/storagecraft/ai-resource-hub/index.html" />
-
-## Choose your mission
-
-<LinkCard title="I am new to storage" description="Start with the visual RAID planner, then learn failure, parity, and rebuild behavior." href="/storagecraft/simulators/raid-planner/" />
-<LinkCard title="I operate SAN infrastructure" description="Enter the guided network academy for FC and iSCSI health checks, configuration, and incidents." href="/storagecraft/simulators/network-academy/" />
-<LinkCard title="I build AI systems" description="Model GPU memory, KV cache, RAG footprints, and end-to-end bottlenecks." href="/storagecraft/ai-infra/gpu-memory/" />
-<LinkCard title="I want to use AI better" description="Open Manmeet AI Command Center for tool selection, repeatable workflows, and official source watch." href="/storagecraft/ai-resource-hub/index.html" />
-
-## The five-minute experiment
+## Your first 30 minutes
 
 <Steps>
-1. Open the **Universal RAID Planner** and compare RAID 6, RAID 10, and RAID-Z2.
-2. Launch the focused RAID-5 Visualizer and fail one disk.
-3. Inspect how XOR reconstruction restores the missing blocks.
+1. Learn how block, file, object, LUN, and filesystem differ in [Storage foundations](/storagecraft/learning/storage-basics/).
+2. Compare capacity and failure tolerance in the [Universal RAID Planner](/storagecraft/simulators/raid-planner/).
+3. Trace host → fabric → target → LUN in [SAN fundamentals](/storagecraft/learning/san-fundamentals/).
+4. Inspect a simulated fabric in Learn mode using the [Storage Network Academy](/storagecraft/simulators/network-academy/).
 </Steps>
 
-> StorageCraft is educational engineering software. Validate workload, durability, recovery objectives, and vendor behavior before making production decisions.
+## Find the right tool
+
+| Goal | Start here | Finish with |
+|---|---|---|
+| Understand a term | [Storage and SAN glossary](/storagecraft/reference/glossary/) | Explain it in your own data path |
+| Prepare for shift work | [Daily health check](/storagecraft/runbooks/daily-health-check/) | A time-stamped evidence record |
+| Provision a host | [Zoning module](/storagecraft/learning/zoning/) | [Host provisioning runbook](/storagecraft/runbooks/host-provisioning/) |
+| Diagnose path loss | [SAN Failure-Domain Lab](/storagecraft/simulators/san-failure/) | [Incident triage runbook](/storagecraft/runbooks/incident-triage/) |
+| Teach a cohort | [Instructor kit](/storagecraft/instructors/) | Practical assessment evidence |
+| Use AI tools better | [Manmeet AI Command Center](/storagecraft/ai-resource-hub/index.html) | A reusable, verified workflow |
+
+> StorageCraft is educational engineering software. Simulators intentionally model selected behavior. Validate identities, commands, workload assumptions, platform releases, and recovery procedures before production use.
 
 ## Built in public by Manmeet Nain
 
-StorageCraft turns enterprise storage and AI-infrastructure experience into free, testable learning artifacts. Read the [project story](/storagecraft/about/), [propose the next capsule](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml), or [star the repository](https://github.com/manmeetnain/storagecraft) to follow each release.
+Every shipped engineering capsule has a model, tests, responsive interface, documentation, CLI workflow, and CI gate. Explore the [repository](https://github.com/manmeetnain/storagecraft), [request a topic](https://github.com/manmeetnain/storagecraft/issues/new?template=topic.yml), join [Discussions](https://github.com/manmeetnain/storagecraft/discussions), or star the project to follow releases.

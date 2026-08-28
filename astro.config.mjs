@@ -26,10 +26,18 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:site_name', content: 'StorageCraft by Manmeet Nain' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'author', content: 'Manmeet Nain' } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#07111f' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#f7fafc' } },
       ],
       sidebar: [
         { label: 'About', link: '/about/' },
+        {
+          label: '🎓 Zero-to-SAN Program',
+          items: [{ autogenerate: { directory: 'learning' } }],
+        },
+        {
+          label: '📋 Operations Runbooks',
+          items: [{ autogenerate: { directory: 'runbooks' } }],
+        },
         {
           label: '🧠 Core Concepts',
           items: [{ autogenerate: { directory: 'concepts' } }],
@@ -58,6 +66,8 @@ export default defineConfig({
           label: '🔬 Simulators',
           items: [{ autogenerate: { directory: 'simulators' } }],
         },
+        { label: '📖 Glossary', link: '/reference/glossary/' },
+        { label: '🧑‍🏫 Instructor Kit', link: '/instructors/' },
       ],
     }),
   ],

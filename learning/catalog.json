@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "program": "StorageCraft Foundations: Zero-to-SAN Engineer",
+  "audience": "New hires, freshers, students, and infrastructure engineers moving into storage operations",
+  "levels": ["foundation", "practitioner", "assessment"],
+  "modes": ["learn", "practice", "challenge", "assess"],
+  "modules": [
+    {"id":"storage-basics","order":10,"level":"foundation","minutes":35,"title":"Storage building blocks","doc":"src/content/docs/learning/storage-basics.md","practice":"/storagecraft/simulators/raid-planner/","outcome":"Differentiate block, file, object, volume, LUN, filesystem, and datastore layers."},
+    {"id":"performance","order":20,"level":"foundation","minutes":40,"title":"Performance fundamentals","doc":"src/content/docs/learning/performance.md","practice":"/storagecraft/simulators/nvme-queues/","outcome":"Relate IOPS, throughput, latency, block size, concurrency, and queueing."},
+    {"id":"data-protection","order":30,"level":"foundation","minutes":45,"title":"Data protection and recovery","doc":"src/content/docs/learning/data-protection.md","practice":"/storagecraft/simulators/raid-planner/","outcome":"Choose among RAID, snapshots, replication, erasure coding, and backup using failure and recovery objectives."},
+    {"id":"san-fundamentals","order":40,"level":"foundation","minutes":45,"title":"SAN architecture","doc":"src/content/docs/learning/san-fundamentals.md","practice":"/storagecraft/simulators/san-failure/","outcome":"Trace a host-to-LUN path and identify every independent failure domain."},
+    {"id":"fc-fabric","order":50,"level":"practitioner","minutes":55,"title":"Fibre Channel fabric operations","doc":"src/content/docs/learning/fc-fabric.md","practice":"/storagecraft/simulators/network-academy/","outcome":"Explain login, naming, services, ISLs, health signals, and dual-fabric behavior."},
+    {"id":"zoning","order":60,"level":"practitioner","minutes":55,"title":"Zoning and safe change","doc":"src/content/docs/learning/zoning.md","practice":"/storagecraft/simulators/network-academy/","outcome":"Create, validate, activate, roll back, and remove zoning safely."},
+    {"id":"iscsi-multipath","order":70,"level":"practitioner","minutes":50,"title":"iSCSI and multipathing","doc":"src/content/docs/learning/iscsi-multipath.md","practice":"/storagecraft/simulators/network-academy/","outcome":"Build and diagnose a redundant iSCSI path from network to session and multipath policy."},
+    {"id":"operations","order":80,"level":"practitioner","minutes":60,"title":"Operations and incident response","doc":"src/content/docs/learning/operations.md","practice":"/storagecraft/simulators/network-academy/","outcome":"Run health checks, gather evidence, isolate failure domains, remediate, and hand off safely."},
+    {"id":"assessment","order":90,"level":"assessment","minutes":75,"title":"Zero-to-SAN practical assessment","doc":"src/content/docs/learning/assessment.md","practice":"/storagecraft/simulators/network-academy/","outcome":"Demonstrate end-to-end inspection, configuration, failure recovery, rollback, and evidence reporting."}
+  ]
+}

@@ -35,6 +35,17 @@ A capsule can move to `shipped` only when it has:
 | 78 | NVMe Queue Lab | Shipped | Systems and performance engineers |
 | 76 | SAN Failure-Domain Lab | Shipped | Enterprise storage engineers |
 
+## Next evidence-driven releases
+
+| Priority | Work item | State | Acceptance signal |
+|---:|---|---|---|
+| 74 | Reproducible benchmark capsule | Planned | Dataset, environment capture, repeatable result, and interpretation guide |
+| 72 | Backup and replication recovery lab | Planned | RPO/RTO scenarios with restore validation and failure injection |
+| 70 | Host multipathing deep-dive | Planned | Linux path-state simulation, ALUA policy, and controlled failover |
+| 68 | Enterprise array operations lab | Discovery | Vendor-neutral pools, volumes, hosts, snapshots, replication, and alerts |
+| 66 | AI checkpoint and data pipeline lab | Discovery | Checkpoint sizing, restart time, throughput, and tiering trade-offs |
+| 64 | Instructor scenario pack | Planned | Facilitator notes, evidence rubric, resettable cohorts, and answer keys |
+
 ## Learning resources outside the capsule pipeline
 
 The [AI Resource & Prompt Hub](https://manmeetnain.github.io/storagecraft/ai-resource-hub/index.html) is a curated learning surface rather than a deterministic engineering capsule. It is covered by repository-wide desktop/mobile browser, accessibility, interaction, and deployment gates.
