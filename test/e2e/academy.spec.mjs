@@ -56,6 +56,21 @@ test('retains independent terminal state across vendors', async ({ page }) => {
   await expect(page.locator('#prompt')).toHaveText('E2E-A1:admin>');
 });
 
+test('runs Cisco guided commands and advances without an invalid-command dead end', async ({ page }) => {
+  await page.getByRole('button', { name: /Configure safely/ }).click();
+  await page.getByRole('button', { name: /Cisco MDS NX-OS-style FC/ }).click();
+  await expect(page.locator('#expected')).toHaveText('show clock');
+  await expect(page.locator('#command-queue')).toContainText('show clock');
+  for (let step = 0; step < 15; step += 1) {
+    await page.getByRole('button', { name: 'RUN SUGGESTED', exact: true }).click();
+  }
+  await expect(page.locator('#expected')).toHaveText('✓ Lab complete');
+  await page.getByRole('button', { name: 'NEXT LAB', exact: true }).click();
+  await expect(page.locator('#lesson-title')).toHaveText('Create a VSAN');
+  await expect(page.locator('#expected')).toHaveText('configure terminal');
+  await expect(page.getByText(/Invalid command/)).toHaveCount(0);
+});
+
 test('runs atomic configuration, reports diff, and rolls back', async ({ page }) => {
   await page.getByRole('button', { name: /Configure safely/ }).click();
   await page.getByText('CONFIGURATION SAFETY · ATOMIC SCRIPTS / DIFF / CHECKPOINT / ROLLBACK').click();
