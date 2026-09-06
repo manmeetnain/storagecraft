@@ -23,9 +23,9 @@
     "storagecraft": "./scripts/storagecraft.mjs"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.39.2",
-    "astro": "^6.3.7",
-    "sharp": "^0.32.5"
+    "@astrojs/starlight": "^0.42.0",
+    "astro": "^7.3.1",
+    "sharp": "^0.35.4"
   },
   "keywords": [
     "storage",
@@ -52,6 +52,6 @@
   "homepage": "https://manmeetnain.github.io/storagecraft",
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
-    "@playwright/test": "^1.62.1"
+    "@playwright/test": "^1.63.0"
   }
 }
